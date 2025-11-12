@@ -2,26 +2,42 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+    
+    $user = Auth::guard('web')->user();
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    // Role-based redirect
+    if ($user?->is_employee && $user->is_activated && !$user->is_deleted) {
+        return redirect()->intended(route('employee.dashboard', absolute: false));
+    }
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+    if ($user?->is_admin && $user->is_activated && !$user->is_deleted) {
+        
+        return redirect()->intended(route('admin.dashboard', absolute: false));
+    }
+
+    
+    return Inertia::render('Auth/Login');
+})->name('home');
+
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Route::middleware(['auth', 'verified'])->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
+
+Route::get('/fake-user', function(){
+    return Inertia::render('FakeUser');
+})->name('fake-user');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/employee.php';
+require __DIR__.'/admin.php';

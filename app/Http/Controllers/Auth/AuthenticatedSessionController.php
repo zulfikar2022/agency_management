@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,14 +28,32 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+    public function store(LoginRequest $request)
+{
+    $request->authenticate();
+    $request->session()->regenerate();
 
-        $request->session()->regenerate();
+    $user = User::where('email', $request->email)->first();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+    
+    if ($user?->is_employee && $user->is_activated && !$user->is_deleted) {
+        return redirect()->intended(route('employee.dashboard', absolute: false));
     }
+
+    if ($user?->is_admin && $user->is_activated && !$user->is_deleted) {
+        return redirect()->intended(route('admin.dashboard', absolute: false));
+    }
+
+    // Invalid role or inactive/deleted → log out + error
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return Inertia::render('Auth/Login', [
+        'canResetPassword' => Route::has('password.request'),
+        'status' => session('status'),
+    ]);
+}
 
     /**
      * Destroy an authenticated session.
@@ -47,6 +66,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 }
