@@ -7,20 +7,20 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    
+
     $user = Auth::guard('web')->user();
 
-    // Role-based redirect
-    if ($user?->is_employee && $user->is_activated && !$user->is_deleted) {
-        return redirect()->intended(route('employee.dashboard', absolute: false));
+    if ($user) {
+        if ($user?->is_employee && $user->is_activated && !$user->is_deleted) {
+            return redirect()->intended(route('employee.dashboard', absolute: false));
+        }
+
+        if ($user?->is_admin && $user->is_activated && !$user->is_deleted) {
+
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
     }
 
-    if ($user?->is_admin && $user->is_activated && !$user->is_deleted) {
-        
-        return redirect()->intended(route('admin.dashboard', absolute: false));
-    }
-
-    
     return Inertia::render('Auth/Login');
 })->name('home');
 
@@ -34,7 +34,7 @@ Route::get('/', function () {
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-Route::get('/fake-user', function(){
+Route::get('/fake-user', function () {
     return Inertia::render('FakeUser');
 })->name('fake-user');
 
