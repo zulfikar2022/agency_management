@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useState } from 'react';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -12,6 +13,8 @@ export default function Login({ status, canResetPassword }) {
         password: '',
         remember: false,
     });
+
+    const [seePassword, setSeePassword] = useState(false);
 
     const submit = (e) => {
         e.preventDefault();
@@ -54,7 +57,7 @@ export default function Login({ status, canResetPassword }) {
 
                     <TextInput
                         id="password"
-                        type="password"
+                        type={seePassword ? 'text' : 'password'}
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
@@ -65,7 +68,7 @@ export default function Login({ status, canResetPassword }) {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4 block">
+                {/* <div className="mt-4 block">
                     <label className="flex items-center">
                         <Checkbox
                             name="remember"
@@ -78,13 +81,25 @@ export default function Login({ status, canResetPassword }) {
                             Remember me
                         </span>
                     </label>
+                </div> */}
+
+             
+                <div className="mt-4">
+                    <Checkbox
+                        name="seePassword"
+                        checked={seePassword}
+                        onChange={(e) => setSeePassword(e.target.checked)}
+                    />
+                    <span className="ms-2 text-sm text-gray-600">
+                        {seePassword ? 'Hide' : 'Show'} Password
+                    </span>
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="rounded-md text-sm underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Forgot your password?
                         </Link>
