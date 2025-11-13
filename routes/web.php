@@ -21,7 +21,9 @@ Route::get('/', function () {
         }
     }
 
-    return Inertia::render('Auth/Login');
+    return redirect()->route('login')->withErrors([
+        'email' => 'Your account does not have access or is inactive/deleted.',
+    ]);
 })->name('home');
 
 // Route::get('/dashboard', function () {

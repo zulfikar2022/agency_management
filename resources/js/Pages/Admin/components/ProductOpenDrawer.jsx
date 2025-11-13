@@ -11,19 +11,29 @@ function ProductOpenDrawer() {
       <ul className="menu bg-base-200 min-h-full w-80 p-4">
         {/* Sidebar content here */}
         <li>
-          <Link href={route('admin.showProducts')}>সকল পণ্য দেখুন</Link>
+          <p className="hover:bg-white hover:cursor-auto font-bold underline">
+            {' '}
+            পণ্য নিয়ন্ত্রণ
+          </p>
         </li>
         <li>
-          <Link href={route('admin.createProduct')}>নতুন পণ্য তৈরি করুন</Link>
+          <Link className="ml-3" href={route('admin.showProducts')}>
+            সকল পণ্য দেখুন
+          </Link>
         </li>
         <li>
-          <Link href={route('admin.showAvailableProducts')}>
+          <Link className="ml-3" href={route('admin.createProduct')}>
+            নতুন পণ্য যুক্ত করুন
+          </Link>
+        </li>
+        <li>
+          <Link className="ml-3" href={route('admin.showAvailableProducts')}>
             উপলব্ধ পণ্যসমূহ
           </Link>
         </li>
 
         <li>
-          <Link href={route('admin.showUnavailableProducts')}>
+          <Link className="ml-3" href={route('admin.showUnavailableProducts')}>
             অপ্রাপ্য পণ্যসমূহ
           </Link>
         </li>

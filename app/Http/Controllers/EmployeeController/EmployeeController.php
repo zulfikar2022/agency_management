@@ -13,13 +13,16 @@ class EmployeeController extends Controller
         
         $user = Auth::guard('web')->user();
         
+        
         if($user && $user['is_activated'] && $user['is_employee'] && !$user['is_deleted']) {
             $leanUser = User::getLeanUser($user->email);
+            
         
             return Inertia::render('Employee/Dashboard', [
                 'user' => $leanUser
             ]);
         } else {
+            
             return redirect()->route('login');
         }
     }

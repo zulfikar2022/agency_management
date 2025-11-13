@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,10 +19,13 @@ class EmployeeOnlyMiddleware
 
     {
         $user = Auth::guard('web')->user();
-        if (!$user || !$user['is_activated'] || !$user['is_employee']) {
-            return redirect()->route('login');
+        
+        if($user && $user['is_activated'] && $user['is_employee'] && !$user['is_deleted']) {
+            $leanUser = User::getLeanUser($user->email);
+            $request->attributes->set('user', $leanUser);
+            return $next($request);
+        } else {
+            return redirect()->route('home');
         }
-
-        return $next($request);
     }
 }

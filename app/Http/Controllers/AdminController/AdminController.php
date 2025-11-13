@@ -12,36 +12,20 @@ use Inertia\Inertia;
 class AdminController extends Controller
 {
      public function dashboard(){
-        
-        $user = Auth::guard('web')->user();
-        
-        if($user && $user['is_activated'] && $user['is_admin'] && !$user['is_deleted']) {
-            $leanUser = User::getLeanUser($user->email);
-        
-            return Inertia::render('Admin/Dashboard', [
-                'user' => $leanUser
-            ]);
-        } else {
-            return redirect()->route('login');
-        }
+        $leanUser = request()->get('user');
+        return Inertia::render('Admin/Dashboard', [
+            'user' => $leanUser
+        ]);
     }
 
     // create product page
     public function createProduct()
     {
-        $user = Auth::guard('web')->user();
+        $leanUser = request()->get('user');
         
-        
-        if($user && $user['is_activated'] && $user['is_admin'] && !$user['is_deleted']) {
-            $leanUser = User::getLeanUser($user->email);
-            // dd("before return");
-
-            return Inertia::render('Admin/Products/CreateProduct', [
+        return Inertia::render('Admin/Products/CreateProduct', [
                 'user' => $leanUser
             ]);
-        } else {
-            return redirect()->route('login');
-        }
     }
 
     // store product
@@ -49,75 +33,45 @@ class AdminController extends Controller
 
     // show all products
     public function showProducts(){
-        $user = Auth::guard('web')->user();
-        
-         if($user && $user['is_activated'] && $user['is_admin'] && !$user['is_deleted']) {
-            $leanUser = User::getLeanUser($user->email);
-            // dd("before return");
-            $products = Product::paginate(100);
-
-            return Inertia::render('Admin/Products/ShowAllProducts', [
+        $leanUser = request()->get('user');
+        $products = Product::paginate(100);
+          return Inertia::render('Admin/Products/ShowAllProducts', [
                 'user' => $leanUser, 
                 'products' => $products
-
-            ]);
-        } else {
-            return redirect()->route('login');
-        }       
+            ]);      
     }
 
     // show product by id
     public function showProductById($id){
-        $user = Auth::guard('web')->user();
-         if($user && $user['is_activated'] && $user['is_admin'] && !$user['is_deleted']) {
-            $leanUser = User::getLeanUser($user->email);
-            $product = Product::find($id);
-
-            return Inertia::render('Admin/Products/ShowProductDetails', [
+       $leanUser = request()->get('user');
+         $product = Product::find($id);
+        return Inertia::render('Admin/Products/ShowProductDetails', [
                 'user' => $leanUser, 
                 'product' => $product
 
             ]);
-        } else {
-            return redirect()->route('login');
-        } 
     }
 
     // show available products
     public function showAvailableProducts(){
-         $user = Auth::guard('web')->user();
-        
-         if($user && $user['is_activated'] && $user['is_admin'] && !$user['is_deleted']) {
-            $leanUser = User::getLeanUser($user->email);
-            // dd("before return");
-            $availableProducts = Product::where('is_available', true)->paginate(100);
-
-            return Inertia::render('Admin/Products/AvailableProducts', [
+        $leanUser = request()->get('user');
+        $availableProducts = Product::where('is_available', true)->paginate(100); 
+        return Inertia::render('Admin/Products/AvailableProducts', [
                 'user' => $leanUser, 
                 'products' => $availableProducts
 
             ]);
-        } else {
-            return redirect()->route('login');
-        }  
     }
 
     // show unavailable products
     public function showUnavailableProducts(){
-         $user = Auth::guard('web')->user();
+        $leanUser = request()->get('user');
+        $unavailableProducts = Product::where('is_available', false)->paginate(100);
         
-         if($user && $user['is_activated'] && $user['is_admin'] && !$user['is_deleted']) {
-            $leanUser = User::getLeanUser($user->email);
-            
-            $unavailableProducts = Product::where('is_available', false)->paginate(100);
-
-            return Inertia::render('Admin/Products/UnavailableProducts', [
+        return Inertia::render('Admin/Products/UnAvailableProducts', [
                 'user' => $leanUser, 
                 'products' => $unavailableProducts
 
             ]);
-        } else {
-            return redirect()->route('login');
-        }  
     }
 }

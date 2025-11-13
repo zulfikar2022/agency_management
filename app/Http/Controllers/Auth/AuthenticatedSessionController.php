@@ -37,6 +37,7 @@ class AuthenticatedSessionController extends Controller
 
     
     if ($user?->is_employee && $user->is_activated && !$user->is_deleted) {
+        
         return redirect()->intended(route('employee.dashboard', absolute: false));
     }
 
@@ -49,9 +50,8 @@ class AuthenticatedSessionController extends Controller
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    return Inertia::render('Auth/Login', [
-        'canResetPassword' => Route::has('password.request'),
-        'status' => session('status'),
+    return redirect()->route('login')->withErrors([
+        'email' => 'Your account does not have access or is inactive/deleted.',
     ]);
 }
 

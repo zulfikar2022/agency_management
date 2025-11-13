@@ -1,3 +1,5 @@
+import { Link } from '@inertiajs/react';
+
 function LayoutForMoney({ children }) {
   return (
     <div>
@@ -26,7 +28,7 @@ function LayoutForMoney({ children }) {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-xl"
             >
               <li>
-                <a>পণ্য</a>
+                <Link href={route('admin.showProducts')}>পণ্য</Link>
               </li>
               <li>
                 <a>সঞ্চয় ও ঋণ </a>
@@ -38,7 +40,7 @@ function LayoutForMoney({ children }) {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
             <li>
-              <a>পণ্য</a>
+              <Link href={route('admin.showProducts')}>পণ্য</Link>
             </li>
             <li>
               <a>সঞ্চয় ও ঋণ </a>

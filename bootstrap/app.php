@@ -8,6 +8,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
+        api: __DIR__.'/../routes/api.php',   
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -15,13 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
-        
-        $middleware->alias(['adminonly' => \App\Http\Middleware\AdminOnlyMiddleware::class]);
-        $middleware->alias(['employeeonly' => \App\Http\Middleware\EmployeeOnlyMiddleware::class]);
+    
 
-
-        //
-    })
+    $middleware->alias(['adminonly' => \App\Http\Middleware\AdminOnlyMiddleware::class,'employeeonly' => \App\Http\Middleware\EmployeeOnlyMiddleware::class]);
+    
+})
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
