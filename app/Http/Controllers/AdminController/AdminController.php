@@ -31,6 +31,7 @@ class AdminController extends Controller
     // store product
     public function storeProduct(Request $request){
         $leanUser = request()->get('user');
+        // dd($request->all());
         
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -42,8 +43,9 @@ class AdminController extends Controller
         $product = new Product();
         $product->name = $validatedData['name'];
         $product->supplier_name = $validatedData['supplier_name'];
-        $product->quantity = $validatedData['quantity'];
-        $product->price_per_product = $validatedData['price_per_product'];
+        $product->initial_quantity = $validatedData['quantity'];
+        $product->current_quantity = $validatedData['quantity'];
+        $product->buying_price_per_product = $validatedData['price_per_product'];
         $product->save();
 
         return redirect()->route('admin.createProduct')->with('success', 'Product created successfully.');
@@ -52,7 +54,7 @@ class AdminController extends Controller
     // show all products
     public function showProducts(){
         $leanUser = request()->get('user');
-        $products = Product::paginate(100);
+        $products = Product::paginate(10);
           return Inertia::render('Admin/Products/ShowAllProducts', [
                 'user' => $leanUser, 
                 'products' => $products

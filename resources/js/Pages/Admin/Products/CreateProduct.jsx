@@ -2,6 +2,7 @@ import LayoutForProduct from '../layouts/LayoutForProduct';
 import { useForm } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import React from 'react';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 
 function CreateProduct() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -13,16 +14,39 @@ function CreateProduct() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // post(route('products.store'), {
-    //   preserveScroll: true,
-    //   onSuccess: () => {
-    //     reset();
-    //     // Optional: show toast or redirect
-    //   },
-    // });
+    post(route('admin.storeProduct'), {
+      preserveScroll: true,
+      onSuccess: () => {
+        reset();
+        toast.success('পণ্যটি সফলভাবে যুক্ত করা হয়েছে!', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+          transition: Bounce,
+        });
+      },
+    });
   };
   return (
     <LayoutForProduct>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
       <div className="min-h-screen bg-base-200 py-10 px-4">
         <div className="max-w-2xl mx-auto">
           {/* Back button (optional) */}
@@ -169,15 +193,6 @@ function CreateProduct() {
 
                 {/* Actions */}
                 <div className="flex flex-col sm:flex-row gap-3 pt-6">
-                  <button
-                    type="button"
-                    className="btn btn-outline flex-1"
-                    onClick={() => reset()}
-                    disabled={processing}
-                  >
-                    ফর্ম রিসেট করুন
-                  </button>
-
                   <button
                     type="submit"
                     className="btn btn-neutral flex-1"

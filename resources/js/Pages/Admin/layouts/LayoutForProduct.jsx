@@ -66,7 +66,8 @@ function LayoutForProduct({ children }) {
           <ProductOpenDrawer />
         </div>
       </div>
-      {children}
+      <div className="h-screen">{children}</div>
+      <footer className="text-center">this is a footer</footer>
     </div>
   );
 }

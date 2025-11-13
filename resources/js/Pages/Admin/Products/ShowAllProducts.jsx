@@ -1,9 +1,17 @@
+import ProductTable from '../components/ProductTable';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 
-function ShowAllProducts() {
+function ShowAllProducts({ user, products }) {
+  console.log(products);
   return (
     <LayoutForProduct>
-      <h1>All Products</h1>
+      <div className="flex flex-col h-screen justify-between">
+        <h1 className="text-center mt-3 text-3xl ">সকল পণ্য</h1>
+        <ProductTable products={products?.data} />
+        <div>
+          <p className="text-center">pagination placeholder</p>
+        </div>
+      </div>
     </LayoutForProduct>
   );
 }
