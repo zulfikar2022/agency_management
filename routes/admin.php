@@ -17,8 +17,10 @@ Route::group(['middleware' => ['auth','adminonly']], function () {
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 
-// create product route
+// create product route (render page)
 Route::get('/admin/create-product', [AdminController::class, 'createProduct'])->name('admin.createProduct');
+// store product route
+Route::post('/admin/store-product', [AdminController::class, 'storeProduct'])->name('admin.storeProduct');
 
 
 // show all products route
@@ -36,6 +38,7 @@ Route::get('/admin/products/available', [AdminController::class, 'showAvailableP
 Route::get('/admin/products/unavailable', [AdminController::class, 'showUnavailableProducts'])->name('admin.showUnavailableProducts');
 
 
+//================== DYNAMIC ROUTES =================   
 // show product by id route
 Route::get('/admin/products/{id}', [AdminController::class, 'showProductById'])->name('admin.showProductById');
 

@@ -29,7 +29,25 @@ class AdminController extends Controller
     }
 
     // store product
-    public function storeProduct(Request $request){}
+    public function storeProduct(Request $request){
+        $leanUser = request()->get('user');
+        
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'supplier_name' => 'required|string',
+            'quantity' => 'required|numeric|min:0', 
+            'price_per_product' => 'required|numeric|min:0',
+        ]);
+
+        $product = new Product();
+        $product->name = $validatedData['name'];
+        $product->supplier_name = $validatedData['supplier_name'];
+        $product->quantity = $validatedData['quantity'];
+        $product->price_per_product = $validatedData['price_per_product'];
+        $product->save();
+
+        return redirect()->route('admin.createProduct')->with('success', 'Product created successfully.');
+    }
 
     // show all products
     public function showProducts(){
