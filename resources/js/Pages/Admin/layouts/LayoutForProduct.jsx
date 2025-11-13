@@ -3,7 +3,7 @@ import ProductOpenDrawer from '../components/ProductOpenDrawer';
 
 function LayoutForProduct({ children }) {
   return (
-    <div>
+    <div className=" min-h-screen">
       <div className="navbar bg-slate-100 shadow-sm">
         <div className="navbar-start">
           <div className="dropdown">
@@ -66,8 +66,7 @@ function LayoutForProduct({ children }) {
           <ProductOpenDrawer />
         </div>
       </div>
-      <div className="h-screen">{children}</div>
-      <footer className="text-center">this is a footer</footer>
+      <div className="h-full">{children}</div>
     </div>
   );
 }

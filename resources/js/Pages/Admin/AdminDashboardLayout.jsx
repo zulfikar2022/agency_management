@@ -58,10 +58,7 @@ function AdminDashboardLayout({ children }) {
           </div>
         </div>
       </header>
-      <main className="admin-dashboard-content">{children}</main>
-      <footer className="admin-dashboard-footer">
-        <p>&copy; 2023 Your Company</p>
-      </footer>
+      <main className="admin-dashboard-content h-full">{children}</main>
     </div>
   );
 }

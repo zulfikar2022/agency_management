@@ -54,7 +54,7 @@ class AdminController extends Controller
     // show all products
     public function showProducts(){
         $leanUser = request()->get('user');
-        $products = Product::paginate(10);
+        $products = Product::paginate(100);
           return Inertia::render('Admin/Products/ShowAllProducts', [
                 'user' => $leanUser, 
                 'products' => $products
