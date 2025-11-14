@@ -37,6 +37,22 @@ function ProductOpenDrawer() {
             অপ্রাপ্য পণ্যসমূহ
           </Link>
         </li>
+        <li>
+          <p className="hover:bg-white hover:cursor-auto font-bold underline">
+            {' '}
+            কাস্টমার নিয়ন্ত্রণ
+          </p>
+        </li>
+        <li>
+          <Link className="ml-3" href={route('admin.showCustomers')}>
+            সকল কাস্টমার দেখুন
+          </Link>
+        </li>
+        <li>
+          <Link className="ml-3" href={route('admin.createCustomer')}>
+            কাস্টমার যুক্ত করুন
+          </Link>
+        </li>
       </ul>
     </div>
   );

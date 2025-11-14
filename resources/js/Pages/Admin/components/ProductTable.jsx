@@ -1,3 +1,5 @@
+import { Link } from '@inertiajs/react';
+
 function ProductTable({ products }) {
   return (
     <div className="mx-1 md:mx-4 my-8">
@@ -11,6 +13,7 @@ function ProductTable({ products }) {
                 <th>সরবরাহকারী প্রতিষ্ঠানের নাম</th>
                 <th>ক্রয়কৃত পরিমাণ</th>
                 <th>বর্তমান পরিমাণ</th>
+                <th>অ্যাকশন</th>
               </tr>
             </thead>
             <tbody>
@@ -25,13 +28,41 @@ function ProductTable({ products }) {
                   <td>{product.supplier_name}</td>
                   <td>{product.initial_quantity}</td>
                   <td>{product.current_quantity}</td>
+
+                  <td className="p-0 m-0">
+                    <Link
+                      className="btn btn-xs btn-outline"
+                      href={route('admin.showProductById', product.id)}
+                    >
+                      বিস্তারিত
+                    </Link>
+                  </td>
+                  <td className="p-0 m-0">
+                    <Link
+                      className="btn btn-xs btn-outline"
+                      href={route('admin.showUpdateProductPage', product.id)}
+                    >
+                      আপডেট করুন
+                    </Link>
+                  </td>
+
+                  <td className="p-0 m-0">
+                    <Link
+                      className="btn btn-xs btn-outline"
+                      href={route('admin.toggleProductStatus', product.id)}
+                    >
+                      {product?.is_available
+                        ? 'আনএভেইলেবল করুন'
+                        : 'অ্যাভেইলেবল করুন'}
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-      {products?.data?.length === 0 && (
+      {products?.length === 0 && (
         <div>
           <p className="text-center">কোন পণ্য পাওয়া যায়নি।</p>
         </div>

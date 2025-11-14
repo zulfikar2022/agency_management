@@ -3,7 +3,7 @@ import { NavigationBar } from './components/NavigationBar';
 
 function AdminDashboardLayout({ children }) {
   return (
-    <div className="admin-dashboard-layout">
+    <div className="admin-dashboard-layout h-full min-h-screen">
       <header className="admin-dashboard-header">
         <div className="navbar bg-slate-100 shadow-sm">
           <div className="navbar-start">

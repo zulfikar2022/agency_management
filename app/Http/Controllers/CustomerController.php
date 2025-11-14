@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
@@ -12,7 +13,12 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $user =  request()->get('user');
+        $customers = Customer::where('is_deleted', false)->paginate(10);
+        return Inertia::render('Admin/Customers/ShowAllCustomers', [
+            'customers' => $customers,
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -20,7 +26,10 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        $user =  request()->get('user');
+        return Inertia::render('Admin/Customers/CreateCustomer', [
+            'user' => $user,
+        ]);
     }
 
     /**

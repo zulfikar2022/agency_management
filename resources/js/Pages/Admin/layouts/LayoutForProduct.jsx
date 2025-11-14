@@ -3,8 +3,8 @@ import ProductOpenDrawer from '../components/ProductOpenDrawer';
 
 function LayoutForProduct({ children }) {
   return (
-    <div className=" min-h-screen">
-      <div className="navbar bg-slate-100 shadow-sm">
+    <div>
+      <div className="navbar">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -66,7 +66,7 @@ function LayoutForProduct({ children }) {
           <ProductOpenDrawer />
         </div>
       </div>
-      <div className="h-full">{children}</div>
+      <div className="">{children}</div>
     </div>
   );
 }

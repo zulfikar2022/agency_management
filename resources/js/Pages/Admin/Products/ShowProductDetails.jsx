@@ -1,9 +1,75 @@
+import { Link } from '@inertiajs/react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 
-function ShowProductDetails({ product }) {
+function ShowProductDetails({ product, update_logs }) {
+  console.log('Update Logs:', update_logs);
   return (
     <LayoutForProduct>
-      <h1>পণ্যের বিস্তারিত তথ্য</h1>
+      <div className="h-full">
+        <div className="flex flex-col justify-center items-center my-10 p-5">
+          <div
+            className={`border rounded-lg shadow-lg p-6 w-full max-w-md ${product.is_available ? 'bg-green-200' : 'bg-red-200'}`}
+          >
+            <h1 className="text-2xl font-bold">পণ্যের বিস্তারিত তথ্য</h1>
+            <p>
+              <span className="font-bold">নাম:</span> {product.name}
+            </p>
+            <p>
+              <span className="font-bold">সরবরাহকারী:</span>{' '}
+              {product.supplier_name}
+            </p>
+            <p>
+              <span className="font-bold">ক্রয়কৃত পরিমাণ:</span>{' '}
+              {product.initial_quantity}
+            </p>
+            <p>
+              <span className="font-bold">বর্তমান পরিমাণ:</span>{' '}
+              {product.current_quantity}
+            </p>
+            <p>
+              <span className="font-bold">অবস্থা:</span>{' '}
+              {product.is_available ? 'এভেইলেবল' : 'আনএভেইলেবল'}
+            </p>
+            <div>
+              <Link
+                className="btn btn-xs btn-outline mr-3"
+                href={route('admin.showUpdateProductPage', product.id)}
+              >
+                <button className="">পণ্য আপডেট করুন</button>
+              </Link>
+
+              <Link
+                className="btn btn-xs btn-outline"
+                href={route('admin.toggleProductStatus', product.id)}
+              >
+                {product.is_available ? 'আনএভেইলেবল করুন' : 'অ্যাভেইলেবল করুন'}
+              </Link>
+            </div>
+          </div>
+
+          {/* <div className="my-3">
+          <h2 className="text-xl font-bold mb-4">আপডেট ইতিহাস</h2>
+          {update_logs && update_logs.length > 0 ? (
+            <ul className="list-disc pl-5">
+              {update_logs.map((log) => (
+                <li key={log.id} className="mb-2">
+                  <p>
+                    <span className="font-bold">তারিখ:</span>{' '}
+                    {new Date(log.created_at).toLocaleString()}
+                  </p>
+                  <p>
+                    <span className="font-bold">পরিবর্তন:</span>{' '}
+                    {log.change_description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>কোন আপডেট ইতিহাস পাওয়া যায়নি।</p>
+          )}
+        </div> */}
+        </div>
+      </div>
     </LayoutForProduct>
   );
 }
