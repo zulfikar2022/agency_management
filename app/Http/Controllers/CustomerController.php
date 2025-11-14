@@ -14,7 +14,7 @@ class CustomerController extends Controller
     public function index()
     {
         $user =  request()->get('user');
-        $customers = Customer::where('is_deleted', false)->paginate(10);
+        $customers = Customer::where('is_deleted', false)->orderBy('created_at', 'desc')->paginate(10);
         return Inertia::render('Admin/Customers/ShowAllCustomers', [
             'customers' => $customers,
             'user' => $user,
@@ -37,31 +37,73 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:12',
+            'address' => 'required|string|max:500',
+            'collection_day' => 'required|string|in:saturday,sunday,monday,tuesday,wednesday,thursday,friday',
+            'nid_number' => 'nullable|string|max:20',
+            'fathers_name' => 'nullable|string|max:255',
+            'mothers_name' => 'nullable|string|max:255',
+        ]);
+
+        
+
+        Customer::create($validatedData);
+        // dd($validatedData);
+
+        return redirect()->route('admin.createCustomer')->with('success', 'Customer created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer)
+    public function show(String $id)
     {
-        //
+        $leanUser = request()->get('user');
+        $customer = Customer::findOrFail($id);
+
+        return Inertia::render('Admin/Customers/ShowCustomerDetails', [
+            'user' => $leanUser,
+            'customer' => $customer,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Customer $customer)
+    public function edit(string $id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        $user = request()->get('user');
+        // dd($customer);
+        return Inertia::render('Admin/Customers/UpdateCustomer', [
+            'customer' => $customer,
+            'user' => $user,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, String $id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:12',
+            'address' => 'required|string|max:500',
+            'collection_day' => 'required|string|in:saturday,sunday,monday,tuesday,wednesday,thursday,friday',
+            'nid_number' => 'nullable|string|max:20',
+            'fathers_name' => 'nullable|string|max:255',
+            'mothers_name' => 'nullable|string|max:255',
+        ]);
+
+        $customer->update($validatedData);
+        
+
+        return redirect()->route('admin.showCustomerDetails',$customer->id)->with('success', 'Customer updated successfully.');
+        // return redirect()->back()->with('success', 'Customer updated successfully.');
     }
 
     /**

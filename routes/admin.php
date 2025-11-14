@@ -44,6 +44,12 @@ Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admi
 // add customer route (render page)
 Route::get('/admin/create-customer', [CustomerController::class, 'create'])->name('admin.createCustomer');
 
+// store customer route
+Route::post('/admin/store-customer', [CustomerController::class, 'store'])->name('admin.storeCustomer');
+
+// rennder update customer page
+
+
  
 
 
@@ -56,6 +62,15 @@ Route::get('/admin/products/update/{id}', [ProductController::class, 'showUpdate
 Route::put('/admin/products/update/{id}', [ProductController::class, 'updateProduct'])->name('admin.updateProduct');
 
 Route::get('/admin/products/toggle-availability/{id}', [ProductController::class, 'toggleProductStatus'])->name('admin.toggleProductStatus');
+
+
+// render edit customer page
+Route::get('/admin/customers/edit/{id}', [CustomerController::class, 'edit'])->name('admin.editCustomer');
+// save the updated customer info
+Route::put('/admin/customers/update/{id}', [CustomerController::class, 'update'])->name('admin.updateCustomer');
+// show customer details
+Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('admin.showCustomerDetails');
+
 
 
 

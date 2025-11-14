@@ -30,7 +30,7 @@ class ProductController extends Controller
             'quantity' => 'required|numeric|min:0', 
             'price_per_product' => 'required|numeric|min:0',
         ]);
-
+        
         $product = new Product();
         $product->name = $validatedData['name'];
         $product->supplier_name = $validatedData['supplier_name'];
@@ -64,7 +64,7 @@ class ProductController extends Controller
     // show product by id
     public function showProductById($id){
        $leanUser = request()->get('user');
-         $product = Product::find($id);
+         $product = Product::findOrFail($id);
         // get all the update logs for this product in descending order of creation witht the user name who made the update my field name is updating_user_id which is a foreign key to users table
         $update_logs = ProductUpdateLog::where('product_id', $id)->orderBy('created_at', 'desc')->get();
         return Inertia::render('Admin/Products/ShowProductDetails', [

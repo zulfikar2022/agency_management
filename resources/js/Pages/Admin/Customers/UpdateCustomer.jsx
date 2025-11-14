@@ -1,11 +1,13 @@
+// resources/js/Pages/Admin/Customers/EditCustomer.tsx
 import { Bounce, toast, ToastContainer } from 'react-toastify';
-import LayoutForProduct from '../layouts/LayoutForProduct';
-import { Link, useForm } from '@inertiajs/react';
+
+import { Link, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
+import LayoutForProduct from '../layouts/LayoutForProduct';
 
 const WEEKDAYS = [
   { value: 'saturday', label: 'শনিবার' },
-  { value: 'sunday', label: 'বরিবার ' },
+  { value: 'sunday', label: 'রবিবার' },
   { value: 'monday', label: 'সোমবার' },
   { value: 'tuesday', label: 'মঙ্গলবার' },
   { value: 'wednesday', label: 'বুধবার' },
@@ -13,40 +15,33 @@ const WEEKDAYS = [
   { value: 'friday', label: 'শুক্রবার' },
 ];
 
-function CreateCustomer() {
-  const { data, setData, post, processing, errors, reset } = useForm({
-    name: '',
-    address: '',
-    phone_number: '',
-    collection_day: '',
-    nid_number: '',
-    fathers_name: '',
-    mothers_name: '',
+function UpdateCustomer({ customer }) {
+  const { data, setData, put, processing, errors, reset } = useForm({
+    name: customer?.name || '',
+    address: customer?.address || '',
+    phone_number: customer?.phone_number || '',
+    collection_day: customer?.collection_day || '',
+    nid_number: customer?.nid_number || '',
+    fathers_name: customer?.fathers_name || '',
+    mothers_name: customer?.mothers_name || '',
   });
 
   const [formattedPhone, setFormattedPhone] = useState('');
   const [localError, setLocalError] = useState('');
 
-  // Sync with Inertia form data
+  // Sync phone input with formatted value
   useEffect(() => {
     setFormattedPhone(data.phone_number);
   }, [data.phone_number]);
 
   const handlePhoneChange = (e) => {
-    let value = e.target.value;
+    let value = e.target.value.replace(/\D/g, ''); // only digits
 
-    // 1. Allow only digits
-    value = value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
 
-    // 2. Limit to 11 digits
-    if (value.length > 11) {
-      value = value.slice(0, 11);
-    }
-
-    // 3. Must start with '01'
     if (value && !value.startsWith('01')) {
       if (value.startsWith('1')) {
-        value = '0' + value; // auto-fix: 1xxxx → 01xxxx
+        value = '0' + value;
       } else {
         setLocalError('ফোন নম্বর 01 দিয়ে শুরু হতে হবে');
         setFormattedPhone(value);
@@ -57,12 +52,11 @@ function CreateCustomer() {
       setLocalError('');
     }
 
-    // 4. Final validation: exactly 11 digits
     if (value.length === 11 && value.startsWith('01')) {
       setData('phone_number', value);
       setLocalError('');
     } else {
-      setData('phone_number', ''); // invalid → don't send to backend
+      setData('phone_number', '');
     }
 
     setFormattedPhone(value);
@@ -70,27 +64,31 @@ function CreateCustomer() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('inside handle submit');
-    console.log(data);
 
-    post(route('admin.storeCustomer'), {
+    put(route('admin.updateCustomer', customer.id), {
       preserveScroll: true,
       onSuccess: () => {
-        reset();
-        toast.success('কাস্টমার সফলভাবে যুক্ত করা হয়েছে!', {
+        toast.success('কাস্টমার সফলভাবে আপডেট করা হয়েছে!', {
           position: 'top-center',
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: false,
           pauseOnHover: true,
           draggable: true,
-          progress: undefined,
           theme: 'dark',
           transition: Bounce,
         });
       },
+      onError: () => {
+        toast.error('আপডেট করতে সমস্যা হয়েছে।', {
+          position: 'top-center',
+          autoClose: 3000,
+          theme: 'dark',
+        });
+      },
     });
   };
+
   return (
     <LayoutForProduct>
       <ToastContainer
@@ -106,11 +104,12 @@ function CreateCustomer() {
         theme="dark"
         transition={Bounce}
       />
+
       <div className="min-h-screen bg-base-200 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <h2 className="card-title text-2xl mb-2">কাস্টমার তৈরি করুন</h2>
+              <h2 className="card-title text-2xl mb-2">কাস্টমার আপডেট করুন</h2>
               <p className="text-sm text-base-content/70 mb-6">
                 <span className="text-error">*</span> অবশ্য পূরণীয় ক্ষেত্রসমূহ।
               </p>
@@ -127,7 +126,6 @@ function CreateCustomer() {
                     type="text"
                     className={`input input-bordered w-full ${errors.name ? 'input-error' : ''}`}
                     value={data.name}
-                    required
                     onChange={(e) => setData('name', e.target.value)}
                     placeholder="আব্দুল করিম"
                   />
@@ -151,7 +149,6 @@ function CreateCustomer() {
                     type="text"
                     className={`input input-bordered w-full ${errors.address ? 'input-error' : ''}`}
                     value={data.address}
-                    required
                     onChange={(e) => setData('address', e.target.value)}
                     placeholder="সদর, ঠাকুরগাঁও"
                   />
@@ -171,7 +168,6 @@ function CreateCustomer() {
                       ফোন নম্বর <span className="text-error">*</span>
                     </span>
                   </label>
-
                   <input
                     type="text"
                     inputMode="numeric"
@@ -183,8 +179,6 @@ function CreateCustomer() {
                     placeholder="01xxxxxxxxx"
                     maxLength={11}
                   />
-
-                  {/* Show error: from server OR local validation */}
                   {(errors.phone_number || localError) && (
                     <label className="label">
                       <span className="label-text-alt text-error">
@@ -202,8 +196,9 @@ function CreateCustomer() {
                     </span>
                   </label>
                   <select
-                    required
-                    className={`select select-bordered w-full ${errors.collection_day ? 'select-error' : ''}`}
+                    className={`select select-bordered w-full ${
+                      errors.collection_day ? 'select-error' : ''
+                    }`}
                     value={data.collection_day}
                     onChange={(e) => setData('collection_day', e.target.value)}
                   >
@@ -225,7 +220,7 @@ function CreateCustomer() {
                   )}
                 </div>
 
-                {/* NID Number (Optional) */}
+                {/* NID Number */}
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-medium">
@@ -244,7 +239,7 @@ function CreateCustomer() {
                   />
                 </div>
 
-                {/* Father's Name (Optional) */}
+                {/* Father's Name */}
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-medium">
@@ -263,7 +258,7 @@ function CreateCustomer() {
                   />
                 </div>
 
-                {/* Mother's Name (Optional) */}
+                {/* Mother's Name */}
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-medium">
@@ -282,22 +277,29 @@ function CreateCustomer() {
                   />
                 </div>
 
-                {/* Submit */}
-                <div className="pt-4">
+                {/* Buttons */}
+                <div className="flex gap-3 pt-4">
                   <button
                     type="submit"
                     disabled={processing}
-                    className="btn btn-neutral w-full"
+                    className="btn btn-neutral flex-1"
                   >
                     {processing ? (
                       <>
                         <span className="loading loading-spinner"></span>
-                        Submitting...
+                        আপডেট হচ্ছে...
                       </>
                     ) : (
-                      'Create User'
+                      'আপডেট করুন'
                     )}
                   </button>
+
+                  {/* <Link
+                    href={route('admin.customers.index')}
+                    className="btn btn-ghost flex-1"
+                  >
+                    বাতিল
+                  </Link> */}
                 </div>
               </form>
             </div>
@@ -308,4 +310,4 @@ function CreateCustomer() {
   );
 }
 
-export default CreateCustomer;
+export default UpdateCustomer;
