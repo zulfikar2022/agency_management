@@ -4,16 +4,7 @@ import { Bounce, toast, ToastContainer } from 'react-toastify';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
-
-const WEEKDAYS = [
-  { value: 'saturday', label: 'শনিবার' },
-  { value: 'sunday', label: 'রবিবার' },
-  { value: 'monday', label: 'সোমবার' },
-  { value: 'tuesday', label: 'মঙ্গলবার' },
-  { value: 'wednesday', label: 'বুধবার' },
-  { value: 'thursday', label: 'বৃহস্পতিবার' },
-  { value: 'friday', label: 'শুক্রবার' },
-];
+import { WEEKDAYS } from '@/constants';
 
 function UpdateCustomer({ customer }) {
   const { data, setData, put, processing, errors, reset } = useForm({
@@ -25,6 +16,7 @@ function UpdateCustomer({ customer }) {
     fathers_name: customer?.fathers_name || '',
     mothers_name: customer?.mothers_name || '',
   });
+  console.log(data.collection_day);
 
   const [formattedPhone, setFormattedPhone] = useState('');
   const [localError, setLocalError] = useState('');
@@ -199,7 +191,7 @@ function UpdateCustomer({ customer }) {
                     className={`select select-bordered w-full ${
                       errors.collection_day ? 'select-error' : ''
                     }`}
-                    value={data.collection_day}
+                    // value={data.collection_day}
                     onChange={(e) => setData('collection_day', e.target.value)}
                   >
                     <option value="" disabled>

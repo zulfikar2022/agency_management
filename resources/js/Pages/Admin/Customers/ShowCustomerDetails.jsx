@@ -1,6 +1,10 @@
+import { WEEKDAYS } from '@/constants';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 
 function ShowCustomerDetails({ customer }) {
+  const collectionDayLabel = WEEKDAYS.find(
+    (day) => day.value === customer.collection_day
+  )?.label;
   return (
     <LayoutForProduct>
       <div>
@@ -18,7 +22,7 @@ function ShowCustomerDetails({ customer }) {
               <strong>ঠিকানা:</strong> {customer.address}
             </p>
             <p>
-              <strong>টাকা সংগ্রহের দিন:</strong> {customer.collection_day}
+              <strong>টাকা সংগ্রহের দিন:</strong> {collectionDayLabel}
             </p>
           </div>
           <div className=" sm:mt-5 md:pl-5 md:mt-0">

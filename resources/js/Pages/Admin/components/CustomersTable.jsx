@@ -1,7 +1,7 @@
+import { WEEKDAYS } from '@/constants';
 import { Link } from '@inertiajs/react';
 
 function CustomersTable({ customers }) {
-  console.log(customers);
   return (
     <div>
       {customers.length > 0 ? (
@@ -17,31 +17,36 @@ function CustomersTable({ customers }) {
               </tr>
             </thead>
             <tbody>
-              {customers.map((customer) => (
-                <tr key={customer.id}>
-                  <td>{customer.name}</td>
-                  <td>{customer.phone_number}</td>
-                  <td>{customer.address}</td>
-                  <td>{customer.collection_day}</td>
-                  <td className="">
-                    {' '}
-                    <Link
-                      className="btn btn-xs btn-outline"
-                      href={route('admin.showCustomerDetails', customer.id)}
-                    >
-                      বিস্তারিত দেখুন
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      href={route('admin.editCustomer', customer.id)}
-                      className="btn btn-xs btn-outline"
-                    >
-                      আপডেট করুন
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+              {customers.map((customer) => {
+                const collectionDayLabel = WEEKDAYS.find(
+                  (day) => day.value === customer.collection_day
+                )?.label;
+                return (
+                  <tr key={customer.id}>
+                    <td>{customer.name}</td>
+                    <td>{customer.phone_number}</td>
+                    <td>{customer.address}</td>
+                    <td>{collectionDayLabel}</td>
+                    <td className="">
+                      {' '}
+                      <Link
+                        className="btn btn-xs btn-outline"
+                        href={route('admin.showCustomerDetails', customer.id)}
+                      >
+                        বিস্তারিত দেখুন
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        href={route('admin.editCustomer', customer.id)}
+                        className="btn btn-xs btn-outline"
+                      >
+                        আপডেট করুন
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

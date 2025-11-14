@@ -37,6 +37,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:12',
@@ -46,6 +47,7 @@ class CustomerController extends Controller
             'fathers_name' => 'nullable|string|max:255',
             'mothers_name' => 'nullable|string|max:255',
         ]);
+        // dd($validatedData);
 
         
 
