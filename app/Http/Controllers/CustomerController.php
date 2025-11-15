@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\CustomerProduct;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -64,10 +65,14 @@ class CustomerController extends Controller
     {
         $leanUser = request()->get('user');
         $customer = Customer::findOrFail($id);
+        $purchagesLists = CustomerProduct::where('customer_id', $customer->id)->where('is_deleted', false)->get();
+        
 
         return Inertia::render('Admin/Customers/ShowCustomerDetails', [
             'user' => $leanUser,
             'customer' => $customer,
+            'purchagesLists' => $purchagesLists,
+            
         ]);
     }
 

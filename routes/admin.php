@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController\AdminController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
@@ -47,7 +48,7 @@ Route::get('/admin/create-customer', [CustomerController::class, 'create'])->nam
 // store customer route
 Route::post('/admin/store-customer', [CustomerController::class, 'store'])->name('admin.storeCustomer');
 
-// rennder update customer page
+
 
 
  
@@ -71,7 +72,11 @@ Route::put('/admin/customers/update/{id}', [CustomerController::class, 'update']
 // show customer details
 Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('admin.showCustomerDetails');
 
+// show page for selling product to customer
+Route::get('/admin/customers/{id}/sell-product', [CustomerProductController::class, 'sellProductToCustomerPage'])->name('admin.sellProductToCustomerPage');
 
+// save the sold product to customer
+Route::post('/admin/customers/sell-product', [CustomerProductController::class, 'sellProductToCustomer'])->name('admin.sellProductToCustomer');
 
 
 

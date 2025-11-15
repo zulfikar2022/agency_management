@@ -5,8 +5,10 @@ import { Link, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import { WEEKDAYS } from '@/constants';
+import GoBack from '../components/GoBack';
 
 function UpdateCustomer({ customer }) {
+  const { previousUrl } = usePage().props;
   const { data, setData, put, processing, errors, reset } = useForm({
     name: customer?.name || '',
     address: customer?.address || '',
@@ -16,7 +18,6 @@ function UpdateCustomer({ customer }) {
     fathers_name: customer?.fathers_name || '',
     mothers_name: customer?.mothers_name || '',
   });
-  console.log(data.collection_day);
 
   const [formattedPhone, setFormattedPhone] = useState('');
   const [localError, setLocalError] = useState('');
@@ -83,6 +84,7 @@ function UpdateCustomer({ customer }) {
 
   return (
     <LayoutForProduct>
+      <GoBack previousUrl={previousUrl} />
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -191,7 +193,7 @@ function UpdateCustomer({ customer }) {
                     className={`select select-bordered w-full ${
                       errors.collection_day ? 'select-error' : ''
                     }`}
-                    // value={data.collection_day}
+                    value={data.collection_day}
                     onChange={(e) => setData('collection_day', e.target.value)}
                   >
                     <option value="" disabled>

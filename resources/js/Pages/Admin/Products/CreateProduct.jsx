@@ -1,10 +1,12 @@
 import LayoutForProduct from '../layouts/LayoutForProduct';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import React from 'react';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
+import GoBack from '../components/GoBack';
 
 function CreateProduct() {
+  const { previousUrl } = usePage().props;
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
     supplier_name: '',
@@ -34,6 +36,7 @@ function CreateProduct() {
   };
   return (
     <LayoutForProduct>
+      <GoBack previousUrl={previousUrl} />
       <ToastContainer
         position="top-center"
         autoClose={3000}
