@@ -84,7 +84,10 @@ function UpdateCustomer({ customer }) {
 
   return (
     <LayoutForProduct>
-      <GoBack previousUrl={previousUrl} />
+      <GoBack
+        targetRouteName="admin.showCustomers"
+        text="কাস্টমার তালিকায় ফিরে যান"
+      />
       <ToastContainer
         position="top-center"
         autoClose={3000}

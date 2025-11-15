@@ -6,7 +6,10 @@ function ShowProductDetails({ product, update_logs }) {
   const { previousUrl } = usePage().props;
   return (
     <LayoutForProduct>
-      <GoBack previousUrl={previousUrl} />
+      <GoBack
+        targetRouteName="admin.showProducts"
+        text="পণ্য তালিকায় ফিরে যান"
+      />
       <div className="h-full">
         <div className="flex flex-col justify-center items-center my-10 p-5">
           <div
@@ -40,12 +43,12 @@ function ShowProductDetails({ product, update_logs }) {
                 <button className="">পণ্য আপডেট করুন</button>
               </Link>
 
-              {/* <Link
+              <Link
                 className="btn btn-xs btn-outline"
                 href={route('admin.toggleProductStatus', product.id)}
               >
                 {product.is_available ? 'আনএভেইলেবল করুন' : 'অ্যাভেইলেবল করুন'}
-              </Link> */}
+              </Link>
             </div>
           </div>
 

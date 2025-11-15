@@ -95,7 +95,6 @@ function CreateCustomer() {
   };
   return (
     <LayoutForProduct>
-      <GoBack previousUrl={previousUrl} />
       <ToastContainer
         position="top-center"
         autoClose={3000}

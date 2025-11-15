@@ -1,16 +1,18 @@
 import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
-function GoBack({ previousUrl = '/' }) {
+function GoBack({ targetRouteName, text }) {
   return (
     <div>
-      {/* <Link
-        href={previousUrl}
-        className="flex items-center text-sm text-blue-600 hover:underline mb-4"
+      <Link
+        href={route(targetRouteName)}
+        className="flex items-center text-sm text-blue-600 hover:underline mb-4 ml-5"
       >
-        <ArrowLeft size={16} strokeWidth={1} />
-        <span className="ml-1">ফিরে যান</span>
-      </Link> */}
+        <span>
+          <ArrowLeft size={16} strokeWidth={1} />
+        </span>
+        <span className="ml-1">{text || 'ফিরে যান'}</span>
+      </Link>
     </div>
   );
 }

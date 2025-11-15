@@ -1,22 +1,52 @@
 import { WEEKDAYS } from '@/constants';
 import LayoutForProduct from '../layouts/LayoutForProduct';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import GoBack from '../components/GoBack';
+import BoughtList from '../components/BoughtList';
+import Swal from 'sweetalert2';
 
-function ShowCustomerDetails({ customer, purchagesLists }) {
-  console.log('customer:', customer);
+function ShowCustomerDetails({ customer, purchagedProducts }) {
   const { previousUrl } = usePage().props;
-  const totalRemainingPayable = purchagesLists.reduce(
-    (total, item) => total + item.remaining_payable_price,
+  const totalRemainingPayable = purchagedProducts?.reduce(
+    (total, item) => total + item?.remaining_payable_price,
     0
   );
+
+  let totalWeeklyPayable = 0;
+  purchagedProducts?.forEach((item) => {
+    if (item?.remaining_payable_price > 0) {
+      totalWeeklyPayable += item?.weekly_payable_price;
+    }
+  });
 
   const collectionDayLabel = WEEKDAYS.find(
     (day) => day.value === customer.collection_day
   )?.label;
+  const handleDelete = () => {
+    Swal.fire({
+      // title: 'Are you sure?',
+      text: 'আপনি কি আসলেই এই কাস্টমারকে ডিলিট করতে চান? ',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#09090b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'হ্যাঁ, ডিলিট করুন!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.delete(route('admin.deleteCustomer', customer.id));
+        Swal.fire({
+          title: 'ডিলিট করা হয়েছে!',
+          icon: 'success',
+        });
+      }
+    });
+  };
   return (
     <LayoutForProduct>
-      <GoBack previousUrl={previousUrl} />
+      <GoBack
+        targetRouteName="admin.showCustomers"
+        text="কাস্টমার তালিকায় ফিরে যান"
+      />
       <div>
         <h1 className="text-center mt-3 text-3xl ">
           কাস্টমারের বিস্তারিত তথ্য
@@ -57,14 +87,27 @@ function ShowCustomerDetails({ customer, purchagesLists }) {
               বাকি আছেঃ{' '}
               <span className="font-bold">{totalRemainingPayable}</span> টাকা
             </p>
+            <p>
+              সাপ্তাহিক পরিশোধ যোগ্যঃ{' '}
+              <span className="font-bold">{totalWeeklyPayable}</span> টাকা
+            </p>
           </div>
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-between mt-5 md:mt-0">
             <Link
               href={route('admin.editCustomer', customer.id)}
               className="btn btn-xs btn-outline mb-3"
             >
               কাস্টমারের তথ্য আপডেট করুন
             </Link>
+            {totalRemainingPayable == 0 && (
+              <button
+                onClick={handleDelete}
+                // href={route('admin.deleteCustomer', customer.id)}
+                className="btn btn-xs btn-error mb-3"
+              >
+                কাস্টমার ডিলিট করুন
+              </button>
+            )}
             <Link
               href={route('admin.sellProductToCustomerPage', customer.id)}
               className="btn btn-xs btn-neutral mb-3"
@@ -73,6 +116,7 @@ function ShowCustomerDetails({ customer, purchagesLists }) {
             </Link>
           </div>
         </div>
+        <BoughtList purchagedProducts={purchagedProducts} />
       </div>
     </LayoutForProduct>
   );

@@ -36,7 +36,11 @@ function UpdateProduct({ product }) {
   };
   return (
     <LayoutForProduct>
-      <GoBack previousUrl={previousUrl} />
+      <GoBack
+        targetRouteName="admin.showProducts"
+        text="পণ্য তালিকায় ফিরে যান"
+      />
+
       <ToastContainer
         position="top-center"
         autoClose={3000}

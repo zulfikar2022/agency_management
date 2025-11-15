@@ -71,12 +71,17 @@ Route::get('/admin/customers/edit/{id}', [CustomerController::class, 'edit'])->n
 Route::put('/admin/customers/update/{id}', [CustomerController::class, 'update'])->name('admin.updateCustomer');
 // show customer details
 Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('admin.showCustomerDetails');
+// delete customer
+Route::delete('/admin/customers/delete/{id}', [CustomerController::class, 'destroy'])->name('admin.deleteCustomer');
 
 // show page for selling product to customer
 Route::get('/admin/customers/{id}/sell-product', [CustomerProductController::class, 'sellProductToCustomerPage'])->name('admin.sellProductToCustomerPage');
 
 // save the sold product to customer
 Route::post('/admin/customers/sell-product', [CustomerProductController::class, 'sellProductToCustomer'])->name('admin.sellProductToCustomer');
+
+// show customer specific purchase details
+Route::get('/admin/customers/{customer_id}/purchases/{purchase_id}', [CustomerController::class, 'showCustomerPurchases'])->name('admin.showCustomerPurchaseDetails');
 
 
 

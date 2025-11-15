@@ -11,7 +11,6 @@ function ShowAllProducts({ user, products }) {
   const { previousUrl } = usePage().props;
   return (
     <LayoutForProduct>
-      <GoBack previousUrl={previousUrl} />
       <div className="flex flex-col  justify-between">
         <h1 className="text-center mt-3 text-3xl ">সকল পণ্য</h1>
         <div className="mb-4 flex sm: flex-col gap-2  md:flex-row items-center md:ml-3.5">

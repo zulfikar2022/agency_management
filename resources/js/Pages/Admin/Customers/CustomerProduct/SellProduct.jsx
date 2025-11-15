@@ -2,6 +2,7 @@ import LayoutForProduct from '../../layouts/LayoutForProduct';
 import { useForm } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
+import GoBack from '../../components/GoBack';
 
 function SellProduct({ customer, products, user_id }) {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -44,6 +45,10 @@ function SellProduct({ customer, products, user_id }) {
 
   return (
     <LayoutForProduct>
+      <GoBack
+        targetRouteName="admin.showCustomers"
+        text="কাস্টমার তালিকায় ফিরে যান"
+      />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">
@@ -53,7 +58,7 @@ function SellProduct({ customer, products, user_id }) {
               </h2> */}
               <p className="text-lg mb-1">
                 <span className="font-bold">{customer.name}</span> (
-                {customer.address}) এর নিকট প্রোডাক্ট বিক্রি করুন
+                {customer.address}) এর নিকট পণ্য বিক্রি করুন
               </p>
               <p className="text-sm text-base-content/70 mb-6">
                 <span className="text-error">*</span> অবশ্যই পূরণ করতে হবে
@@ -225,7 +230,7 @@ function SellProduct({ customer, products, user_id }) {
                   <button
                     type="submit"
                     disabled={processing}
-                    className="btn btn-primary w-full"
+                    className="btn btn-neutral w-full"
                   >
                     {processing ? (
                       <>
@@ -233,7 +238,7 @@ function SellProduct({ customer, products, user_id }) {
                         সাবমিট হচ্ছে...
                       </>
                     ) : (
-                      'কিস্তি তৈরি করুন'
+                      'পণ্য বিক্রি করুন'
                     )}
                   </button>
                 </div>

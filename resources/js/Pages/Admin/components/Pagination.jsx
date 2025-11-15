@@ -1,10 +1,10 @@
 function Pagination({ paginationData }) {
-  let links = paginationData.links || [];
+  let links = paginationData?.links || [];
   // remove the first and the last entry of the links array and put them into the links itself
-  links = links.slice(1, -1);
+  links = links?.slice(1, -1);
   let prevNext = [
-    paginationData.links[0],
-    paginationData.links[paginationData.links.length - 1],
+    paginationData?.links[0],
+    paginationData?.links[paginationData?.links.length - 1],
   ];
 
   return (

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\CustomerProduct;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +16,16 @@ class CustomerController extends Controller
     public function index()
     {
         $user =  request()->get('user');
-        $customers = Customer::where('is_deleted', false)->orderBy('created_at', 'desc')->paginate(10);
+        $searchTerm = request()->query('search', '');
+        $customers = Customer::where('is_deleted', false)
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('name', 'like', '%' . $searchTerm . '%')
+                      ->orWhere('phone_number', 'like', '%' . $searchTerm . '%')
+                      ->orWhere('address', 'like', '%' . $searchTerm . '%')->orWhere('nid_number', 'like', '%' . $searchTerm . '%')->orWhere('fathers_name', 'like', '%' . $searchTerm . '%')->orWhere('mothers_name', 'like', '%' . $searchTerm . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
         return Inertia::render('Admin/Customers/ShowAllCustomers', [
             'customers' => $customers,
             'user' => $user,
@@ -66,12 +76,16 @@ class CustomerController extends Controller
         $leanUser = request()->get('user');
         $customer = Customer::findOrFail($id);
         $purchagesLists = CustomerProduct::where('customer_id', $customer->id)->where('is_deleted', false)->get();
-        
-
+        $purchagedProducts = $purchagesLists->map(function ($item) {
+            $product = Product::find($item->product_id);
+            $item['product'] = $product;
+            return $item;
+        });
+            
         return Inertia::render('Admin/Customers/ShowCustomerDetails', [
             'user' => $leanUser,
             'customer' => $customer,
-            'purchagesLists' => $purchagesLists,
+            'purchagedProducts' => $purchagedProducts,
             
         ]);
     }
@@ -116,8 +130,31 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer)
+    public function destroy(String $id)
     {
-        //
+        // dd($id);
+        $customer = Customer::findOrFail($id);
+        $customer->is_deleted = true;
+        $customer->save();
+        
+
+        return redirect()->route('admin.showCustomers')->with('success', 'Customer deleted successfully.');
+    }
+
+    // customer specific purchase details
+    public function showCustomerPurchases(String $customer_id, String $purchase_id){
+        
+            $customer = Customer::findOrFail($customer_id);
+            
+            $purchase = CustomerProduct::where('customer_id', $customer->id)->findOrFail($purchase_id);
+            
+            $product = Product::findOrFail($purchase->product_id);
+            // dd($product);
+            $purchase['product'] = $product;
+            
+            return Inertia::render('Admin/Customers/ShowCustomerPurchaseDetails', [
+                'customer' => $customer,
+                'purchase' => $purchase,
+            ]);
     }
 }

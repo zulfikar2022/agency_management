@@ -36,6 +36,18 @@ function CustomersTable({ customers }) {
                         বিস্তারিত দেখুন
                       </Link>
                     </td>
+                    <td className="">
+                      {' '}
+                      <Link
+                        className="btn btn-xs btn-outline"
+                        href={route(
+                          'admin.sellProductToCustomerPage',
+                          customer.id
+                        )}
+                      >
+                        পণ্য বিক্রয় করুন
+                      </Link>
+                    </td>
                     <td>
                       <Link
                         href={route('admin.editCustomer', customer.id)}
