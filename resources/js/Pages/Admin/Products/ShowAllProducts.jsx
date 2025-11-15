@@ -5,9 +5,9 @@ import LayoutForProduct from '../layouts/LayoutForProduct';
 import { useState } from 'react';
 import GoBack from '../components/GoBack';
 
-function ShowAllProducts({ user, products }) {
+function ShowAllProducts({ user, products, search }) {
   let paginationData = { ...products, data: [] };
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(search || '');
   const { previousUrl } = usePage().props;
   return (
     <LayoutForProduct>
@@ -28,11 +28,20 @@ function ShowAllProducts({ user, products }) {
           >
             অনুসন্ধান করুন
           </Link>
+          <Link
+            href={route('admin.showProducts', { search: '' })}
+            className="btn btn-neutral"
+          >
+            সকল পণ্য দেখুন
+          </Link>
         </div>
         <ProductTable products={products?.data} />
         {products?.data?.length > 0 && (
           <div>
-            <Pagination paginationData={paginationData} />
+            <Pagination
+              paginationData={paginationData}
+              queryParams={{ search: searchTerm }}
+            />
           </div>
         )}
       </div>

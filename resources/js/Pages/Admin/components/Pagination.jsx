@@ -22,6 +22,7 @@ function Pagination({ paginationData, queryParams = {} }) {
       url: link.url ? link.url + plainPrams : null,
     };
   });
+
   prevNext = prevNext.map((link) => {
     return {
       ...link,

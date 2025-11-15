@@ -5,10 +5,11 @@ import LayoutForProduct from '../layouts/LayoutForProduct';
 import { useState } from 'react';
 import GoBack from '../components/GoBack';
 
-function AvailableProducts({ products, user }) {
+function AvailableProducts({ products, user, search }) {
+  console.log(products);
   const { previousUrl } = usePage().props;
   let paginationData = { ...products, data: [] };
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(search || '');
   return (
     <LayoutForProduct>
       <div className="flex flex-col justify-evenly">
@@ -28,11 +29,20 @@ function AvailableProducts({ products, user }) {
           >
             অনুসন্ধান করুন
           </Link>
+          <Link
+            href={route('admin.showAvailableProducts', { search: '' })}
+            className="btn btn-neutral"
+          >
+            সকল পণ্য দেখুন
+          </Link>
         </div>
         <ProductTable products={products?.data} />
         {products?.data?.length > 0 && (
           <div>
-            <Pagination paginationData={paginationData} />
+            <Pagination
+              paginationData={paginationData}
+              queryParams={{ search: searchTerm }}
+            />
           </div>
         )}
       </div>

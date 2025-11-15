@@ -46,18 +46,19 @@ class ProductController extends Controller
     public function showProducts(){
         $leanUser = request()->get('user');
         
-        $search = request()->query('search');
-        $products = Product::orderBy('created_at', 'desc')->paginate(100);
-        if ($search) {
-            $products = Product::where('name', 'like', "%{$search}%")
-                ->orWhere('supplier_name', 'like', "%{$search}%")
-                ->orWhere('id', 'like', "%{$search}%")
-                ->orderBy('created_at', 'desc')
-                ->paginate(5);
-        }
+        $search = request()->query('search', '');
+        $products = Product::where('is_deleted' ,false)
+        ->where(function($query) use ($search){
+             $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('supplier_name', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+        })
+        ->orderBy('created_at', 'desc')->paginate(5);
+        
         return Inertia::render('Admin/Products/ShowAllProducts', [
             'user' => $leanUser,
-            'products' => $products
+            'products' => $products, 
+            'search' => $search,
         ]);
     }
 
@@ -77,20 +78,21 @@ class ProductController extends Controller
     // show available products
     public function showAvailableProducts(){
         $leanUser = request()->get('user');
-
-        $search = request()->query('search');
-        $availableProducts = Product::where('is_available', true)->orderBy('created_at', 'desc');
-
-        if ($search) {
-            $availableProducts = $availableProducts->where('name', 'like', "%{$search}%")
-                ->orWhere('supplier_name', 'like', "%{$search}%")
-                ->orWhere('id', 'like', "%{$search}%")->orderBy('created_at', 'desc');
-        }
-
-        $availableProducts = $availableProducts->paginate(100);
+        $search = request()->query('search', '');
+        // dd($search);
+        $availableProducts = Product::where('is_available', true)
+        ->where('is_deleted' ,false)
+        ->where(function($query) use ($search){
+             $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('supplier_name', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+        })
+        ->orderBy('created_at', 'desc')->paginate(5);
+        
         return Inertia::render('Admin/Products/AvailableProducts', [
                 'user' => $leanUser, 
-                'products' => $availableProducts
+                'products' => $availableProducts,
+                'search' => $search
 
             ]);
     }
@@ -99,20 +101,21 @@ class ProductController extends Controller
     public function showUnavailableProducts(){
         $leanUser = request()->get('user');
         
-        $search = request()->query('search');
-        $unavailableProducts = Product::where('is_available', false)->orderBy('created_at', 'desc');
+        $search = request()->query('search', '');
 
-        if ($search) {
-            $unavailableProducts = Product::where('is_available', false);
-            $unavailableProducts = $unavailableProducts->where('name', 'like', "%{$search}%")
-                ->orWhere('supplier_name', 'like', "%{$search}%")
-                ->orWhere('id', 'like', "%{$search}%")->orderBy('created_at', 'desc');
-        }
-
-        $unavailableProducts = $unavailableProducts->paginate(100);
+        $unavailableProducts = Product::where('is_available', false)
+        ->where('is_deleted' ,false)
+        ->where(function($query) use ($search){
+             $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('supplier_name', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+        })
+        ->orderBy('created_at', 'desc')->paginate(5);
+        
         return Inertia::render('Admin/Products/UnAvailableProducts', [
                 'user' => $leanUser, 
-                'products' => $unavailableProducts
+                'products' => $unavailableProducts ,
+                'search' => $search
 
             ]);
     }
