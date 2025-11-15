@@ -5,8 +5,7 @@ import LayoutForProduct from '../layouts/LayoutForProduct';
 import { useState } from 'react';
 import GoBack from '../components/GoBack';
 
-function AvailableProducts({ products, user, search }) {
-  console.log(products);
+function AvailableProducts({ products, user, search, numberOfProducts }) {
   const { previousUrl } = usePage().props;
   let paginationData = { ...products, data: [] };
   const [searchTerm, setSearchTerm] = useState(search || '');
@@ -14,6 +13,10 @@ function AvailableProducts({ products, user, search }) {
     <LayoutForProduct>
       <div className="flex flex-col justify-evenly">
         <h1 className="text-center mt-3 text-3xl ">এভেইলেবল পণ্যসমূহ</h1>
+        <p className="text-center ">মোট পণ্য: {numberOfProducts} টি</p>
+        <p className="text-center ">
+          এই পৃষ্ঠায় পণ্য আছেঃ {products?.data?.length} টি
+        </p>
         <div className="mb-4 flex sm: flex-col gap-2  md:flex-row items-center md:ml-3.5">
           <input
             type="text"

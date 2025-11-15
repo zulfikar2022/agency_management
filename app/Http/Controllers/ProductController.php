@@ -53,12 +53,15 @@ class ProductController extends Controller
                   ->orWhere('supplier_name', 'like', "%{$search}%")
                   ->orWhere('id', 'like', "%{$search}%");
         })
-        ->orderBy('created_at', 'desc')->paginate(5);
+        ->orderBy('created_at', 'desc')->paginate(50);
+
+        $numberOfProducts = Product::where('is_deleted', false)->count();
         
         return Inertia::render('Admin/Products/ShowAllProducts', [
             'user' => $leanUser,
             'products' => $products, 
             'search' => $search,
+            'numberOfProducts' => $numberOfProducts
         ]);
     }
 
@@ -87,12 +90,14 @@ class ProductController extends Controller
                   ->orWhere('supplier_name', 'like', "%{$search}%")
                   ->orWhere('id', 'like', "%{$search}%");
         })
-        ->orderBy('created_at', 'desc')->paginate(5);
+        ->orderBy('created_at', 'desc')->paginate(50);
+        $numberOfProducts = Product::where('is_deleted', false)->where('is_available', true)->count();
         
         return Inertia::render('Admin/Products/AvailableProducts', [
                 'user' => $leanUser, 
                 'products' => $availableProducts,
-                'search' => $search
+                'search' => $search,
+                'numberOfProducts' => $numberOfProducts
 
             ]);
     }
@@ -110,12 +115,15 @@ class ProductController extends Controller
                   ->orWhere('supplier_name', 'like', "%{$search}%")
                   ->orWhere('id', 'like', "%{$search}%");
         })
-        ->orderBy('created_at', 'desc')->paginate(5);
+        ->orderBy('created_at', 'desc')->paginate(50);
         
+        $numberOfProducts = Product::where('is_deleted', false)->where('is_available', false)->count();
+
         return Inertia::render('Admin/Products/UnAvailableProducts', [
                 'user' => $leanUser, 
                 'products' => $unavailableProducts ,
-                'search' => $search
+                'search' => $search,
+                'numberOfProducts' => $numberOfProducts
 
             ]);
     }
