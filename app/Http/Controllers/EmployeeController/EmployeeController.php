@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EmployeeController;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\CustomerProduct;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,13 @@ class EmployeeController extends Controller
         })
         ->orderBy('created_at', 'desc')
         ->paginate(10);
+         $customers->getCollection()->transform(function ($customer) {
+                    $purchases = CustomerProduct::where('customer_id', $customer->id)
+                        ->where('is_deleted', false)
+                        ->get();
+                    $customer->purchases = $purchases;
+                    return $customer;
+                });
 
     return Inertia::render('Employee/Products/HaveToPayToday', [
         'user' => $user,
@@ -66,6 +74,15 @@ class EmployeeController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
 
+                
+                $customers->getCollection()->transform(function ($customer) {
+                    $purchases = CustomerProduct::where('customer_id', $customer->id)
+                        ->where('is_deleted', false)
+                        ->get();
+                    $customer->purchases = $purchases;
+                    return $customer;
+                });
+
         return Inertia::render('Employee/Products/AllCustomers', [
             'customers' => $customers,
             'user' => $user,
@@ -83,6 +100,15 @@ class EmployeeController extends Controller
                 })
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
+
+                $customers->getCollection()->transform(function ($customer) {
+                    $purchases = CustomerProduct::where('customer_id', $customer->id)
+                        ->where('is_deleted', false)
+                        ->get();
+                    $customer->purchases = $purchases;
+                    return $customer;
+                });
+
             return Inertia::render('Employee/Products/AllCustomers', [
                 'customers' => $customers
         ]);
@@ -93,6 +119,7 @@ class EmployeeController extends Controller
     public function customersPaidToday(){
         $user = request()->get('user');
         $today = request()->query('todate');
+        $search = request()->query('search', '');
 
         // make the following arraay unique
         
@@ -103,8 +130,24 @@ class EmployeeController extends Controller
         // fetch customers by ids
         $customers = Customer::whereIn('id', $customersIds)
             ->where('is_deleted', false)
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    ->orWhere('address', 'like', '%' . $search . '%')
+                    ->orWhere('nid_number', 'like', '%' . $search . '%')
+                    ->orWhere('fathers_name', 'like', '%' . $search . '%')
+                    ->orWhere('mothers_name', 'like', '%' . $search . '%');
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+
+             $customers->getCollection()->transform(function ($customer) {
+                    $purchases = CustomerProduct::where('customer_id', $customer->id)
+                        ->where('is_deleted', false)
+                        ->get();
+                    $customer->purchases = $purchases;
+                    return $customer;
+                });
 
         return Inertia::render('Employee/Products/PaidToday', [
             'user' => $user,
@@ -116,6 +159,7 @@ class EmployeeController extends Controller
         $user = request()->get('user');
         $todate = request()->query('todate');
         $today =  request()->query('today');
+        $search = request()->query('search', '');
 
         $customersIds = ProductCustomerMoneyCollection::where('created_at', $todate)
             ->pluck('customer_id')
@@ -124,10 +168,26 @@ class EmployeeController extends Controller
         $customers = Customer::whereNotIn('id', $customersIds)
             ->where('is_deleted', false)
             ->where('collection_day', $today)
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    ->orWhere('address', 'like', '%' . $search . '%')
+                    ->orWhere('nid_number', 'like', '%' . $search . '%')
+                    ->orWhere('fathers_name', 'like', '%' . $search . '%')
+                    ->orWhere('mothers_name', 'like', '%' . $search . '%');
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return Inertia::render('Employee/Products/NotPiadToday', [
+             $customers->getCollection()->transform(function ($customer) {
+                    $purchases = CustomerProduct::where('customer_id', $customer->id)
+                        ->where('is_deleted', false)
+                        ->get();
+                    $customer->purchases = $purchases;
+                    return $customer;
+                });
+
+        return Inertia::render('Employee/Products/NotPaidToday', [
             'user' => $user,
             'customers' => $customers
         ]);

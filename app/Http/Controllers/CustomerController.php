@@ -17,6 +17,7 @@ class CustomerController extends Controller
     {
         $user =  request()->get('user');
         $searchTerm = request()->query('search', '');
+        dd($user);
         $customers = Customer::where('is_deleted', false)
             ->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', '%' . $searchTerm . '%')
@@ -26,6 +27,8 @@ class CustomerController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
+
+        
         return Inertia::render('Admin/Customers/ShowAllCustomers', [
             'customers' => $customers,
             'user' => $user,

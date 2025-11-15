@@ -76,7 +76,14 @@ function EmployeeProductLayout({ children }) {
                 </Link>
               </li>
               <li>
-                <Link className="text-sm">আজকের স্ট্যাটাস </Link>
+                <Link
+                  href={route('employee.todaysStatus', {
+                    todate: new Date().toISOString().split('T')[0],
+                  })}
+                  className="text-sm"
+                >
+                  আজকের স্ট্যাটাস{' '}
+                </Link>
               </li>
               {/* <li>
                 <Link>ড্যাশবোর্ডে যান </Link>
