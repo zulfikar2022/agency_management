@@ -17,12 +17,16 @@ class CustomerController extends Controller
     {
         $user =  request()->get('user');
         $searchTerm = request()->query('search', '');
-        dd($user);
+        // dd($user);
+        // dd($searchTerm);
         $customers = Customer::where('is_deleted', false)
             ->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', '%' . $searchTerm . '%')
                       ->orWhere('phone_number', 'like', '%' . $searchTerm . '%')
-                      ->orWhere('address', 'like', '%' . $searchTerm . '%')->orWhere('nid_number', 'like', '%' . $searchTerm . '%')->orWhere('fathers_name', 'like', '%' . $searchTerm . '%')->orWhere('mothers_name', 'like', '%' . $searchTerm . '%');
+                      ->orWhere('address', 'like', '%' . $searchTerm . '%')
+                      ->orWhere('nid_number', 'like', '%' . $searchTerm . '%')
+                      ->orWhere('fathers_name', 'like', '%' . $searchTerm . '%')->orWhere('mothers_name', 'like', '%' . $searchTerm . '%')
+                      ->orWhere('collection_day', 'like', '%' . $searchTerm . '%');
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10);

@@ -53,7 +53,7 @@ class ProductController extends Controller
                 ->orWhere('supplier_name', 'like', "%{$search}%")
                 ->orWhere('id', 'like', "%{$search}%")
                 ->orderBy('created_at', 'desc')
-                ->paginate(100);
+                ->paginate(5);
         }
         return Inertia::render('Admin/Products/ShowAllProducts', [
             'user' => $leanUser,
