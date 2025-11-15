@@ -7,7 +7,8 @@ function HaveToPayToday({ customers }) {
   const data = customers?.data;
   const pagination = { ...customers, data: [] };
   const tableData = customerTableDataGenerateForEmployee(data);
-  console.log(data);
+  const today = new Date().toISOString().split('T')[0].toLowerCase();
+  const todate = new Date().toISOString().split('T')[0];
 
   return (
     <EmployeeProductLayout>
@@ -15,7 +16,12 @@ function HaveToPayToday({ customers }) {
         আজ পরিশোধ করতে হবে
       </p>
       <ResponsiveTable data={tableData} />
-      {data?.length > 0 && <Pagination paginationData={pagination} />}
+      {data?.length > 0 && (
+        <Pagination
+          paginationData={pagination}
+          queryParams={{ today, todate }}
+        />
+      )}
     </EmployeeProductLayout>
   );
 }
