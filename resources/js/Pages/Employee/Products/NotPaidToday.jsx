@@ -8,13 +8,21 @@ function NotPaidToday({ customers }) {
   const pagination = { ...customers, data: [] };
 
   const tableData = customerTableDataGenerateForEmployee(data);
+  const actionData = [
+    {
+      label: 'কালেকশন করুন',
+      routeName: 'employee.renderCollectionPage',
+      routeHasParameter: true,
+      paramName: 'id',
+    },
+  ];
 
   return (
     <EmployeeProductLayout>
       <p className="text-lg font-semibold text-center my-5">
         আজ যারা টাকা দেয়নি
       </p>
-      <ResponsiveTable data={tableData} />
+      <ResponsiveTable data={tableData} actionData={actionData} />
       {data?.length > 0 && <Pagination paginationData={pagination} />}
     </EmployeeProductLayout>
   );

@@ -5,6 +5,7 @@ import CustomersTable from '../components/CustomersTable';
 import { Link, usePage } from '@inertiajs/react';
 import GoBack from '../components/GoBack';
 import { WEEKDAYS } from '@/constants';
+import ResponsiveCustomerTable from '../components/ResponsiveCustomerTable';
 
 function ShowAllCustomers({ customers, user }) {
   const { previousUrl } = usePage().props;
@@ -61,7 +62,9 @@ function ShowAllCustomers({ customers, user }) {
       </div>
       <div>
         <h1 className="text-center mt-3 text-3xl ">সকল কাস্টমার</h1>
-        <CustomersTable customers={customers?.data} />
+        {/* <CustomersTable customers={customers?.data} /> */}
+
+        <ResponsiveCustomerTable data={customers?.data} />
       </div>
       {customers.data.length > 0 && (
         <Pagination paginationData={paginationData} />

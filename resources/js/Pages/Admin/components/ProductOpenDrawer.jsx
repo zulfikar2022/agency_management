@@ -34,7 +34,7 @@ function ProductOpenDrawer() {
 
         <li>
           <Link className="ml-3" href={route('admin.showUnavailableProducts')}>
-            অপ্রাপ্য পণ্যসমূহ
+            আনএভেইলেবল পণ্যসমূহ
           </Link>
         </li>
         <li>

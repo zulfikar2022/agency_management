@@ -4,6 +4,7 @@ import ProductTable from '../components/ProductTable';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import { useState } from 'react';
 import GoBack from '../components/GoBack';
+import ResponsiveProductTable from '../components/ResponsiveProductTable';
 
 function AvailableProducts({ products, user, search, numberOfProducts }) {
   const { previousUrl } = usePage().props;
@@ -13,7 +14,7 @@ function AvailableProducts({ products, user, search, numberOfProducts }) {
     <LayoutForProduct>
       <div className="flex flex-col justify-evenly">
         <h1 className="text-center mt-3 text-3xl ">এভেইলেবল পণ্যসমূহ</h1>
-        <p className="text-center ">মোট পণ্য: {numberOfProducts} টি</p>
+        <p className="text-center ">মোট এভেইলেবল পণ্য: {numberOfProducts} টি</p>
         <p className="text-center ">
           এই পৃষ্ঠায় পণ্য আছেঃ {products?.data?.length} টি
         </p>
@@ -39,7 +40,7 @@ function AvailableProducts({ products, user, search, numberOfProducts }) {
             সকল পণ্য দেখুন
           </Link>
         </div>
-        <ProductTable products={products?.data} />
+        <ResponsiveProductTable data={products?.data} />
         {products?.data?.length > 0 && (
           <div>
             <Pagination

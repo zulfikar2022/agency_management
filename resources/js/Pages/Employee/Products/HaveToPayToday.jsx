@@ -10,12 +10,21 @@ function HaveToPayToday({ customers }) {
   const today = new Date().toISOString().split('T')[0].toLowerCase();
   const todate = new Date().toISOString().split('T')[0];
 
+  const actionData = [
+    {
+      label: 'কালেকশন করুন',
+      routeName: 'employee.renderCollectionPage',
+      routeHasParameter: true,
+      paramName: 'id',
+    },
+  ];
+
   return (
     <EmployeeProductLayout>
       <p className="text-lg font-semibold text-center my-5">
-        আজ পরিশোধ করতে হবে
+        আজ যারা টাকা দেবে
       </p>
-      <ResponsiveTable data={tableData} />
+      <ResponsiveTable data={tableData} actionData={actionData} />
       {data?.length > 0 && (
         <Pagination
           paginationData={pagination}

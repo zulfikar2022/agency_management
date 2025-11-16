@@ -11,7 +11,6 @@ function Pagination({ paginationData, queryParams = {} }) {
     plainPrams += `&${key}=${queryParams[key]}`;
   });
 
-  console.log(links);
   // append the query params to the links
   links = links.map((link) => {
     if (!link?.url?.includes('?')) {
@@ -29,7 +28,6 @@ function Pagination({ paginationData, queryParams = {} }) {
       url: link.url ? link.url + plainPrams : null,
     };
   });
-  console.log(links);
 
   // console.log({ links, prevNext, plainPrams });
 

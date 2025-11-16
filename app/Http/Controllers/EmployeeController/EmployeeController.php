@@ -5,6 +5,7 @@ namespace App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
+use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -193,6 +194,27 @@ class EmployeeController extends Controller
         ]);
     }
 
+    public function renderCollectionPage($id){
+        $user = request()->get('user');
+        $customer = Customer::findOrFail($id);
+        $purchases = CustomerProduct::where('customer_id', $customer->id)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_price', '>', 0)
+            ->get();
+        
+        $purchases->transform(function ($purchase) {
+            $product = Product::find($purchase->product_id);
+            $purchase->product = $product;
+            return $purchase;
+        });
+       
+
+        return Inertia::render('Employee/Products/CollectionPage', [
+            'user' => $user,
+            'customer' => $customer, 
+            'purchases' => $purchases
+        ]);
+    }
     public function todaysCollection(){
         $user = request()->get('user');
         $todate = request()->query('todate');

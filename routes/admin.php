@@ -58,6 +58,7 @@ Route::post('/admin/store-customer', [CustomerController::class, 'store'])->name
 // show product by id route
 Route::get('/admin/products/{id}', [ProductController::class, 'showProductById'])->name('admin.showProductById');
 
+// show update product page
 Route::get('/admin/products/update/{id}', [ProductController::class, 'showUpdateProductPage'])->name('admin.showUpdateProductPage');
 
 Route::put('/admin/products/update/{id}', [ProductController::class, 'updateProduct'])->name('admin.updateProduct');

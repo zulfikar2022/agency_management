@@ -34,6 +34,8 @@ Route::get('/employee/todays-collection', [EmployeeController::class, 'todaysCol
 // today's status route
 Route::get('/employee/todays-status', [EmployeeController::class, 'todaysStatus'])->name('employee.todaysStatus');
 
+// render collection page route
+Route::get('/employee/collection-page/{id}', [EmployeeController::class, 'renderCollectionPage'])->name('employee.renderCollectionPage');   
 
 
 });
