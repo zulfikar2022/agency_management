@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 function CollectionPage({ user, customer, purchases }) {
-  console.log(purchases);
+  console.log(purchases, customer);
   const { data, setData, post, processing, errors } = useForm({
     customer_id: customer.id,
     customer_product_id: purchases.map((p) => p?.id),
@@ -81,11 +81,11 @@ function CollectionPage({ user, customer, purchases }) {
         theme="dark"
         transition={Bounce}
       />
-      <div className="p-5">
-        <div className="flex flex-col gap-3 mb-6 container mx-auto items-center">
-          <h1 className="text-2xl font-bold mb-4 border-b">
-            কাস্টমার কালেকশন পেজ
-          </h1>
+      <h1 className="text-2xl font-bold mb-4 border-b text-center">
+        কাস্টমার কালেকশন পেজ
+      </h1>
+      <div className="p-5 border container rounded-lg mx-auto mb-6 flex flex-col md:flex-row h-full md:justify-between">
+        <div className="">
           <p>
             <span className="font-semibold">কাস্টমার নাম:</span>{' '}
             {customer?.name}
@@ -97,6 +97,7 @@ function CollectionPage({ user, customer, purchases }) {
           </p>
         </div>
         {/* আরও কাস্টমার সম্পর্কিত তথ্য এখানে দেখানো যেতে পারে */}
+        <div className="divider divider-vertical divider-info"></div>
         <div>
           <h2 className="text-xl font-bold mb-4 text-center">
             পণ্যের মোট মূল্যঃ {totalPrice} টাকা
