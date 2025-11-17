@@ -88,7 +88,7 @@ function SellProduct({ customer, products, user_id }) {
                     </option>
                     {products.map((product) => (
                       <option key={product.id} value={product.id}>
-                        {product.name}
+                        {product.name} - {product.supplier_name}
                       </option>
                     ))}
                   </select>

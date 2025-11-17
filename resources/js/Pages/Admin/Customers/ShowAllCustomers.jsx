@@ -44,7 +44,6 @@ function ShowAllCustomers({ customers, user }) {
               কালেকশন ডে দ্বারা ফিল্টার করুন
             </option>
             {WEEKDAYS.map((day) => {
-              console.log(day);
               return (
                 <option key={day.value} value={day.value}>
                   {day.label}

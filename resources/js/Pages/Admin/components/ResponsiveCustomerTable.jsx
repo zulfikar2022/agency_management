@@ -2,14 +2,12 @@ import { WEEKDAYS } from '@/constants';
 import { Link } from '@inertiajs/react';
 
 function ResponsiveCustomerTable({ data }) {
-  console.log(data);
   if (data.length === 0) {
     return <div className="text-center my-10 text-gray-500">কোন পণ্য নেই</div>;
   }
   return (
     <div>
       {data?.map((customer, index) => {
-        console.log(customer);
         return (
           <div
             key={customer.id}

@@ -8,7 +8,6 @@ function ResponsiveCustomerDetailsTable({ purchagedProducts }) {
   return (
     <div className="mt-10 mb-5">
       {purchagedProducts?.map((item, index) => {
-        console.log(item);
         return (
           <div
             key={item?.id}

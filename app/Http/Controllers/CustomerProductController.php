@@ -13,7 +13,7 @@ class CustomerProductController extends Controller
 {
     public function sellProductToCustomerPage($id){
         $user =  request()->get('user');
-        $productsNames = Product::select('name', 'id')->where('is_deleted', false)->where('is_available', true)->orderBy('created_at', 'desc')->get();
+        $productsNames = Product::select('name', 'id', 'supplier_name')->where('is_deleted', false)->where('is_available', true)->orderBy('created_at', 'desc')->get();
         $customer = Customer::findOrFail($id);
         return Inertia::render('Admin/Customers/CustomerProduct/SellProduct', [
             'customer' => $customer, 
