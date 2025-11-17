@@ -31,7 +31,9 @@ function EmployeeProductLayout({ children }) {
                 <Link
                   className="text-sm"
                   href={route('employee.customersThatPayToday', {
-                    today: new Date().toISOString().split('T')[0].toLowerCase(),
+                    today: new Date()
+                      .toLocaleDateString(undefined, { weekday: 'long' })
+                      .toLowerCase(),
                   })}
                 >
                   আজ যারা টাকা দেবে

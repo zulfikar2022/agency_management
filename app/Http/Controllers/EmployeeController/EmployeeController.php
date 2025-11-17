@@ -122,9 +122,9 @@ class EmployeeController extends Controller
         $today = request()->query('todate');
         $search = request()->query('search', '');
 
-        // make the following arraay unique
-        
-        $customersIds = ProductCustomerMoneyCollection::where('created_at', $today)
+        // make the following array unique
+
+        $customersIds = ProductCustomerMoneyCollection::where('collecting_date', $today)
             ->pluck('customer_id')
             ->toArray();
         $customersIds = array_unique($customersIds);
@@ -162,7 +162,12 @@ class EmployeeController extends Controller
         $today =  request()->query('today');
         $search = request()->query('search', '');
 
-        $customersIds = ProductCustomerMoneyCollection::where('created_at', $todate)
+        // $customersIdsPaidToday = ProductCustomerMoneyCollection::where('collecting_date', $todate)
+        //     ->pluck('customer_id')
+        //     ->toArray();
+        // $customersIdsPaidToday = array_unique($customersIdsPaidToday);
+            
+        $customersIds = ProductCustomerMoneyCollection::where('collecting_date', $todate)
             ->pluck('customer_id')
             ->toArray();
         // fetch customers who are not in the above ids
@@ -207,12 +212,17 @@ class EmployeeController extends Controller
             $purchase->product = $product;
             return $purchase;
         });
+
+        $collections = ProductCustomerMoneyCollection::where('customer_id', $customer->id)
+            ->orderBy('collecting_date', 'desc')
+            ->get();
        
 
         return Inertia::render('Employee/Products/CollectionPage', [
             'user' => $user,
             'customer' => $customer, 
-            'purchases' => $purchases
+            'purchases' => $purchases,
+            'collections' => $collections
         ]);
     }
     public function todaysCollection(){
@@ -232,6 +242,30 @@ class EmployeeController extends Controller
         return Inertia::render('Employee/Products/TodaysStatus', [
             'user' => $user,
             'todate' => $todate
+        ]);
+    }
+
+    public function customerDetails($id){
+        $user = request()->get('user');
+        $customer = Customer::findOrFail($id);
+        $purchases = CustomerProduct::where('customer_id', $customer->id)
+            ->where('is_deleted', false)
+            ->get();
+        $collections = ProductCustomerMoneyCollection::where('customer_id', $customer->id)
+            ->get();
+        
+        $purchases->transform(function ($purchase) {
+            $product = Product::find($purchase->product_id);
+            $purchase->product = $product;
+            return $purchase;
+        });
+       
+
+        return Inertia::render('Employee/Products/EmployeeCustomerDetails', [
+            'user' => $user,
+            'customer' => $customer, 
+            'purchases' => $purchases,
+            'collections' => $collections
         ]);
     }
 }

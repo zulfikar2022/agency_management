@@ -1,17 +1,19 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import CollectMoneyForm from '../components/CollectMoneyForm';
 import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
 import Swal from 'sweetalert2';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { WEEKDAYS } from '@/constants';
+import CollectionListTable from '../components/CollectionListTable';
 
-function CollectionPage({ user, customer, purchases }) {
-  console.log(purchases, customer);
+function CollectionPage({ user, customer, purchases, collections }) {
   const { data, setData, post, processing, errors } = useForm({
     customer_id: customer.id,
     customer_product_id: purchases.map((p) => p?.id),
     collectable_amount: purchases.map((p) => p?.weekly_payable_price || 0),
     collected_amount: purchases.map((p) => p?.weekly_payable_price || 0),
   });
+  const { error: returnedErrorMessage } = usePage()?.props?.errors;
 
   const totalRemainingPayable = purchases.reduce(
     (total, purchase) => total + (purchase?.remaining_payable_price || 0),
@@ -26,7 +28,7 @@ function CollectionPage({ user, customer, purchases }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     Swal.fire({
-      title: 'আসলেই আপনি এই পেমেন্ট সংগ্রহ করতে চান?',
+      title: 'আসলেই আপনি এই কিস্তি সংগ্রহ করতে চান?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#09090b',
@@ -44,22 +46,33 @@ function CollectionPage({ user, customer, purchases }) {
         post(route('employee.storeCollection'), {
           preserveScroll: true,
           onSuccess: () => {
-            toast.success('🦄 Wow so easy!', {
+            toast.success('পেমেন্ট সফলভাবে সংগ্রহ করা হয়েছে!', {
               position: 'top-center',
               autoClose: 3000,
               hideProgressBar: false,
               closeOnClick: false,
-              pauseOnHover: true,
+              pauseOnHover: false,
               draggable: true,
               progress: undefined,
               theme: 'dark',
               transition: Bounce,
             });
-            // Reset collected_amount fields
-            // setData((prevData) => ({
-            //   ...prevData,
-            //   collected_amount: prevData.collected_amount.map(() => ''),
-            // }));
+          },
+          onError: () => {
+            toast.error(
+              returnedErrorMessage || 'পেমেন্ট সংগ্রহে সমস্যা হয়েছে!',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+                transition: Bounce,
+              }
+            );
           },
         });
       }
@@ -81,10 +94,10 @@ function CollectionPage({ user, customer, purchases }) {
         theme="dark"
         transition={Bounce}
       />
-      <h1 className="text-2xl font-bold mb-4 border-b text-center">
+      <h1 className="text-2xl font-bold mb-4 border-b text-center md:container mx-2 md:mx-auto pb-2 ">
         কাস্টমার কালেকশন পেজ
       </h1>
-      <div className="p-5 border container rounded-lg mx-auto mb-6 flex flex-col md:flex-row h-full md:justify-between">
+      <div className="p-5 border container rounded-lg md:mx-auto mb-6 flex flex-col md:flex-row h-full md:justify-between">
         <div className="">
           <p>
             <span className="font-semibold">কাস্টমার নাম:</span>{' '}
@@ -95,28 +108,41 @@ function CollectionPage({ user, customer, purchases }) {
             <span className="font-semibold">কাস্টমার ফোন:</span>{' '}
             {customer?.phone_number}
           </p>
+          <p>
+            <span className="font-semibold">ঠিকানা:</span> {customer?.address}
+          </p>
+          <p>
+            <span className="font-semibold">টাকা সংগ্রহের দিন:</span>{' '}
+            {
+              WEEKDAYS.find((day) => day.value === customer?.collection_day)
+                ?.label
+            }
+          </p>
         </div>
         {/* আরও কাস্টমার সম্পর্কিত তথ্য এখানে দেখানো যেতে পারে */}
-        <div className="divider divider-vertical divider-info"></div>
-        <div>
-          <h2 className="text-xl font-bold mb-4 text-center">
-            পণ্যের মোট মূল্যঃ {totalPrice} টাকা
-          </h2>
-          <h2 className="text-xl font-bold mb-4 text-center">
-            মোট সাপ্তাহিক পরিশোধঃ{' '}
+
+        <div className="flex flex-col mt-4 md:mt-0 items-start">
+          <p className="  text-center">
+            <span className="font-bold">পণ্যের মোট মূল্যঃ</span> {totalPrice}{' '}
+            টাকা
+          </p>
+          <p className="  text-center">
+            <span className="font-bold">মোট সাপ্তাহিক পরিশোধঃ</span>{' '}
             {purchases.reduce(
               (total, purchase) =>
                 total + (purchase?.weekly_payable_price || 0),
               0
             )}{' '}
             টাকা
-          </h2>
-          <h2 className="text-xl font-bold mb-4 text-center">
-            মোট বাকি পরিমানঃ {totalRemainingPayable} টাকা
-          </h2>
-          <h2 className="text-xl font-bold mb-4 text-center">
-            মোট পরিশোধিত পরিমানঃ {totalPrice - totalRemainingPayable} টাকা
-          </h2>
+          </p>
+          <p className="  text-center">
+            <span className="font-bold">মোট পরিশোধিত পরিমানঃ</span>{' '}
+            {totalPrice - totalRemainingPayable} টাকা
+          </p>
+          <p className="  text-center">
+            <span className="font-bold">মোট বাকি আছেঃ</span>{' '}
+            {totalRemainingPayable} টাকা
+          </p>
         </div>
       </div>
       <form
@@ -168,23 +194,28 @@ function CollectionPage({ user, customer, purchases }) {
           );
         })}
 
-        <div className=" w-full max-w-md px-5 md:px-0">
-          <button
-            type="submit"
-            disabled={processing}
-            className="btn btn-neutral w-full max-w-md "
-          >
-            {processing ? (
-              <>
-                <span className="loading loading-spinner"></span>
-                Collecting...
-              </>
-            ) : (
-              'পেমেন্ট সংগ্রহ করুন'
-            )}
-          </button>
-        </div>
+        {purchases?.length > 0 && (
+          <div className=" w-full max-w-md px-5 md:px-0">
+            <button
+              type="submit"
+              disabled={processing}
+              className="btn btn-neutral w-full max-w-md "
+            >
+              {processing ? (
+                <>
+                  <span className="loading loading-spinner"></span>
+                  Collecting...
+                </>
+              ) : (
+                'কিস্তি সংগ্রহ করুন'
+              )}
+            </button>
+          </div>
+        )}
       </form>
+      {collections && collections.length > 0 && (
+        <CollectionListTable collections={collections} />
+      )}
     </EmployeeProductLayout>
   );
 }

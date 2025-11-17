@@ -44,6 +44,6 @@ Route::post('/employee/process-collection', [ProductCustomerMoneyCollectionContr
 
 
 // customer details route
-Route::get('/employee/customer-details/{id}', [CustomerController::class, 'show'])->name('employee.customerDetails');
+Route::get('/employee/customer-details/{id}', [EmployeeController::class, 'customerDetails'])->name('employee.customerDetails');
 
 });

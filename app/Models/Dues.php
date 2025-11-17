@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dues extends Model
 {
-    //
+    protected $fillable = [
+        'customer_id',
+        'due_amount',
+        'customer_product_id',
+    ];
 }

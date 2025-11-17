@@ -1,3 +1,5 @@
+import { Link } from '@inertiajs/react';
+
 function Pagination({ paginationData, queryParams = {} }) {
   let links = paginationData?.links || [];
   // remove the first and the last entry of the links array and put them into the links itself
@@ -29,13 +31,11 @@ function Pagination({ paginationData, queryParams = {} }) {
     };
   });
 
-  // console.log({ links, prevNext, plainPrams });
-
   return (
     <div>
       <nav className="pagination-nav flex justify-center my-4">
         <div>
-          <a href={prevNext[0].url} className={`p-3 btn  mx-1 btn-neutral`}>
+          <a href={prevNext[0]?.url} className={`p-3 btn  mx-1 btn-neutral`}>
             {'আগের পৃষ্ঠা'}
           </a>
         </div>
@@ -43,15 +43,15 @@ function Pagination({ paginationData, queryParams = {} }) {
           {links.map((link, index) => (
             <a
               key={index}
-              href={link.url}
-              className={`p-3 btn  mx-1 ${link.active ? 'btn-outline ' : 'btn-neutral'}`}
+              href={link?.url}
+              className={`p-3 btn  mx-1 ${link?.active ? 'btn-outline ' : 'btn-neutral'}`}
             >
-              {link.label}
+              {link?.label}
             </a>
           ))}
         </div>
         <div>
-          <a href={prevNext[1].url} className={`p-3 btn  mx-1 btn-neutral`}>
+          <a href={prevNext[1]?.url} className={`p-3 btn  mx-1 btn-neutral`}>
             {'পরের পৃষ্ঠা'}
           </a>
         </div>
