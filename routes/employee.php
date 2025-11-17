@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController\EmployeeController;
+use App\Http\Controllers\ProductCustomerMoneyCollectionController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -37,5 +39,11 @@ Route::get('/employee/todays-status', [EmployeeController::class, 'todaysStatus'
 // render collection page route
 Route::get('/employee/collection-page/{id}', [EmployeeController::class, 'renderCollectionPage'])->name('employee.renderCollectionPage');   
 
+// process collection route and store
+Route::post('/employee/process-collection', [ProductCustomerMoneyCollectionController::class, 'store'])->name('employee.storeCollection');
+
+
+// customer details route
+Route::get('/employee/customer-details/{id}', [CustomerController::class, 'show'])->name('employee.customerDetails');
 
 });

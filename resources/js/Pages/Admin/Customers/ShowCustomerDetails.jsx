@@ -6,14 +6,14 @@ import BoughtList from '../components/BoughtList';
 import Swal from 'sweetalert2';
 import ResponsiveCustomerDetailsTable from '../components/ResponsiveCustomerDetailsTable';
 
-function ShowCustomerDetails({ customer, purchagedProducts }) {
+function ShowCustomerDetails({ customer, purchagedProducts, paymentLists }) {
   const { previousUrl } = usePage().props;
   const totalRemainingPayable = purchagedProducts?.reduce(
     (total, item) => total + item?.remaining_payable_price,
     0
   );
 
-  console.log(purchagedProducts);
+  console.log(paymentLists);
 
   let totalWeeklyPayable = 0;
   purchagedProducts?.forEach((item) => {

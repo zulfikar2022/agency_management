@@ -28,10 +28,10 @@ function ResponsiveTable({ data, actionData = null }) {
               );
             })}
             {actionData && (
-              <div>
+              <div className="flex gap-1">
                 {actionData?.map((action, actIndx) => (
                   <Link
-                    className="btn btn-sm btn-outline"
+                    className="btn btn-xs btn-outline"
                     key={action?.label}
                     href={route(action?.routeName, {
                       [action?.paramName]: item?.আইডি,

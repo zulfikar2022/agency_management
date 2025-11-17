@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
+use App\Models\ProductCustomerMoneyCollection;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -83,6 +84,7 @@ class CustomerController extends Controller
         $leanUser = request()->get('user');
         $customer = Customer::findOrFail($id);
         $purchagesLists = CustomerProduct::where('customer_id', $customer->id)->where('is_deleted', false)->get();
+        $paymentLists = ProductCustomerMoneyCollection::where('customer_id', $customer->id)->get();
         $purchagedProducts = $purchagesLists->map(function ($item) {
             $product = Product::find($item->product_id);
             $item['product'] = $product;
@@ -93,6 +95,7 @@ class CustomerController extends Controller
             'user' => $leanUser,
             'customer' => $customer,
             'purchagedProducts' => $purchagedProducts,
+            'paymentLists' => $paymentLists,
             
         ]);
     }
@@ -154,6 +157,10 @@ class CustomerController extends Controller
             $customer = Customer::findOrFail($customer_id);
             
             $purchase = CustomerProduct::where('customer_id', $customer->id)->findOrFail($purchase_id);
+
+            $paymentList = ProductCustomerMoneyCollection::where('customer_id', $customer->id)
+                            ->where('customer_products_id', $purchase->id)
+                            ->get();
             
             $product = Product::findOrFail($purchase->product_id);
             // dd($product);
@@ -162,6 +169,7 @@ class CustomerController extends Controller
             return Inertia::render('Admin/Customers/ShowCustomerPurchaseDetails', [
                 'customer' => $customer,
                 'purchase' => $purchase,
+                'paymentList' => $paymentList,
             ]);
     }
 }

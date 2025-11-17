@@ -17,6 +17,12 @@ function HaveToPayToday({ customers }) {
       routeHasParameter: true,
       paramName: 'id',
     },
+    {
+      label: 'বিস্তারিত দেখুন',
+      routeName: 'employee.customerDetails',
+      routeHasParameter: true,
+      paramName: 'id',
+    },
   ];
 
   return (

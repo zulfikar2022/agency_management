@@ -1,7 +1,12 @@
 import LayoutForProduct from '../layouts/LayoutForProduct';
 
-function ShowCustomerPurchaseDetails({ customer, purchase }) {
-  console.log({ purchase, customer });
+function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
+  console.log({ purchase, customer, paymentList });
+  const totalCollectedAmount = paymentList?.reduce(
+    (total, payment) => total + payment?.collected_amount,
+    0
+  );
+  console.log({ totalCollectedAmount });
   return (
     <LayoutForProduct>
       <div className="container mx-auto p-4 flex flex-col gap-4 md:flex-row md:justify-between border-b mb-5">
@@ -27,7 +32,7 @@ function ShowCustomerPurchaseDetails({ customer, purchase }) {
         <div>
           <p>মোট মূল্যঃ {purchase?.total_payable_price} টাকা</p>
           <p>ডাউনপেমেন্টঃ {purchase?.downpayment} টাকা</p>
-          <p>কিস্তিতে পরিশোধ হয়েছেঃ </p>
+          <p>কিস্তিতে পরিশোধ হয়েছেঃ {totalCollectedAmount} টাকা</p>
           <p>বাকি আছেঃ {purchase?.remaining_payable_price} টাকা</p>
         </div>
       </div>
