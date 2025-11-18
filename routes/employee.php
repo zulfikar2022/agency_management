@@ -37,11 +37,13 @@ Route::get('/employee/todays-collection', [EmployeeController::class, 'todaysCol
 Route::get('/employee/todays-status', [EmployeeController::class, 'todaysStatus'])->name('employee.todaysStatus');
 
 // render collection page route
-Route::get('/employee/collection-page/{id}', [EmployeeController::class, 'renderCollectionPage'])->name('employee.renderCollectionPage');   
+Route::get('/employee/collection-page/{id}', [ProductCustomerMoneyCollectionController::class, 'create'])->name('employee.renderCollectionPage');   
 
 // process collection route and store
 Route::post('/employee/process-collection', [ProductCustomerMoneyCollectionController::class, 'store'])->name('employee.storeCollection');
 
+// update collection page route
+Route::get('/employee/update-collection-page/{collection_id}', [ProductCustomerMoneyCollectionController::class, 'edit'])->name('employee.updateCollectionPage');
 
 // customer details route
 Route::get('/employee/customer-details/{id}', [EmployeeController::class, 'customerDetails'])->name('employee.customerDetails');

@@ -29,7 +29,7 @@ function ResponsiveCustomerDetailsTable({ purchagedProducts }) {
               <p className="font-bold">বাকি আছেঃ </p>
               <p>{item?.remaining_payable_price}</p>
             </div>
-            <div>
+            <div className="flex flex-col md:flex-row gap-2">
               <Link
                 href={route('admin.showCustomerPurchaseDetails', {
                   customer_id: item?.customer_id,
@@ -38,6 +38,15 @@ function ResponsiveCustomerDetailsTable({ purchagedProducts }) {
                 className="btn btn-xs btn-outline"
               >
                 বিস্তারিত
+              </Link>
+
+              <Link
+                href={route('admin.updateProductCustomerRenderPage', {
+                  purchase_id: item?.id,
+                })}
+                className="btn btn-xs btn-outline"
+              >
+                আপডেট করুন
               </Link>
             </div>
           </div>

@@ -78,11 +78,18 @@ Route::delete('/admin/customers/delete/{id}', [CustomerController::class, 'destr
 // show page for selling product to customer
 Route::get('/admin/customers/{id}/sell-product', [CustomerProductController::class, 'sellProductToCustomerPage'])->name('admin.sellProductToCustomerPage');
 
+// render update sell product page
+Route::get('/admin/customers/purchases/update/{purchase_id}', [CustomerProductController::class, 'updateProductCustomerRenderPage'])->name('admin.updateProductCustomerRenderPage');
+
+// save the updated sold product to customer
+Route::put('/admin/customers/purchases/update', [CustomerProductController::class, 'saveUpdatedCustomerProduct'])->name('admin.saveUpdatedCustomerProduct');
+
 // save the sold product to customer
 Route::post('/admin/customers/sell-product', [CustomerProductController::class, 'sellProductToCustomer'])->name('admin.sellProductToCustomer');
 
 // show customer specific purchase details
 Route::get('/admin/customers/{customer_id}/purchases/{purchase_id}', [CustomerController::class, 'showCustomerPurchases'])->name('admin.showCustomerPurchaseDetails');
+
 
 
 

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Dues;
+use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class ProductCustomerMoneyCollectionController extends Controller
 {
@@ -21,9 +24,32 @@ class ProductCustomerMoneyCollectionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
-        //
+         $user = request()->get('user');
+        $customer = Customer::findOrFail($id);
+        $purchases = CustomerProduct::where('customer_id', $customer->id)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_price', '>', 0)
+            ->get();
+        
+        $purchases->transform(function ($purchase) {
+            $product = Product::find($purchase->product_id);
+            $purchase->product = $product;
+            return $purchase;
+        });
+
+        $collections = ProductCustomerMoneyCollection::where('customer_id', $customer->id)
+            ->orderBy('collecting_date', 'desc')
+            ->get();
+       
+
+        return Inertia::render('Employee/Products/CollectionPage', [
+            'user' => $user,
+            'customer' => $customer, 
+            'purchases' => $purchases,
+            'collections' => $collections
+        ]);
     }
 
     /**
@@ -88,14 +114,13 @@ class ProductCustomerMoneyCollectionController extends Controller
                 } else{
                     $updatingFailed = true;
                 }
-                // else{
-                //     return redirect()->back()->withErrors(['error' => 'সংগৃহীত পরিমাণ বাকি প্রদেয় পরিমাণ অতিক্রম করেছে।']);
-                // }
+               
 
                 // if the collected amount is less than the collectable amount,  create a due record
                
             }
         });
+
         if($updatingFailed){
             return redirect()->back()->withErrors(['error' => 'অনুগ্রহ করে সঠিক তথ্য দিয়ে আবার চেষ্টা করুন।']);
         }
@@ -115,9 +140,9 @@ class ProductCustomerMoneyCollectionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProductCustomerMoneyCollection $productCustomerMoneyCollection)
+    public function edit(String $collection_id)
     {
-        //
+        dd($collection_id);
     }
 
     /**
