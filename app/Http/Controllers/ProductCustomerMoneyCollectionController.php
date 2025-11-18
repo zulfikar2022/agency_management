@@ -149,8 +149,18 @@ class ProductCustomerMoneyCollectionController extends Controller
         $collection_ids = explode('-', $collection_id);
         $collections = ProductCustomerMoneyCollection::whereIn('id', $collection_ids)
             ->get();
+        $customer_products_ids = $collections->pluck('customer_products_id')->unique();
 
-        // dd($collections);
+        // based on the customer_products_ids get the customers_products from the customer_products table
+        $customer_products = CustomerProduct::whereIn('id', $customer_products_ids)->get();
+        $customer_products->transform(function ($customer_product) {
+            $product = Product::find($customer_product->product_id);
+            $customer_product->product = $product;
+            return $customer_product;
+        });
+
+        
+        
        
         if($collections->count() !== count($collection_ids)){
             return abort(404);
@@ -163,7 +173,12 @@ class ProductCustomerMoneyCollectionController extends Controller
         } 
 
         $customer = Customer::findOrFail($customer_ids->first());
-        dd($customer);
+        
+        return Inertia::render('Employee/Products/UpdateCollectionPage', [
+            'customer' => $customer, 
+            'collections' => $collections, 
+            'customer_products' => $customer_products,
+        ]);
 
     
 
@@ -173,9 +188,27 @@ class ProductCustomerMoneyCollectionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductCustomerMoneyCollection $productCustomerMoneyCollection)
+    public function update(Request $request)
     {
-        //
+        $validated_data = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'collection_ids' => 'required|array',
+            'collected_amounts' => 'required|array',
+        ]);
+
+        // fetch all the entries from product_customer_money_collections table based on the customer_id
+        $collections = ProductCustomerMoneyCollection::where('customer_id', $validated_data['customer_id'])->get();
+        if($collections->count() == 0){
+            return abort(404);
+        }
+
+        // from the collections separates only the collections that are in the collection_ids array
+        $collections_to_update = $collections->whereIn('id', $validated_data['collection_ids'])->toArray();
+        // now filter those which are not going to be updated
+        $collections_not_to_update = [];
+
+        
+
     }
 
     /**

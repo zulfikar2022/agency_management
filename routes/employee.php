@@ -45,6 +45,9 @@ Route::post('/employee/process-collection', [ProductCustomerMoneyCollectionContr
 // update collection page route
 Route::get('/employee/update-collection-page/{collection_id}', [ProductCustomerMoneyCollectionController::class, 'edit'])->name('employee.updateCollectionPage');
 
+// process update collection route and save 
+Route::put('/employee/process-update-collection', [ProductCustomerMoneyCollectionController::class, 'update'])->name('employee.updateCollection');
+
 // customer details route
 Route::get('/employee/customer-details/{id}', [EmployeeController::class, 'customerDetails'])->name('employee.customerDetails');
 

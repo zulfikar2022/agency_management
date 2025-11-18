@@ -50,7 +50,7 @@ function EmployeeCustomerDetails({ customer, purchases, collections }) {
               টাকা
             </p>
             <p className="  text-center">
-              <span className="font-bold">মোট সাপ্তাহিক পরিশোধঃ</span>{' '}
+              <span className="font-bold">মোট সাপ্তাহিক পরিশোধযোগ্যঃ</span>{' '}
               {purchases.reduce(
                 (total, purchase) =>
                   total + (purchase?.weekly_payable_price || 0),
