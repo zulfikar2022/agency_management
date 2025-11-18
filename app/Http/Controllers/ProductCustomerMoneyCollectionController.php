@@ -26,7 +26,7 @@ class ProductCustomerMoneyCollectionController extends Controller
      */
     public function create($id)
     {
-         $user = request()->get('user');
+        $user = request()->get('user');
         $customer = Customer::findOrFail($id);
         $purchases = CustomerProduct::where('customer_id', $customer->id)
             ->where('is_deleted', false)
@@ -142,7 +142,32 @@ class ProductCustomerMoneyCollectionController extends Controller
      */
     public function edit(String $collection_id)
     {
-        dd($collection_id);
+        // dd($collection_id);
+        $user = request()->get('user');
+        
+        // the collection id is in form 34-45-63 where each number is the id of a collection made on the same day
+        $collection_ids = explode('-', $collection_id);
+        $collections = ProductCustomerMoneyCollection::whereIn('id', $collection_ids)
+            ->get();
+
+        // dd($collections);
+       
+        if($collections->count() !== count($collection_ids)){
+            return abort(404);
+        }
+        
+        //get customers ids  in an array for each collection from each collection
+        $customer_ids = $collections->pluck('customer_id')->unique();
+        if($customer_ids->count() > 1){
+            return abort(404);
+        } 
+
+        $customer = Customer::findOrFail($customer_ids->first());
+        dd($customer);
+
+    
+
+    
     }
 
     /**
