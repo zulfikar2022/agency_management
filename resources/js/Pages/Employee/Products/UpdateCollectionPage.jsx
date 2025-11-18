@@ -1,5 +1,6 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
+import Swal from 'sweetalert2';
 
 function UpdateCollectionPage({ collections, customer, customer_products }) {
   const collectionPurchaseCombo = collections.map((collection) => {
@@ -12,18 +13,38 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
   });
 
   console.log({ collectionPurchaseCombo });
+  const { error } = usePage().props;
+  console.log({ error });
 
   const { data, setData, put } = useForm({
     customer_id: customer?.id || '',
     collection_ids: collections.map((collection) => collection.id) || [],
     collected_amounts:
       collectionPurchaseCombo.map((combo) => combo?.collected_amount) || [],
+    purchase_ids:
+      collectionPurchaseCombo.map((combo) => combo?.purchase?.id) || [],
   });
   console.log({ data });
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitting data:', data);
-    put(route('employee.updateCollection'), data);
+
+    Swal.fire({
+      // title: 'Are you sure?',
+      text: 'আপনি কি আসলেই এই কিস্তি আপডেট করতে চান? ',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#09090b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'হ্যাঁ, আপডেট করুন!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        put(route('employee.updateCollection'), data);
+        Swal.fire({
+          title: 'আপডেট করা হয়েছে!',
+          icon: 'success',
+        });
+      }
+    });
   };
 
   return (

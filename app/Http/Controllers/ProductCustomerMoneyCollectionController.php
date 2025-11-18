@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\CustomerProduct;
+use App\Models\CustomerProductUpdateLog;
 use App\Models\Dues;
 use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
+use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -194,7 +197,12 @@ class ProductCustomerMoneyCollectionController extends Controller
             'customer_id' => 'required|exists:customers,id',
             'collection_ids' => 'required|array',
             'collected_amounts' => 'required|array',
+            'purchase_ids' => 'required|array',
         ]);
+
+        $total_updated_collected_amount = array_sum($validated_data['collected_amounts']);
+
+
 
         // fetch all the entries from product_customer_money_collections table based on the customer_id
         $collections = ProductCustomerMoneyCollection::where('customer_id', $validated_data['customer_id'])->get();
@@ -204,10 +212,86 @@ class ProductCustomerMoneyCollectionController extends Controller
 
         // from the collections separates only the collections that are in the collection_ids array
         $collections_to_update = $collections->whereIn('id', $validated_data['collection_ids'])->toArray();
-        // now filter those which are not going to be updated
-        $collections_not_to_update = [];
-
         
+        // now filter those which are not going to be updated
+        $collections_not_to_update = array_filter($collections->toArray(), function ($collection) use ($validated_data) {
+            return !in_array($collection['id'], $validated_data['collection_ids']);
+        });
+
+        $total_collected_amount_from_not_to_update = 0;
+        // from the collections_not_to_update, find the sum of collected_amount into each collection and place the sum into total_collected_amount
+        foreach ($collections_not_to_update as $collection) {
+            $total_collected_amount_from_not_to_update += $collection['collected_amount'];
+        }
+
+        // using the customer_id, fetch all the customer_products where remaining_payable_price > 0
+        $customer_products = CustomerProduct::where('customer_id', $validated_data['customer_id'])
+            ->where('is_deleted', false)
+            ->get();
+        
+        $total_payable_amount = 0;
+        $total_downpayments = 0;
+        // find the sum of remaining_payable_price into each customer_product and place the sum into total_payable_amount
+        foreach ($customer_products as $customer_product) {
+            $total_payable_amount += $customer_product->total_payable_price;
+            $total_downpayments += $customer_product->downpayment;
+        }
+
+        if($total_collected_amount_from_not_to_update + $total_updated_collected_amount + $total_downpayments > $total_payable_amount) {
+            return redirect()->back()->withErrors(['error' => 'আপডেটকৃত সংগ্রহের পরিমাণ মোট বকেয়া পরিমাণের চেয়ে বেশি হতে পারে না।']);
+        }
+
+        $updatable_customer_products = CustomerProduct::whereIn('id', $validated_data['purchase_ids'])->get();
+        $updatable_collection_instances = ProductCustomerMoneyCollection::whereIn('id', $validated_data['collection_ids'])->get();
+        
+        // loop through updatable_collection_instances
+        foreach ($updatable_collection_instances as $index => $collection_instance) {
+            if($updatable_customer_products[$index]['remaining_payable_price']+$updatable_collection_instances[$index]['collected_amount'] - $validated_data['collected_amounts'][$index] < 0) {
+                return redirect()->back()->withErrors(['error' => 'আপডেটকৃত সংগ্রহের পরিমাণ মোট বকেয়া পরিমাণের চেয়ে বেশি হতে পারে না।']);
+            }
+        }
+        // dd(Auth::id());
+
+        // dd("just before the transaction start");
+        // create an instance of product_customer_money_collection_update_logs
+        DB::transaction(function () use ($validated_data, $updatable_customer_products, $updatable_collection_instances) {
+            foreach ($validated_data['collection_ids'] as $index => $collection_id) {
+                // update each collection's collected_amount
+                ProductCustomerMoneyCollectionUpdateLog::create([
+                    'product_customer_money_collection_id' => $collection_id,
+                    'updating_at' => now(),
+                    'collected_amount_before' => $updatable_collection_instances[$index]['collected_amount'],
+                    'collected_amount_after' => $validated_data['collected_amounts'][$index],
+                    'collectable_amount_before' => $updatable_collection_instances[$index]['collectable_amount'],
+                    'collectable_amount_after' => $updatable_collection_instances[$index]['collectable_amount'],
+                    'updating_user_id' => Auth::id(),
+                ]);
+
+                // product customer update log
+                CustomerProductUpdateLog::create([
+                    'customer_product_id' => $updatable_customer_products[$index]['id'],
+                    'remaining_payable_price_before' => $updatable_customer_products[$index]['remaining_payable_price'],
+                    'remaining_payable_price_after' => $updatable_customer_products[$index]['remaining_payable_price'] + $updatable_collection_instances[$index]['collected_amount'] - $validated_data['collected_amounts'][$index],
+                    'updating_user_id' => request()->get('user')->id,
+                    'total_payable_price_before' => $updatable_customer_products[$index]['total_payable_price'],
+                    'total_payable_price_after' => $updatable_customer_products[$index]['total_payable_price'],
+                    'weekly_payable_price_before' => $updatable_customer_products[$index]['weekly_payable_price'],
+                    'weekly_payable_price_after' => $updatable_customer_products[$index]['weekly_payable_price'],
+                    
+                ]);
+
+                 // update the customer product instance
+                $updatable_customer_products[$index]->remaining_payable_price = $updatable_customer_products[$index]['remaining_payable_price'] + $updatable_collection_instances[$index]['collected_amount'] - $validated_data['collected_amounts'][$index];
+                $updatable_customer_products[$index]->save();
+
+
+                // update the collection instance
+                $updatable_collection_instances[$index]->collected_amount = $validated_data['collected_amounts'][$index];
+                $updatable_collection_instances[$index]->save();    
+            }
+        });
+
+        return redirect()->back()->with('success', 'কালেকশন আপডেট সফল হয়েছে।');
 
     }
 
