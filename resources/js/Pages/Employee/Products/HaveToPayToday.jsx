@@ -2,13 +2,17 @@ import Pagination from '@/Pages/Admin/components/Pagination';
 import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
 import { customerTableDataGenerateForEmployee } from '@/utilityFuntion';
 import ResponsiveTable from '../components/ResponsiveTable';
+import { Link } from '@inertiajs/react';
+import { useState } from 'react';
+import dayjs from 'dayjs';
 
-function HaveToPayToday({ customers }) {
+function HaveToPayToday({ customers, totalCustomers }) {
   const data = customers?.data;
   const pagination = { ...customers, data: [] };
   const tableData = customerTableDataGenerateForEmployee(data);
-  const today = new Date().toISOString().split('T')[0].toLowerCase();
+  const today = dayjs().format('dddd').toLowerCase();
   const todate = new Date().toISOString().split('T')[0];
+  const [searchTerm, setSearchTerm] = useState('');
 
   const actionData = [
     {
@@ -30,6 +34,34 @@ function HaveToPayToday({ customers }) {
       <p className="text-lg font-semibold text-center my-5">
         আজ যারা টাকা দেবে
       </p>
+      <p className="text-center">
+        মোট কাস্টমার: <span className="font-bold">{totalCustomers}</span> জন
+      </p>
+      <p className="text-center">
+        এই পৃষ্ঠায় আছেন: <span className="font-bold">{data?.length}</span> জন
+      </p>
+      <div className="ml-7 md:ml-20">
+        <div className="flex flex-col md:flex-row mb-4">
+          <input
+            type="text"
+            placeholder="কাস্টমার অনুসন্ধান করুন..."
+            className="input input-bordered w-full max-w-xs mr-3 mb-3 md:mb-0"
+            value={searchTerm}
+            name="search"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <Link
+            href={route('employee.customersThatPayToday', {
+              search: searchTerm,
+              today: today,
+            })}
+            className="btn btn-neutral w-[150px]"
+          >
+            অনুসন্ধান করুন
+          </Link>
+        </div>
+      </div>
       <ResponsiveTable data={tableData} actionData={actionData} />
       {data?.length > 0 && (
         <Pagination

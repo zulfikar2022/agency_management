@@ -32,11 +32,13 @@ class CustomerController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-
+        
+        $totalCustomers = Customer::where('is_deleted', false)->count();
         
         return Inertia::render('Admin/Customers/ShowAllCustomers', [
             'customers' => $customers,
             'user' => $user,
+            'totalCustomers' => $totalCustomers,
         ]);
     }
 

@@ -7,12 +7,24 @@ import GoBack from '../components/GoBack';
 import { WEEKDAYS } from '@/constants';
 import ResponsiveCustomerTable from '../components/ResponsiveCustomerTable';
 
-function ShowAllCustomers({ customers, user }) {
+function ShowAllCustomers({ customers, user, totalCustomers }) {
+  console.log('totalCustomers:', totalCustomers);
   const { previousUrl } = usePage().props;
   let paginationData = { ...customers, data: [] };
   const [searchTerm, setSearchTerm] = useState('');
   return (
     <LayoutForProduct>
+      <h1 className="text-center mt-3 text-3xl ">সকল কাস্টমার</h1>
+      <div className="my-6">
+        <p className="text-center">
+          মোট কাস্টমারঃ <span className="font-bold">{totalCustomers}</span> জন
+        </p>
+        <p className="text-center">
+          {' '}
+          এই পৃষ্ঠায় আছেনঃ{' '}
+          <span className="font-bold">{customers?.data.length}</span> জন
+        </p>
+      </div>
       <div className="flex flex-col md:flex-row justify-evenly items-center mb-4">
         <div className="mb-4 flex flex-col content-start  gap-2  md:flex-row items-center md:ml-3.5">
           <input
@@ -60,7 +72,6 @@ function ShowAllCustomers({ customers, user }) {
         </div>
       </div>
       <div>
-        <h1 className="text-center mt-3 text-3xl ">সকল কাস্টমার</h1>
         {/* <CustomersTable customers={customers?.data} /> */}
 
         <ResponsiveCustomerTable data={customers?.data} />

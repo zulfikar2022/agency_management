@@ -36,7 +36,8 @@ class EmployeeController extends Controller
                 ->orWhere('address', 'like', '%' . $search . '%')
                 ->orWhere('nid_number', 'like', '%' . $search . '%')
                 ->orWhere('fathers_name', 'like', '%' . $search . '%')
-                ->orWhere('mothers_name', 'like', '%' . $search . '%');
+                ->orWhere('mothers_name', 'like', '%' . $search . '%')
+                ->orWhere('id', 'like', '%' . $search . '%');
         })
         ->orderBy('created_at', 'desc')
         ->paginate(10);
@@ -47,10 +48,14 @@ class EmployeeController extends Controller
                     $customer->purchases = $purchases;
                     return $customer;
                 });
+    $totalCustomers = Customer::where('is_deleted', false)
+        ->where('collection_day', $today)
+        ->count();
 
     return Inertia::render('Employee/Products/HaveToPayToday', [
         'user' => $user,
-        'customers' => $customers
+        'customers' => $customers,
+        'totalCustomers' => $totalCustomers
     ]);
     }
 
@@ -70,7 +75,9 @@ class EmployeeController extends Controller
                         ->orWhere('address', 'like', '%' . $search . '%')
                         ->orWhere('nid_number', 'like', '%' . $search . '%')
                         ->orWhere('fathers_name', 'like', '%' . $search . '%')
-                        ->orWhere('mothers_name', 'like', '%' . $search . '%');
+                        ->orWhere('mothers_name', 'like', '%' . $search . '%')
+                        // ->orWhere('collection_day', 'like', '%' . $search . '%')
+                        ->orWhere('id', 'like', '%' . $search . '%');
                 })
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
@@ -83,10 +90,12 @@ class EmployeeController extends Controller
                     $customer->purchases = $purchases;
                     return $customer;
                 });
-
+        // fetch the total number of not deleted customers
+        $totalCustomers = Customer::where('is_deleted', false)->count();
         return Inertia::render('Employee/Products/AllCustomers', [
             'customers' => $customers,
-            'user' => $user,
+            
+            'totalCustomers' => $totalCustomers,
         ]);
         } else {
             $customers = Customer::where('is_deleted', false)
@@ -95,7 +104,7 @@ class EmployeeController extends Controller
                         ->orWhere('phone_number', 'like', '%' . $search . '%')
                         ->orWhere('address', 'like', '%' . $search . '%')
                         ->orWhere('nid_number', 'like', '%' . $search . '%')    
-
+                        ->orWhere('id', 'like', '%' . $search . '%')
                         ->orWhere('fathers_name', 'like', '%' . $search . '%')
                         ->orWhere('mothers_name', 'like', '%' . $search . '%');
                 })
@@ -109,11 +118,13 @@ class EmployeeController extends Controller
                     $customer->purchases = $purchases;
                     return $customer;
                 });
+            $totalCustomers = Customer::where('is_deleted', false)->count();
 
             return Inertia::render('Employee/Products/AllCustomers', [
-                'customers' => $customers
-        ]);
-        
+                'customers' => $customers,
+                
+                'totalCustomers' => $totalCustomers,
+            ]);
         }
     }
 
@@ -128,6 +139,7 @@ class EmployeeController extends Controller
             ->pluck('customer_id')
             ->toArray();
         $customersIds = array_unique($customersIds);
+
         // fetch customers by ids
         $customers = Customer::whereIn('id', $customersIds)
             ->where('is_deleted', false)
@@ -137,6 +149,7 @@ class EmployeeController extends Controller
                     ->orWhere('address', 'like', '%' . $search . '%')
                     ->orWhere('nid_number', 'like', '%' . $search . '%')
                     ->orWhere('fathers_name', 'like', '%' . $search . '%')
+                    ->orWhere('id', 'like', '%' . $search . '%')
                     ->orWhere('mothers_name', 'like', '%' . $search . '%');
             })
             ->orderBy('created_at', 'desc')
@@ -149,10 +162,12 @@ class EmployeeController extends Controller
                     $customer->purchases = $purchases;
                     return $customer;
                 });
-
+        // $totalCustomers = Customer::where('is_deleted', false)->count();
+        $totalCustomers = count($customersIds);
         return Inertia::render('Employee/Products/PaidToday', [
             'user' => $user,
-            'customers' => $customers
+            'customers' => $customers,
+            'totalCustomers' => $totalCustomers
         ]);
     }
 
@@ -180,6 +195,7 @@ class EmployeeController extends Controller
                     ->orWhere('address', 'like', '%' . $search . '%')
                     ->orWhere('nid_number', 'like', '%' . $search . '%')
                     ->orWhere('fathers_name', 'like', '%' . $search . '%')
+                    ->orWhere('id', 'like', '%' . $search . '%')
                     ->orWhere('mothers_name', 'like', '%' . $search . '%');
             })
             ->orderBy('created_at', 'desc')
@@ -193,9 +209,12 @@ class EmployeeController extends Controller
                     return $customer;
                 });
 
+                // make the customerIds unique
+        $customersIds = array_unique($customersIds);
         return Inertia::render('Employee/Products/NotPaidToday', [
             'user' => $user,
-            'customers' => $customers
+            'customers' => $customers, 
+            'totalCustomers' => count($customersIds)
         ]);
     }
     public function todaysCollection(){
