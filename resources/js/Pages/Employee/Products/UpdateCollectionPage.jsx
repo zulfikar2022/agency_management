@@ -38,11 +38,28 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
       confirmButtonText: 'হ্যাঁ, আপডেট করুন!',
     }).then((result) => {
       if (result.isConfirmed) {
-        put(route('employee.updateCollection'), data);
-        Swal.fire({
-          title: 'আপডেট করা হয়েছে!',
-          icon: 'success',
-        });
+        put(
+          route('employee.updateCollection'),
+          // { ...data },
+          data,
+          {
+            onError: (err) => {
+              console.log({ err });
+              Swal.fire({
+                title: 'ত্রুটি!',
+                text: 'কিস্তি আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।',
+                icon: 'error',
+              });
+            },
+            onSuccess: () => {
+              Swal.fire({
+                title: 'সফল!',
+                text: 'কিস্তি সফলভাবে আপডেট হয়েছে।',
+                icon: 'success',
+              });
+            },
+          }
+        );
       }
     });
   };

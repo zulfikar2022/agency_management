@@ -6,7 +6,8 @@ function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
     (total, payment) => total + payment?.collected_amount,
     0
   );
-  console.log({ totalCollectedAmount });
+
+  console.log({ purchase });
   return (
     <LayoutForProduct>
       <div className="container mx-auto p-4 flex flex-col gap-4 md:flex-row md:justify-between border-b mb-5">

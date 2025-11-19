@@ -74,7 +74,9 @@ function ShowAllCustomers({ customers, user, totalCustomers }) {
       <div>
         {/* <CustomersTable customers={customers?.data} /> */}
 
-        <ResponsiveCustomerTable data={customers?.data} />
+        <div className="container mx-auto">
+          <ResponsiveCustomerTable data={customers?.data} />
+        </div>
       </div>
       {customers.data.length > 0 && (
         <Pagination paginationData={paginationData} />

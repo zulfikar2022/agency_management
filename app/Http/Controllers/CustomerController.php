@@ -92,7 +92,14 @@ class CustomerController extends Controller
             $item['product'] = $product;
             return $item;
         });
-            
+
+        // each entry from paymentList has a customer_products_id property, using which fetch the corresponding purchase details from the customer_produdcts table
+        $paymentLists = $paymentLists->map(function ($item) use ($purchagedProducts) {
+            $purchase = $purchagedProducts->find($item->customer_products_id);
+            $item['purchase'] = $purchase;
+            return $item;
+        });
+
         return Inertia::render('Admin/Customers/ShowCustomerDetails', [
             'user' => $leanUser,
             'customer' => $customer,

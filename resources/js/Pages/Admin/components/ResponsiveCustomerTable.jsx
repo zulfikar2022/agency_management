@@ -11,21 +11,21 @@ function ResponsiveCustomerTable({ data }) {
         return (
           <div
             key={customer.id}
-            className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-5 py-2 border-b`}
+            className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-4 px-5 py-2 border-b items-center`}
           >
-            <div className="flex flex-col">
+            <div className="flex flex-col col-span-2">
               <p className="font-bold">গ্রাহকের নামঃ</p>
               <p>{customer.name}</p>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col col-span-2">
               <p className="font-bold">ফোন নম্বরঃ</p>
               <p>{customer.phone_number}</p>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col col-span-2">
               <p className="font-bold">ঠিকানাঃ </p>
               <p>{customer.address}</p>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col col-span-2">
               <p className="font-bold">টাকা সংগ্রহের দিনঃ </p>
               <p>
                 {
@@ -35,7 +35,7 @@ function ResponsiveCustomerTable({ data }) {
               </p>
             </div>
 
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2 col-span-4">
               <Link
                 href={route('admin.showCustomerDetails', {
                   id: customer.id,

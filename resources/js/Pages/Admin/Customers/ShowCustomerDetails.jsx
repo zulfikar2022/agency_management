@@ -5,6 +5,7 @@ import GoBack from '../components/GoBack';
 import BoughtList from '../components/BoughtList';
 import Swal from 'sweetalert2';
 import ResponsiveCustomerDetailsTable from '../components/ResponsiveCustomerDetailsTable';
+import AdminCollectionList from '../components/AdminCollectionList';
 
 function ShowCustomerDetails({ customer, purchagedProducts, paymentLists }) {
   const { previousUrl } = usePage().props;
@@ -12,8 +13,7 @@ function ShowCustomerDetails({ customer, purchagedProducts, paymentLists }) {
     (total, item) => total + item?.remaining_payable_price,
     0
   );
-
-  console.log(paymentLists);
+  console.log({ purchagedProducts });
 
   let totalWeeklyPayable = 0;
   purchagedProducts?.forEach((item) => {
@@ -121,6 +121,8 @@ function ShowCustomerDetails({ customer, purchagedProducts, paymentLists }) {
         </div>
         {/* <BoughtList purchagedProducts={purchagedProducts} /> */}
         <ResponsiveCustomerDetailsTable purchagedProducts={purchagedProducts} />
+
+        <AdminCollectionList collections={paymentLists} />
       </div>
     </LayoutForProduct>
   );

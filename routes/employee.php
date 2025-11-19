@@ -39,6 +39,8 @@ Route::get('/employee/todays-status', [EmployeeController::class, 'todaysStatus'
 // render collection page route
 Route::get('/employee/collection-page/{id}', [ProductCustomerMoneyCollectionController::class, 'create'])->name('employee.renderCollectionPage');   
 
+// mark as due
+Route::post('/employee/mark-as-due', [ProductCustomerMoneyCollectionController::class, 'markAsDue'])->name('employee.markAsDue');
 // process collection route and store
 Route::post('/employee/process-collection', [ProductCustomerMoneyCollectionController::class, 'store'])->name('employee.storeCollection');
 

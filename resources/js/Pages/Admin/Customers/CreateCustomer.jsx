@@ -297,7 +297,7 @@ function CreateCustomer() {
                         Submitting...
                       </>
                     ) : (
-                      'Create User'
+                      'কাস্টমার তৈরি করুন'
                     )}
                   </button>
                 </div>

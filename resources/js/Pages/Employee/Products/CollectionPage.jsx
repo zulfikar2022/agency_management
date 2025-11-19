@@ -7,7 +7,7 @@ import { WEEKDAYS } from '@/constants';
 import CollectionListTable from '../components/CollectionListTable';
 
 function CollectionPage({ user, customer, purchases, collections }) {
-  const { data, setData, post, processing, errors } = useForm({
+  let { data, setData, post, processing, errors } = useForm({
     customer_id: customer.id,
     customer_product_id: purchases.map((p) => p?.id),
     collectable_amount: purchases.map((p) => p?.weekly_payable_price || 0),
@@ -27,6 +27,7 @@ function CollectionPage({ user, customer, purchases, collections }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     Swal.fire({
       title: 'আসলেই আপনি এই কিস্তি সংগ্রহ করতে চান?',
       icon: 'warning',
@@ -36,17 +37,10 @@ function CollectionPage({ user, customer, purchases, collections }) {
       confirmButtonText: 'হ্যাঁ, চাই!',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Swal.fire({
-        //   title: 'Deleted!',
-        //   text: 'Your file has been deleted.',
-        //   icon: 'success',
-        // });
-        //POST REQUEST TO THE SERVER
-        // console.log(data);
         post(route('employee.storeCollection'), {
           preserveScroll: true,
           onSuccess: () => {
-            toast.success('পেমেন্ট সফলভাবে সংগ্রহ করা হয়েছে!', {
+            toast.success('কিস্তি সফলভাবে সংগ্রহ করা হয়েছে!', {
               position: 'top-center',
               autoClose: 3000,
               hideProgressBar: false,
@@ -60,7 +54,7 @@ function CollectionPage({ user, customer, purchases, collections }) {
           },
           onError: () => {
             toast.error(
-              returnedErrorMessage || 'পেমেন্ট সংগ্রহে সমস্যা হয়েছে!',
+              returnedErrorMessage || 'কিস্তি সংগ্রহে সমস্যা হয়েছে!',
               {
                 position: 'top-center',
                 autoClose: 3000,
@@ -79,6 +73,53 @@ function CollectionPage({ user, customer, purchases, collections }) {
     });
   };
 
+  const handleMarkAsDue = async (e) => {
+    e.preventDefault();
+
+    const result = await Swal.fire({
+      title: 'আসলেই আপনি এই কিস্তি ডিউ হিসেবে চিহ্নিত করতে চান?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#09090b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'হ্যাঁ, চাই!',
+      cancelButtonText: 'না',
+      reverseButtons: false,
+    });
+
+    if (!result.isConfirmed) return;
+    post(route('employee.markAsDue'), {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast.success('কিস্তি সফলভাবে ডিউ হিসেবে চিহ্নিত করা হয়েছে!', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          theme: 'dark',
+          transition: Bounce,
+        });
+      },
+      onError: () => {
+        toast.error(
+          returnedErrorMessage ||
+            'কিস্তি ডিউ হিসেবে চিহ্নিত করতে সমস্যা হয়েছে!',
+          {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            theme: 'dark',
+            transition: Bounce,
+          }
+        );
+      },
+    });
+  };
   return (
     <EmployeeProductLayout>
       <ToastContainer
@@ -199,7 +240,7 @@ function CollectionPage({ user, customer, purchases, collections }) {
             <button
               type="submit"
               disabled={processing}
-              className="btn btn-neutral w-full max-w-md "
+              className="btn btn-neutral w-full max-w-md mb-5"
             >
               {processing ? (
                 <>
@@ -210,6 +251,14 @@ function CollectionPage({ user, customer, purchases, collections }) {
                 'কিস্তি সংগ্রহ করুন'
               )}
             </button>
+
+            <p
+              onClick={handleMarkAsDue}
+              className="btn btn-outline w-full max-w-md"
+              // disabled={processing}
+            >
+              ডিউ হিসেব চিহ্নিত করুন
+            </p>
           </div>
         )}
       </form>

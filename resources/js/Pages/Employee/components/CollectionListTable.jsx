@@ -24,7 +24,7 @@ function CollectionListTable({ collections }) {
     const sameDayCollectionsIds = collections
       .filter((collection) => collection.collecting_date === date)
       .map((item) => item.id);
-    // console.log(sameDayCollectionsIds);
+
     const formattedCreatedAt = dayjs(collectionsOfTheDay[0]?.created_at);
 
     const day = formattedCreatedAt.date();
@@ -53,13 +53,12 @@ function CollectionListTable({ collections }) {
     <div className="my-10">
       <div>
         <h2 className="text-center text-2xl font-bold">কিস্তির তালিকা</h2>
-        <div className="container mx-auto px-4">
+        <div className={`container mx-auto px-4 `}>
           {sameDayCollections.map((item, index) => {
-            console.log(item);
             return (
               <div
                 key={item.date}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-6 mb-10 border-dashed border-b"
+                className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-6 mb-10 border-dashed border-b ${item?.totalCollectable - item?.totalCollected > 0 ? 'bg-red-200' : ''}`}
               >
                 <div className="flex flex-col">
                   <p className="font-bold">কালেকশনের তারিখঃ</p>
@@ -75,7 +74,11 @@ function CollectionListTable({ collections }) {
                 </div>
                 <div className="flex flex-col">
                   <p className="font-bold">বাকি আছেঃ </p>
-                  <p>{item?.totalCollectable - item?.totalCollected}</p>
+                  <p>
+                    {item?.totalCollectable - item?.totalCollected > 0
+                      ? item?.totalCollectable - item?.totalCollected
+                      : 0}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <Link
