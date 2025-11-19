@@ -7,7 +7,6 @@ function ResponsiveProductTable({ data }) {
   return (
     <div>
       {data?.map((product, index) => {
-        console.log(product);
         return (
           <div
             key={product.id}
