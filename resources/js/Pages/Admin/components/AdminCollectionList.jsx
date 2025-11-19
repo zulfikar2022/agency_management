@@ -49,7 +49,7 @@ function AdminCollectionList({ collections }) {
 
   console.log({ sameDayCollections });
   return (
-    <div className="my-5">
+    <div className="my-5 mx-5 md:mx-0">
       {sameDayCollections.length > 0 && (
         <p className="text-2xl text-center font-bold">কিস্তির লিস্ট</p>
       )}
@@ -65,7 +65,7 @@ function AdminCollectionList({ collections }) {
           return (
             <div
               key={item?.id}
-              className="grid gird-cols-1 md:grid-cols-4 border-b pb-3 mb-3"
+              className={`grid gird-cols-1 md:grid-cols-4 border-b pb-3 mb-3 ${item?.totalCollectable - item?.totalCollected > 0 ? 'bg-red-200' : ''}`}
             >
               <div>
                 <p className="font-bold">তারিখঃ </p>
