@@ -373,4 +373,21 @@ class ProductCustomerMoneyCollectionController extends Controller
     {
         //
     }
+
+    public function todaysCollections(Request $request){
+        // $today = $request->input('today');
+        $todate = $request->input('todate');
+
+        $collections = ProductCustomerMoneyCollection::where('collecting_date', $todate)->get();
+        // each collection has a customer_id property and based on this id fetch the customer from customers table and put it to the collection instance as customer property
+        $collections->transform(function ($collection) {
+            $customer = Customer::find($collection->customer_id);
+            $collection->customer = $customer;
+            return $collection;
+        });
+
+        return Inertia::render('Admin/Customers/CustomerCollection/TodaysCollection', [
+            'collections' => $collections,
+        ]);
+    }
 }

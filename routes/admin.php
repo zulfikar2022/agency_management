@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EmployeeController\EmployeeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductCustomerMoneyCollectionController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -78,6 +79,9 @@ Route::get('/admin/customers/have-to-pay-today', [CustomerController::class, 'cu
 
 // route for customers who have not paid today
 Route::get('/admin/customers/not-paid-today', [CustomerController::class, 'customersDidNotPayToday'])->name('admin.customersDidNotPayToday');
+
+// todays collections
+Route::get('/admin/customers/todays-collections', [ProductCustomerMoneyCollectionController::class, 'todaysCollections'])->name('admin.todaysCollections');
 
 // route for customer have to paid today 
 Route::get('/admin/customers/paid-today', [CustomerController::class, 'customersPaidToday'])->name('admin.customerHaveToPayToday');

@@ -90,7 +90,14 @@ function ProductOpenDrawer() {
         </li>
 
         <li>
-          <Link className="ml-3">আজকের কালেকশন</Link>
+          <Link
+            href={route('admin.todaysCollections', {
+              todate: dayjs().format('YYYY-MM-DD'),
+            })}
+            className="ml-3"
+          >
+            আজকের কালেকশন
+          </Link>
         </li>
       </ul>
     </div>
