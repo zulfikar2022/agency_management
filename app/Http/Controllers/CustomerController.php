@@ -86,7 +86,12 @@ class CustomerController extends Controller
         $leanUser = request()->get('user');
         $customer = Customer::findOrFail($id);
         $purchagesLists = CustomerProduct::where('customer_id', $customer->id)->where('is_deleted', false)->get();
-        $paymentLists = ProductCustomerMoneyCollection::where('customer_id', $customer->id)->get();
+        // each of the purchasesLists item holda property named total_payable_price, find the sum of all total_payable_price where is_deleted is false and remaining_payable_price > 0
+        $total_payable_price = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('total_payable_price');
+        // find the total downpayment amount from the purchasesLists
+        $total_downpayment_amount = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('downpayment');
+
+        $paymentLists = ProductCustomerMoneyCollection::where('customer_id',  $customer->id)->get();
         $purchagedProducts = $purchagesLists->map(function ($item) {
             $product = Product::find($item->product_id);
             $item['product'] = $product;
@@ -105,6 +110,8 @@ class CustomerController extends Controller
             'customer' => $customer,
             'purchagedProducts' => $purchagedProducts,
             'paymentLists' => $paymentLists,
+            'total_payable_price' => $total_payable_price,
+            'total_downpayment' => $total_downpayment_amount,
             
         ]);
     }

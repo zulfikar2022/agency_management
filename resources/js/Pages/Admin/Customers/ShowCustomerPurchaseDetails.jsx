@@ -1,4 +1,6 @@
+import dayjs from 'dayjs';
 import LayoutForProduct from '../layouts/LayoutForProduct';
+import { WEEKDAYS } from '@/constants';
 
 function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
   console.log({ purchase, customer, paymentList });
@@ -27,7 +29,13 @@ function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
           </p>
           <p>
             <span className="underline">ক্রয়ের তারিখঃ</span> &nbsp;
-            {new Date(purchase?.created_at).toLocaleDateString()}
+            {dayjs(purchase?.created_at).format('D MMMM YYYY')}({' '}
+            {WEEKDAYS.find(
+              (day) =>
+                dayjs(purchase?.created_at).format('dddd').toLowerCase() ===
+                day.value
+            )?.label || ''}{' '}
+            )
           </p>
         </div>
         <div>
@@ -38,7 +46,7 @@ function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
         </div>
       </div>
       <div>
-        <h1 className="text-lg font-bold text-center"> টাকা কালেকশন তালিকা</h1>
+        {/* <h1 className="text-lg font-bold text-center"> টাকা কালেকশন তালিকা</h1> */}
       </div>
     </LayoutForProduct>
   );

@@ -7,13 +7,24 @@ import Swal from 'sweetalert2';
 import ResponsiveCustomerDetailsTable from '../components/ResponsiveCustomerDetailsTable';
 import AdminCollectionList from '../components/AdminCollectionList';
 
-function ShowCustomerDetails({ customer, purchagedProducts, paymentLists }) {
+function ShowCustomerDetails({
+  customer,
+  purchagedProducts,
+  paymentLists,
+  total_payable_price,
+  total_downpayment,
+}) {
   const { previousUrl } = usePage().props;
   const totalRemainingPayable = purchagedProducts?.reduce(
     (total, item) => total + item?.remaining_payable_price,
     0
   );
-  console.log({ purchagedProducts });
+  console.log({ total_payable_price, total_downpayment });
+
+  let totalPaymentByCollection = paymentLists?.reduce(
+    (total, item) => total + item?.collected_amount,
+    0
+  );
 
   let totalWeeklyPayable = 0;
   purchagedProducts?.forEach((item) => {
@@ -87,12 +98,25 @@ function ShowCustomerDetails({ customer, purchagedProducts, paymentLists }) {
           </div>
           <div className="border-b md:border-r md:border-b-0 pr-6 pb-6">
             <p>
-              বাকি আছেঃ{' '}
-              <span className="font-bold">{totalRemainingPayable}</span> টাকা
+              মোট পরিশোধযোগ্যঃ{' '}
+              <span className="font-bold">{total_payable_price}</span> টাকা
+            </p>
+
+            <p>
+              মোট ডাউনপেমেন্টঃ{' '}
+              <span className="font-bold">{total_downpayment}</span> টাকা
+            </p>
+            <p>
+              কিস্তিতে মোট পরিশোধঃ{' '}
+              <span className="font-bold">{totalPaymentByCollection}</span> টাকা
             </p>
             <p>
               সাপ্তাহিক পরিশোধ যোগ্যঃ{' '}
               <span className="font-bold">{totalWeeklyPayable}</span> টাকা
+            </p>
+            <p>
+              মোট বাকি আছেঃ{' '}
+              <span className="font-bold">{totalRemainingPayable}</span> টাকা
             </p>
           </div>
           <div className="flex flex-col justify-between mt-5 md:mt-0">

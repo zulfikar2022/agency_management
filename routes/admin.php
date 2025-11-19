@@ -86,6 +86,11 @@ Route::get('/admin/customers/todays-collections', [ProductCustomerMoneyCollectio
 // route for customer have to paid today 
 Route::get('/admin/customers/paid-today', [CustomerController::class, 'customersPaidToday'])->name('admin.customerHaveToPayToday');
 // delete customer
+
+// route for show customer details
+Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('admin.showCustomerDetails');
+
+
 Route::delete('/admin/customers/delete/{id}', [CustomerController::class, 'destroy'])->name('admin.deleteCustomer');
 
 // show page for selling product to customer

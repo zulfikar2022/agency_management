@@ -377,6 +377,10 @@ class ProductCustomerMoneyCollectionController extends Controller
     public function todaysCollections(Request $request){
         // $today = $request->input('today');
         $todate = $request->input('todate');
+        //find out the day in the format saturday, sunday not from the todate, rahter using the system time and date
+        $day = \Carbon\Carbon::now()->format('l');
+        // $day = \Carbon\Carbon::parse($todate)->format('l');
+        
 
         $collections = ProductCustomerMoneyCollection::where('collecting_date', $todate)->get();
         // each collection has a customer_id property and based on this id fetch the customer from customers table and put it to the collection instance as customer property
@@ -386,8 +390,44 @@ class ProductCustomerMoneyCollectionController extends Controller
             return $collection;
         });
 
+        // each of the collections instance has a customer property named collected_amount. find the some of all collected_amount and place it into a variable named total_collected_amount
+        // find the system date in the format yyyy-mm-dd
+        $system_date = \Carbon\Carbon::now()->format('Y-m-d');
+
+        $total_collected_amount = ProductCustomerMoneyCollection::where('collecting_date', $system_date)->get()->sum('collected_amount');
+
+        // each collection has a customer_products_id property and based on this id fetch the customer_product from customer_products table and put the product_Id from the customer_product to the collection instance as product property
+        $collections->transform(function ($collection) {
+            $customer_product = CustomerProduct::find($collection->customer_products_id);
+            if($customer_product){
+                $product = Product::find($customer_product->product_id);
+                $collection->product = $product;
+            }
+            return $collection;
+        });
+
+        $collections->transform(function ($collection) {
+            $customer_product = CustomerProduct::find($collection->customer_products_id);
+            $collection->customer_product = $customer_product;
+            return $collection;
+        });
+
+        // using the $day variable fetch all the customers id who are supposed to pay today and place them into an array. I don't want the cutomers. I just want to know the total receivable amount for today
+
+        $customer_ids = Customer::where('collection_day', $day)->pluck('id')->toArray();
+       // using the customer_ids array fetch all the instances from customer_products table where customer_id is in the customer_ids array and remaining_payable_price > 0
+        $customer_products = CustomerProduct::whereIn('customer_id', $customer_ids)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_price', '>', 0)
+            ->get();
+        // now find the total sum of weekly_payable_price from the customer_products instances
+        $total_receivable_amount = $customer_products->sum('weekly_payable_price');
+        
+
         return Inertia::render('Admin/Customers/CustomerCollection/TodaysCollection', [
             'collections' => $collections,
+            'totalReceivableAmount' => $total_receivable_amount,
+            'total_collected_amount' => $total_collected_amount,
         ]);
     }
 }
