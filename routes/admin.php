@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController\AdminController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerProductController;
+use App\Http\Controllers\EmployeeController\EmployeeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
@@ -71,7 +72,15 @@ Route::get('/admin/customers/edit/{id}', [CustomerController::class, 'edit'])->n
 // save the updated customer info
 Route::put('/admin/customers/update/{id}', [CustomerController::class, 'update'])->name('admin.updateCustomer');
 // show customer details
-Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('admin.showCustomerDetails');
+
+// route for showing customers who will have to pay today
+Route::get('/admin/customers/have-to-pay-today', [CustomerController::class, 'customerThatPayToday'])->name('admin.haveToPayToday');
+
+// route for customers who have not paid today
+Route::get('/admin/customers/not-paid-today', [CustomerController::class, 'customersDidNotPayToday'])->name('admin.customersDidNotPayToday');
+
+// route for customer have to paid today 
+Route::get('/admin/customers/paid-today', [CustomerController::class, 'customersPaidToday'])->name('admin.customerHaveToPayToday');
 // delete customer
 Route::delete('/admin/customers/delete/{id}', [CustomerController::class, 'destroy'])->name('admin.deleteCustomer');
 
@@ -89,6 +98,7 @@ Route::post('/admin/customers/sell-product', [CustomerProductController::class, 
 
 // show customer specific purchase details
 Route::get('/admin/customers/{customer_id}/purchases/{purchase_id}', [CustomerController::class, 'showCustomerPurchases'])->name('admin.showCustomerPurchaseDetails');
+
 
 
 

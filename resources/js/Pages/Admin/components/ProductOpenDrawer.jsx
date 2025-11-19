@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import dayjs from 'dayjs';
 
 function ProductOpenDrawer() {
   return (
@@ -52,6 +53,44 @@ function ProductOpenDrawer() {
           <Link className="ml-3" href={route('admin.createCustomer')}>
             কাস্টমার যুক্ত করুন
           </Link>
+        </li>
+
+        {/* features from employee for watching collections */}
+        <li>
+          <Link
+            href={route('admin.haveToPayToday', {
+              today: dayjs().format('dddd'),
+            })}
+            className="ml-3"
+          >
+            আজ যারা টাকা দেবে
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            href={route('admin.customerHaveToPayToday', {
+              todate: dayjs().format('YYYY-MM-DD'),
+            })}
+            className="ml-3"
+          >
+            আজ যারা টাকা দিয়েছে
+          </Link>
+        </li>
+        <li>
+          <Link
+            href={route('admin.customersDidNotPayToday', {
+              todate: dayjs().format('YYYY-MM-DD'),
+              today: dayjs().format('dddd'),
+            })}
+            className="ml-3"
+          >
+            আজ যারা টাকা দেয়নি
+          </Link>
+        </li>
+
+        <li>
+          <Link className="ml-3">আজকের কালেকশন</Link>
         </li>
       </ul>
     </div>
