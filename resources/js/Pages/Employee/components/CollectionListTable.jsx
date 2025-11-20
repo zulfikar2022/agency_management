@@ -58,7 +58,7 @@ function CollectionListTable({ collections }) {
             return (
               <div
                 key={item.date}
-                className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-6 mb-10 border-dashed border-b ${item?.totalCollectable - item?.totalCollected > 0 ? 'bg-red-200' : ''}`}
+                className={`grid items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-6 mb-10 border-dashed border-b p-2 ${item?.totalCollectable - item?.totalCollected > 0 ? 'bg-red-200' : ''}`}
               >
                 <div className="flex flex-col">
                   <p className="font-bold">কালেকশনের তারিখঃ</p>

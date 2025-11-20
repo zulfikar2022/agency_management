@@ -9,6 +9,7 @@ use App\Models\Dues;
 use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\ProductCustomerMoneyCollectionUpdateLog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -429,5 +430,43 @@ class ProductCustomerMoneyCollectionController extends Controller
             'totalReceivableAmount' => $total_receivable_amount,
             'total_collected_amount' => $total_collected_amount,
         ]);
+    }
+
+    public function seeDetailsOfOneDayCollection(Request $request){
+        $user = $request->get('user');
+        $customer_id = $request->route('customer_id');
+        $date = $request->route('date');
+        
+        $collections = ProductCustomerMoneyCollection::where('customer_id', $customer_id)
+            ->where('collecting_date', $date)
+            ->get();
+        $collections->transform(function (ProductCustomerMoneyCollection $collection) {
+            $product_customer = CustomerProduct::find($collection->customer_products_id);
+            
+            $product = Product::find($product_customer->product_id);
+            $collection->product = $product;
+            return $collection;
+        });
+        $collectionIds = $collections->pluck('id')->toArray();
+
+        $collectionsUpdateLogs = ProductCustomerMoneyCollectionUpdateLog::whereIn('product_customer_money_collection_id', $collectionIds)->orderBy('created_at', 'desc')->get();
+        $collectionsUpdateLogs->transform(function ($update) use ($collections) {
+            $user = User::find($update->updating_user_id);
+            $user->password = null;
+            $update->updating_user = $user;
+
+            $update->product = Product::find(CustomerProduct::find($collections->where('id', $update->product_customer_money_collection_id)->first()->customer_products_id)->product_id);
+            return $update;
+        });
+
+
+        return Inertia::render('Admin/Customers/SingleCollectionDetails', [
+            'collections' => $collections,
+            'collectionsUpdateLogs' => $collectionsUpdateLogs,
+        ]);
+
+        
+
+        
     }
 }

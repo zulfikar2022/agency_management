@@ -1,9 +1,15 @@
 import { WEEKDAYS } from '@/constants';
+import { Link } from '@inertiajs/react';
 import dayjs from 'dayjs';
 
 function AdminCollectionList({ collections }) {
   const uniqueDays = [];
   const sameDayCollections = [];
+  console.log({ collections });
+
+  // get the customers id from the url
+  const urlParts = window.location.pathname.split('/');
+  const customerId = urlParts[urlParts?.length - 1]; // assuming the URL structure is /admin/customers/{id}/...
 
   collections?.forEach((collection) => {
     if (uniqueDays.indexOf(collection.collecting_date) === -1) {
@@ -65,7 +71,7 @@ function AdminCollectionList({ collections }) {
           return (
             <div
               key={item?.id}
-              className={`grid gird-cols-1 md:grid-cols-4 border-b pb-3 mb-3 ${item?.totalCollectable - item?.totalCollected > 0 ? 'bg-red-200' : ''}`}
+              className={`grid gird-cols-1 md:grid-cols-5 border-b pb-3 mb-3 items-center ${item?.totalCollectable - item?.totalCollected > 0 ? 'bg-red-200' : ''}`}
             >
               <div>
                 <p className="font-bold">তারিখঃ </p>
@@ -84,7 +90,23 @@ function AdminCollectionList({ collections }) {
               </div>
               <div>
                 <p className="font-bold">বাকি আছেঃ </p>
-                <p>{item?.totalCollectable - item?.totalCollected}</p>
+                <p>
+                  {item?.totalCollectable - item?.totalCollected > 0
+                    ? item?.totalCollectable - item?.totalCollected
+                    : 0}
+                </p>
+              </div>
+              <div>
+                <Link
+                  href={route('admin.showCustomersCollectionsOnDate', {
+                    customer_id: customerId,
+                    date: item.date,
+                  })}
+                  className="btn btn-xs btn-outline"
+                >
+                  {' '}
+                  বিস্তারিত দেখুন{' '}
+                </Link>
               </div>
             </div>
           );

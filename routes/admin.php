@@ -96,6 +96,9 @@ Route::delete('/admin/customers/delete/{id}', [CustomerController::class, 'destr
 // show page for selling product to customer
 Route::get('/admin/customers/{id}/sell-product', [CustomerProductController::class, 'sellProductToCustomerPage'])->name('admin.sellProductToCustomerPage');
 
+// show all collections of a customer on a specific day
+Route::get('/admin/customers/{customer_id}/collections/{date}', [ProductCustomerMoneyCollectionController::class, 'seeDetailsOfOneDayCollection'])->name('admin.showCustomersCollectionsOnDate');
+
 // render update sell product page
 Route::get('/admin/customers/purchases/update/{purchase_id}', [CustomerProductController::class, 'updateProductCustomerRenderPage'])->name('admin.updateProductCustomerRenderPage');
 
