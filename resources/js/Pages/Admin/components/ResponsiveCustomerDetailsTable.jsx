@@ -1,7 +1,6 @@
 import { Link } from '@inertiajs/react';
 
 function ResponsiveCustomerDetailsTable({ purchagedProducts }) {
-  console.log({ purchagedProducts });
   if (purchagedProducts.length === 0) {
     return <div className="text-center my-10 text-gray-500">কোন পণ্য নেই</div>;
   }

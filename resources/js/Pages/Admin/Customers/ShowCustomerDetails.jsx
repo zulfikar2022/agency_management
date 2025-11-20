@@ -19,7 +19,6 @@ function ShowCustomerDetails({
     (total, item) => total + item?.remaining_payable_price,
     0
   );
-  console.log({ total_payable_price, total_downpayment });
 
   let totalPaymentByCollection = paymentLists?.reduce(
     (total, item) => total + item?.collected_amount,

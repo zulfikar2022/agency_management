@@ -108,6 +108,7 @@ Route::post('/admin/customers/sell-product', [CustomerProductController::class, 
 // show customer specific purchase details
 Route::get('/admin/customers/{customer_id}/purchases/{purchase_id}', [CustomerController::class, 'showCustomerPurchases'])->name('admin.showCustomerPurchaseDetails');
 
+// Route::get('/admin/customers/{customer_id}/collections?todate=', [CustomerController::class, 'showCustomerCollections'])->name('admin.showCustomerCollectionDetails');
 
 
 

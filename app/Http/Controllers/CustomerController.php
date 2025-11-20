@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
+use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -102,6 +103,8 @@ class CustomerController extends Controller
         $paymentLists = $paymentLists->map(function ($item) use ($purchagedProducts) {
             $purchase = $purchagedProducts->find($item->customer_products_id);
             $item['purchase'] = $purchase;
+            $isUpdated = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $item->id)->exists();
+            $item['isUpdated'] = $isUpdated;
             return $item;
         });
 

@@ -4,8 +4,7 @@ import dayjs from 'dayjs';
 function AdminCollectionList({ collections }) {
   const uniqueDays = [];
   const sameDayCollections = [];
-  // const sameDayCollectionsIds = [];
-  console.log(collections);
+
   collections?.forEach((collection) => {
     if (uniqueDays.indexOf(collection.collecting_date) === -1) {
       uniqueDays.push(collection.collecting_date);
@@ -44,10 +43,11 @@ function AdminCollectionList({ collections }) {
       ),
       id: sameDayCollectionsIds.join('-'),
       createdAt: `${day} ${month} ${year} (${WEEKDAYS.find((day) => day.value === dateDay)?.label})`,
+      isUpdated: collectionsOfTheDay.some((item) => item.isUpdated),
     });
   }
-
   console.log({ sameDayCollections });
+
   return (
     <div className="my-5 mx-5 md:mx-0">
       {sameDayCollections.length > 0 && (
@@ -70,6 +70,9 @@ function AdminCollectionList({ collections }) {
               <div>
                 <p className="font-bold">তারিখঃ </p>
                 <p>{dateWithDay}</p>
+                <span className="text-sm text-slate-700">
+                  {item?.isUpdated ? '(আপডেট হয়েছে)' : ''}
+                </span>
               </div>
               <div>
                 <p className="font-bold">কালেকশনযোগ্যঃ </p>
