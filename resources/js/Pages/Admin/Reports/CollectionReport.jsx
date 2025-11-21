@@ -1,7 +1,5 @@
-<<<<<<< HEAD
-=======
 import { dateFormatter } from '@/utilityFuntion';
->>>>>>> e4f37d6 (feat: Add report generation buttons and enhance report formatting in collection views)
+
 import {
   Document,
   Font,
@@ -85,8 +83,7 @@ function CollectionReport({ collections }) {
             {'\u200B'} Collection Report {'\u200B'}
           </Text>
         </View>
-<<<<<<< HEAD
-=======
+
         <View
           style={{
             display: 'flex',
@@ -146,7 +143,6 @@ function CollectionReport({ collections }) {
             );
           })}
         </View>
->>>>>>> e4f37d6 (feat: Add report generation buttons and enhance report formatting in collection views)
       </Page>
     </Document>
   );
