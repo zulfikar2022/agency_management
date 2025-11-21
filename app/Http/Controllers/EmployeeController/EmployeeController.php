@@ -7,9 +7,12 @@ use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
+use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+
 
 class EmployeeController extends Controller
 {
@@ -217,13 +220,60 @@ class EmployeeController extends Controller
             'totalCustomers' => count($customersIds)
         ]);
     }
-    public function todaysCollection(){
-        $user = request()->get('user');
-        $todate = request()->query('todate');
+    public function todaysCollection(Request $request){
+        $user = $request->get('user');
+        
+
+        // $today = $request->input('today');
+        $todate = $request->input('todate');
+        //find out the day in the format saturday, sunday not from the todate, rahter using the system time and date
+        $day = \Carbon\Carbon::now()->format('l');
+        
+        
+
+        $collections = ProductCustomerMoneyCollection::where('collecting_date', $todate)->get();
+        // each collection has a customer_id property and based on this id fetch the customer from customers table and put it to the collection instance as customer property
+        $collections->transform(function ($collection) {
+            $customer = Customer::find($collection->customer_id);
+            $collection->customer = $customer;
+            return $collection;
+        });
+
+        $system_date = \Carbon\Carbon::now()->format('Y-m-d');
+
+        $total_collected_amount = ProductCustomerMoneyCollection::where('collecting_date', $system_date)->get()->sum('collected_amount');
+
+        // each collection has a customer_products_id property and based on this id fetch the customer_product from customer_products table and put the product_Id from the customer_product to the collection instance as product property
+        $collections->transform(function ($collection) {
+            $customer_product = CustomerProduct::find($collection->customer_products_id);
+            if($customer_product){
+                $product = Product::find($customer_product->product_id);
+                $collection->product = $product;
+            }
+            return $collection;
+        });
+
+        $collections->transform(function ($collection) {
+            $customer_product = CustomerProduct::find($collection->customer_products_id);
+            $collection->customer_product = $customer_product;
+            $isUpdated = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $collection->id)->exists();
+            $collection->is_updated = $isUpdated;
+            return $collection;
+        });
+
+        $customer_ids = Customer::where('collection_day', $day)->pluck('id')->toArray();
+       
+        $customer_products = CustomerProduct::whereIn('customer_id', $customer_ids)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_price', '>', 0)
+            ->get();
+        
+        $total_receivable_amount = $customer_products->sum('weekly_payable_price');
 
         return Inertia::render('Employee/Products/TodaysCollection', [
-            'user' => $user,
-            'todate' => $todate
+            'totalReceivableAmount' => $total_receivable_amount,  
+            'total_collected_amount' => $total_collected_amount,
+            'collections' => $collections
         ]);
     }
 
@@ -260,4 +310,6 @@ class EmployeeController extends Controller
             'collections' => $collections
         ]);
     }
+
+    
 }

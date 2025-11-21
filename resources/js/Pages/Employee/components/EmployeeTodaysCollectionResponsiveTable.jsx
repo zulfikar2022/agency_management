@@ -1,10 +1,8 @@
-import { Link, usePage } from '@inertiajs/react';
-import dayjs from 'dayjs';
+import { Link } from '@inertiajs/react';
 import { useState } from 'react';
 
-function AdminTodaysCollectionResponsiveTable({ collections, date }) {
+function EmployeeTodaysCollectionResponsiveTable({ collections }) {
   const [todaysCollection, setTodaysCollection] = useState(collections);
-
   return (
     <div>
       {todaysCollection?.length === 0 && (
@@ -12,7 +10,7 @@ function AdminTodaysCollectionResponsiveTable({ collections, date }) {
       )}
 
       <div className="container mx-auto space-y-4 ">
-        {todaysCollection?.map((collection, index) => {
+        {todaysCollection?.map((collection) => {
           return (
             <div
               key={collection.customer.id}
@@ -28,7 +26,7 @@ function AdminTodaysCollectionResponsiveTable({ collections, date }) {
                 <p className="font-bold">কাস্টমারের নামঃ</p>
                 <Link
                   className="text-blue-600 underline"
-                  href={route('admin.showCustomerDetails', {
+                  href={route('employee.customerDetails', {
                     id: collection?.customer?.id,
                   })}
                 >
@@ -76,4 +74,4 @@ function AdminTodaysCollectionResponsiveTable({ collections, date }) {
   );
 }
 
-export default AdminTodaysCollectionResponsiveTable;
+export default EmployeeTodaysCollectionResponsiveTable;

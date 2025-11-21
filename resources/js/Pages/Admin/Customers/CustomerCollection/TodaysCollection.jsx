@@ -12,10 +12,8 @@ function TodaysCollection({
   totalReceivableAmount,
   total_collected_amount,
 }) {
-  // console.log(collections);
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'));
   const { url } = usePage();
-  // console.log(collections);
 
   const queryParams = new URLSearchParams(url.split('?')[1]);
   const formattedDate = dayjs(queryParams.get('todate')).format('D MMMM YYYY');
@@ -72,7 +70,6 @@ function TodaysCollection({
     });
   });
 
-  console.log(showableCollectionData);
   const handleGenerateReport = async (e) => {
     e.preventDefault();
 
