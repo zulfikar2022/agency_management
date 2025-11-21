@@ -50,6 +50,7 @@ function AdminCollectionList({ collections }) {
       id: sameDayCollectionsIds.join('-'),
       createdAt: `${day} ${month} ${year} (${WEEKDAYS.find((day) => day.value === dateDay)?.label})`,
       isUpdated: collectionsOfTheDay.some((item) => item.isUpdated),
+      collectingUser: collectionsOfTheDay[0]?.collectingUser,
     });
   }
   console.log({ sameDayCollections });
@@ -61,13 +62,7 @@ function AdminCollectionList({ collections }) {
       )}
       <div className="container mx-auto mt-5">
         {sameDayCollections?.map((item, index) => {
-          const formattedDate = dayjs(item.created_at).format('D MMMM YYYY');
-          const dayName = WEEKDAYS.find(
-            (day) =>
-              day.value === dayjs(item?.created_at).format('dddd').toLowerCase()
-          )?.label;
-          const dateWithDay = `${formattedDate} (${dayName})`;
-
+          console.log(item);
           return (
             <div
               key={item?.id}
@@ -75,10 +70,11 @@ function AdminCollectionList({ collections }) {
             >
               <div>
                 <p className="font-bold">তারিখঃ </p>
-                <p>{dateWithDay}</p>
+                <p>{item.createdAt}</p>
                 <span className="text-sm text-slate-700">
                   {item?.isUpdated ? '(আপডেট হয়েছে)' : ''}
                 </span>
+                <span>{item?.collectingUser?.name}</span>
               </div>
               <div>
                 <p className="font-bold">কালেকশনযোগ্যঃ </p>

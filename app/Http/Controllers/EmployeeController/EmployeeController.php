@@ -243,7 +243,7 @@ class EmployeeController extends Controller
         $purchases = CustomerProduct::where('customer_id', $customer->id)
             ->where('is_deleted', false)
             ->get();
-        $collections = ProductCustomerMoneyCollection::where('customer_id', $customer->id)
+        $collections = ProductCustomerMoneyCollection::where('customer_id', $customer->id)->orderBy('created_at', 'desc')
             ->get();
         
         $purchases->transform(function ($purchase) {

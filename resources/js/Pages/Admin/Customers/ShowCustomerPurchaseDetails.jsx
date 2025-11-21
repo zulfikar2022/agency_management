@@ -46,7 +46,7 @@ function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
         </div>
       </div>
       <div>
-        {/* <h1 className="text-lg font-bold text-center"> টাকা কালেকশন তালিকা</h1> */}
+        <h1 className="text-lg font-bold text-center"> টাকা কালেকশন তালিকা</h1>
       </div>
     </LayoutForProduct>
   );

@@ -7,6 +7,7 @@ use App\Models\CustomerProduct;
 use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\ProductCustomerMoneyCollectionUpdateLog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -92,7 +93,7 @@ class CustomerController extends Controller
         // find the total downpayment amount from the purchasesLists
         $total_downpayment_amount = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('downpayment');
 
-        $paymentLists = ProductCustomerMoneyCollection::where('customer_id',  $customer->id)->get();
+        $paymentLists = ProductCustomerMoneyCollection::where('customer_id',  $customer->id)->orderBy('created_at', 'desc')->get();
         $purchagedProducts = $purchagesLists->map(function ($item) {
             $product = Product::find($item->product_id);
             $item['product'] = $product;
@@ -105,6 +106,8 @@ class CustomerController extends Controller
             $item['purchase'] = $purchase;
             $isUpdated = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $item->id)->exists();
             $item['isUpdated'] = $isUpdated;
+            $collectingUser = User::find($item->collecting_user_id)->only('id', 'name', 'is_admin', 'is_employee');
+            $item['collectingUser'] = $collectingUser;
             return $item;
         });
 

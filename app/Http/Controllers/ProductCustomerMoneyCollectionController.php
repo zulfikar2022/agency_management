@@ -43,6 +43,8 @@ class ProductCustomerMoneyCollectionController extends Controller
             return $purchase;
         });
 
+        $total_downpayment = $purchases->sum('downpayment');
+
         $collections = ProductCustomerMoneyCollection::where('customer_id', $customer->id)
             ->orderBy('collecting_date', 'desc')
             ->get();
@@ -52,7 +54,8 @@ class ProductCustomerMoneyCollectionController extends Controller
             'user' => $user,
             'customer' => $customer, 
             'purchases' => $purchases,
-            'collections' => $collections
+            'collections' => $collections,
+            'total_downpayment' => $total_downpayment,
         ]);
     }
 
