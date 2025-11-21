@@ -6,6 +6,8 @@ import BoughtList from '../components/BoughtList';
 import Swal from 'sweetalert2';
 import ResponsiveCustomerDetailsTable from '../components/ResponsiveCustomerDetailsTable';
 import AdminCollectionList from '../components/AdminCollectionList';
+import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
+import IndividualCustomerReport from '../Reports/IndividualCustomerReport';
 
 function ShowCustomerDetails({
   customer,
@@ -53,6 +55,22 @@ function ShowCustomerDetails({
         });
       }
     });
+  };
+
+  const handleGeneratePdf = async (e) => {
+    e.preventDefault();
+    const blob = await pdf(
+      <IndividualCustomerReport
+        customer={customer}
+        purchagedProducts={purchagedProducts}
+        total_remaining_payable={totalRemainingPayable}
+        collections={paymentLists}
+        total_payable_price={total_payable_price}
+        total_downpayment={total_downpayment}
+      />
+    ).toBlob();
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
   };
   return (
     <LayoutForProduct>
@@ -133,6 +151,9 @@ function ShowCustomerDetails({
               >
                 কাস্টমার ডিলিট করুন
               </button>
+            )}
+            {totalRemainingPayable > 0 && (
+              <button onClick={handleGeneratePdf}>See PDF </button>
             )}
             <Link
               href={route('admin.sellProductToCustomerPage', customer.id)}

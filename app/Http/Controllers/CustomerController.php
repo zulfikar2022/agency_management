@@ -33,6 +33,17 @@ class CustomerController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+        
+        $customers->getCollection()->transform(function ($customer) {
+            $purchases = CustomerProduct::where('customer_id', $customer->id)
+                ->where('is_deleted', false)
+                ->where('remaining_payable_price', '>', 0)
+                ->get();
+            $total_remaining_payable = $purchases->sum('remaining_payable_price');
+            $customer->total_remaining_payable = $total_remaining_payable;
+            
+            return $customer;
+        });
 
         
         $totalCustomers = Customer::where('is_deleted', false)->count();

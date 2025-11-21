@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 function AdminCollectionList({ collections }) {
   const uniqueDays = [];
   const sameDayCollections = [];
-  console.log({ collections });
 
   // get the customers id from the url
   const urlParts = window.location.pathname.split('/');
@@ -53,7 +52,6 @@ function AdminCollectionList({ collections }) {
       collectingUser: collectionsOfTheDay[0]?.collectingUser,
     });
   }
-  console.log({ sameDayCollections });
 
   return (
     <div className="my-5 mx-5 md:mx-0">
@@ -62,7 +60,6 @@ function AdminCollectionList({ collections }) {
       )}
       <div className="container mx-auto mt-5">
         {sameDayCollections?.map((item, index) => {
-          console.log(item);
           return (
             <div
               key={item?.id}

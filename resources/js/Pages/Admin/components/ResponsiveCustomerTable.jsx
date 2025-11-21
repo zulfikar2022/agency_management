@@ -2,8 +2,9 @@ import { WEEKDAYS } from '@/constants';
 import { Link } from '@inertiajs/react';
 
 function ResponsiveCustomerTable({ data }) {
+  console.log({ data });
   if (data.length === 0) {
-    return <div className="text-center my-10 text-gray-500">কোন পণ্য নেই</div>;
+    return <div className="text-center my-10 text-gray-500">কোন তথ্য নেই</div>;
   }
   return (
     <div>
@@ -11,7 +12,7 @@ function ResponsiveCustomerTable({ data }) {
         return (
           <div
             key={customer.id}
-            className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-4 px-5 py-2 border-b items-center`}
+            className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-14 gap-4 px-5 py-2 border-b items-center`}
           >
             <div className="flex flex-col col-span-2">
               <p className="font-bold">গ্রাহকের নামঃ</p>
@@ -34,8 +35,12 @@ function ResponsiveCustomerTable({ data }) {
                 }
               </p>
             </div>
+            <div className="flex flex-col col-span-1">
+              <p className="font-bold">মোট বাকিঃ </p>
+              <p>{customer.total_remaining_payable} টাকা</p>
+            </div>
 
-            <div className="flex flex-col md:flex-row gap-2 col-span-4">
+            <div className="flex flex-col md:flex-row gap-2 col-span-5 justify-evenly">
               <Link
                 href={route('admin.showCustomerDetails', {
                   id: customer.id,
