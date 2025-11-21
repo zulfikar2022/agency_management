@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import { dateFormatter } from '@/utilityFuntion';
+>>>>>>> e4f37d6 (feat: Add report generation buttons and enhance report formatting in collection views)
 import {
   Document,
   Font,
@@ -81,6 +85,68 @@ function CollectionReport({ collections }) {
             {'\u200B'} Collection Report {'\u200B'}
           </Text>
         </View>
+<<<<<<< HEAD
+=======
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 20,
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ fontWeight: 'bold' }}>
+            আজকের তারিখঃ{' '}
+            <Text style={{ fontWeight: 'normal' }}>
+              {dateFormatter(new Date())}
+            </Text>
+          </Text>
+          <Text style={{ fontWeight: 'bold' }}>
+            কালেকশনের তারিখঃ{' '}
+            <Text style={{ fontWeight: 'normal' }}>
+              {dateFormatter(collections[0].createdAt)}
+            </Text>
+          </Text>
+        </View>
+        <View style={{ fontSize: 10 }}>
+          {collections.map((collection, index) => {
+            return (
+              <View
+                key={collection?.customer?.id}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  borderBottom: '1px solid #ccc',
+                  paddingTop: 8,
+                }}
+              >
+                <View>
+                  <Text style={{ fontWeight: 'bold' }}>কাস্টমারের নামঃ </Text>
+                  <Text>{collection?.customer?.name}</Text>
+                </View>
+                <View>
+                  <Text style={{ fontWeight: 'bold' }}>ঠিকানাঃ </Text>
+                  <Text>{collection?.customer?.address}</Text>
+                </View>
+                <View>
+                  <Text style={{ fontWeight: 'bold' }}>
+                    সাপ্তাহিক পরিশোধযোগ্যঃ{' '}
+                  </Text>
+                  <Text>{collection?.totalWeeklyCollectableAmount} টাকা</Text>
+                </View>
+                <View>
+                  <Text style={{ fontWeight: 'bold' }}>
+                    সাপ্তাহিক কালেকশনঃ{' '}
+                  </Text>
+                  <Text>{collection?.totalWeeklyCollectedAmount} টাকা</Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+>>>>>>> e4f37d6 (feat: Add report generation buttons and enhance report formatting in collection views)
       </Page>
     </Document>
   );

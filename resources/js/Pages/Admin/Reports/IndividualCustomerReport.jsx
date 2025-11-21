@@ -232,6 +232,7 @@ function IndividualCustomerReport({
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   marginBottom: 10,
+                  borderBottom: '1px solid #ccc',
                 }}
               >
                 <View style={{ display: 'flex', flexDirection: 'column' }}>
@@ -281,6 +282,7 @@ function IndividualCustomerReport({
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   marginBottom: 10,
+                  borderBottom: '1px solid #ccc',
                 }}
               >
                 <View>
@@ -300,9 +302,9 @@ function IndividualCustomerReport({
                 <View>
                   <Text style={{ fontWeight: 'bold' }}>বাকি আছেঃ </Text>
                   <Text>
-                    {item?.collectable_amount - item?.collected_amount > 0
-                      ? item?.collectable_amount - item?.collected_amount
-                      : 0}{' '}
+                    {item?.totalCollectable - item?.totalCollected > 0
+                      ? item?.totalCollectable - item?.totalCollected
+                      : '0'}{' '}
                     টাকা{' '}
                   </Text>
                 </View>

@@ -59,6 +59,8 @@ function ShowCustomerDetails({
     });
   };
 
+  console.log(paymentLists);
+
   const handleGeneratePdf = async (e) => {
     e.preventDefault();
 
@@ -223,7 +225,11 @@ function ShowCustomerDetails({
                 className="btn btn-xs btn-outline"
                 onClick={handleGeneratePdf}
               >
+<<<<<<< HEAD
                 রিপোর্ট তৈরি করুন{' '}
+=======
+                রিপোর্ট তৈরি করুন
+>>>>>>> e4f37d6 (feat: Add report generation buttons and enhance report formatting in collection views)
               </button>
             )}
             <Link
