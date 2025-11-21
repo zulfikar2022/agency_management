@@ -72,6 +72,7 @@ function TodaysCollection({
     });
   });
 
+  console.log(showableCollectionData);
   const handleGenerateReport = async (e) => {
     e.preventDefault();
 

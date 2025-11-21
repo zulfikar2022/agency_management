@@ -68,6 +68,10 @@ Font.register({
 });
 
 function CollectionReport({ collections }) {
+  const totalCollected = collections.reduce(
+    (total, collection) => total + collection.totalWeeklyCollectedAmount,
+    0
+  );
   return (
     <Document>
       <Page title="কালেকশন রিপোর্ট" style={styles.page}>
@@ -89,7 +93,7 @@ function CollectionReport({ collections }) {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginBottom: 20,
+            marginBottom: 5,
             marginTop: 10,
           }}
         >
@@ -104,6 +108,12 @@ function CollectionReport({ collections }) {
             <Text style={{ fontWeight: 'normal' }}>
               {dateFormatter(collections[0].createdAt)}
             </Text>
+          </Text>
+        </View>
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ fontWeight: 'bold' }}>
+            মোট কালেকশনঃ{' '}
+            <Text style={{ fontWeight: 'normal' }}>{totalCollected} টাকা</Text>
           </Text>
         </View>
         <View style={{ fontSize: 10 }}>

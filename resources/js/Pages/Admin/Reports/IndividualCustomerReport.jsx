@@ -233,6 +233,7 @@ function IndividualCustomerReport({
                   justifyContent: 'space-between',
                   marginBottom: 10,
                   borderBottom: '1px solid #ccc',
+                  fontSize: 10,
                 }}
               >
                 <View style={{ display: 'flex', flexDirection: 'column' }}>
@@ -283,6 +284,7 @@ function IndividualCustomerReport({
                   justifyContent: 'space-between',
                   marginBottom: 10,
                   borderBottom: '1px solid #ccc',
+                  fontSize: 10,
                 }}
               >
                 <View>
