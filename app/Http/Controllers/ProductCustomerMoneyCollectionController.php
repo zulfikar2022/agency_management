@@ -413,6 +413,8 @@ class ProductCustomerMoneyCollectionController extends Controller
         $collections->transform(function ($collection) {
             $customer_product = CustomerProduct::find($collection->customer_products_id);
             $collection->customer_product = $customer_product;
+            $isUpdated = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $collection->id)->exists();
+            $collection->is_updated = $isUpdated;
             return $collection;
         });
 

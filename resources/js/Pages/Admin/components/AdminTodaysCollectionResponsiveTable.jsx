@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 function AdminTodaysCollectionResponsiveTable({ collections, date }) {
   const [todaysCollection, setTodaysCollection] = useState(collections);
+  console.log(collections);
 
   return (
     <div>
@@ -15,9 +16,10 @@ function AdminTodaysCollectionResponsiveTable({ collections, date }) {
         {todaysCollection?.map((collection, index) => {
           return (
             <div
-              key={collection.id}
-              className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 border-b pb-2 px-4 md:px-1 ${
-                collection?.collectable_amount - collection?.collected_amount >
+              key={collection.customer.id}
+              className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 border-b pb-2 px-4 md:px-1 ${
+                collection?.totalWeeklyCollectableAmount -
+                  collection?.totalWeeklyCollectedAmount >
                 0
                   ? 'bg-red-100'
                   : ''
@@ -33,38 +35,39 @@ function AdminTodaysCollectionResponsiveTable({ collections, date }) {
                 >
                   {collection?.customer?.name}
                 </Link>
+                <br />
+                <span className="text-xs text-slate-500">
+                  {collection?.is_updated ? ' (আপডেটেড)' : ''}
+                </span>
               </div>
               <div>
                 <p className="font-bold">ঠিকানা</p>
                 <p>{collection?.customer?.address}</p>
               </div>
-              <div>
-                <p className="font-bold">পণ্যের নামঃ</p>
-                <p>{collection?.product?.name}</p>
-              </div>
+
               <div>
                 <p className="font-bold">সাপ্তাহিক পরিশোধযোগ্যঃ</p>
-                <p>{collection?.collectable_amount}</p>
+                <p>{collection?.totalWeeklyCollectableAmount}</p>
               </div>
               <div>
                 <p className="font-bold">সাপ্তাহিক কালেকশনঃ</p>
-                <p>{collection?.collected_amount}</p>
+                <p>{collection?.totalWeeklyCollectedAmount}</p>
               </div>
               <div>
                 <p className="font-bold">আজকের বাকিঃ </p>
                 <p>
-                  {collection?.collectable_amount -
-                    collection?.collected_amount >
+                  {collection?.totalWeeklyCollectableAmount -
+                    collection?.totalWeeklyCollectedAmount >
                   0
-                    ? collection?.collectable_amount -
-                      collection?.collected_amount
+                    ? collection?.totalWeeklyCollectableAmount -
+                      collection?.totalWeeklyCollectedAmount
                     : 0}
                 </p>
               </div>
 
               <div>
                 <p className="font-bold">মোট বাকিঃ </p>
-                <p>{collection?.customer_product?.remaining_payable_price}</p>
+                <p>{collection?.totalRemainingPayableAmount}</p>
               </div>
             </div>
           );

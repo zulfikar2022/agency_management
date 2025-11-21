@@ -136,6 +136,8 @@ function IndividualCustomerReport({
       collectingUser: collectionsOfTheDay[0]?.collectingUser,
     });
   }
+
+  const dateOfTheReport = dateFormatter(new Date());
   return (
     <Document>
       {/* এখানে style={styles.page} দিতে হবে */}
@@ -169,6 +171,10 @@ function IndividualCustomerReport({
               <Text style={{ fontWeight: 'normal' }}>
                 {customer?.phone_number ?? 'নাম্বার নেই'}
               </Text>
+            </Text>
+            <Text style={{ fontWeight: 'bold' }}>
+              তারিখঃ{' '}
+              <Text style={{ fontWeight: 'normal' }}>{dateOfTheReport}</Text>
             </Text>
           </View>
           <View>

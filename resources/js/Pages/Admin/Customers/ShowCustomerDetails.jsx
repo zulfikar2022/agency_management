@@ -8,6 +8,8 @@ import ResponsiveCustomerDetailsTable from '../components/ResponsiveCustomerDeta
 import AdminCollectionList from '../components/AdminCollectionList';
 import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
 import IndividualCustomerReport from '../Reports/IndividualCustomerReport';
+import dayjs from 'dayjs';
+import { dateFormatter } from '@/utilityFuntion';
 
 function ShowCustomerDetails({
   customer,
@@ -59,6 +61,7 @@ function ShowCustomerDetails({
 
   const handleGeneratePdf = async (e) => {
     e.preventDefault();
+
     const blob = await pdf(
       <IndividualCustomerReport
         customer={customer}
@@ -69,8 +72,71 @@ function ShowCustomerDetails({
         total_downpayment={total_downpayment}
       />
     ).toBlob();
+
     const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
+
+    // আপনার পছন্দের নাম (বাংলা থাকলেও চলবে)
+    const todayDate = dateFormatter(new Date());
+    const fileName = `${customer?.name || 'Customer'}_${customer?.phone_number}_রিপোর্ট_${todayDate}.pdf`;
+
+    // নতুন ট্যাব খোলা + সুন্দর টাইটেল + ডাউনলোড নাম সেট
+    const newWindow = window.open('', '_blank');
+
+    // আপনার handleGeneratePdf ফাংশনের ভিতরে এই অংশটা বদলান
+
+    if (newWindow) {
+      newWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="bn">
+      <head>
+        <meta charset="utf-8">
+        <title>${fileName}</title>
+        <style>
+          body, html { margin:0; padding:0; height:100%; overflow:hidden; background:#f3f4f6; }
+          embed { width:100%; height:100%; border:none; }
+          #downloadBtn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 9999;
+            padding: 12px 20px;
+            background: #1e40af;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          }
+          #downloadBtn:hover { background: #1e3a8a; }
+        </style>
+      </head>
+      <body>
+        <button id="downloadBtn">ডাউনলোড করুন </button>
+        <embed src="${url}" type="application/pdf" width="100%" height="100%">
+      </body>
+    </html>
+  `);
+      newWindow.document.close();
+
+      // এই অংশটা যোগ করুন — এটাই মূল কাজ করবে
+      newWindow.onload = () => {
+        const btn = newWindow.document.getElementById('downloadBtn');
+        if (btn) {
+          btn.onclick = () => {
+            const a = newWindow.document.createElement('a');
+            a.href = url;
+            a.download = fileName; // এটাই আপনার নাম সেট করে
+            a.click();
+          };
+        }
+      };
+    } else {
+      alert('পপআপ ব্লক করা আছে। অনুগ্রহ করে পপআপ অনুমোদন করুন।');
+    }
+
+    // মেমরি ক্লিন (১ মিনিট পর)
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
   };
   return (
     <LayoutForProduct>
@@ -153,7 +219,12 @@ function ShowCustomerDetails({
               </button>
             )}
             {totalRemainingPayable > 0 && (
-              <button onClick={handleGeneratePdf}>See PDF </button>
+              <button
+                className="btn btn-xs btn-outline"
+                onClick={handleGeneratePdf}
+              >
+                রিপোর্ট তৈরি করুন{' '}
+              </button>
             )}
             <Link
               href={route('admin.sellProductToCustomerPage', customer.id)}
