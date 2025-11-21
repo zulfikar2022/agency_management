@@ -72,10 +72,6 @@ function TodaysCollection({
     });
   });
 
-<<<<<<< HEAD
-=======
-  console.log(showableCollectionData);
->>>>>>> e4f37d6 (feat: Add report generation buttons and enhance report formatting in collection views)
   const handleGenerateReport = async (e) => {
     e.preventDefault();
 
@@ -180,14 +176,6 @@ function TodaysCollection({
             </Link>
           </div>
 
-<<<<<<< HEAD
-          <button
-            onClick={handleGenerateReport}
-            className="btn btn-xs btn-outline"
-          >
-            রিপোর্ট তৈরি করুন
-          </button>
-=======
           {showableCollectionData?.length > 0 && (
             <button
               onClick={handleGenerateReport}
@@ -196,7 +184,6 @@ function TodaysCollection({
               রিপোর্ট তৈরি করুন
             </button>
           )}
->>>>>>> e4f37d6 (feat: Add report generation buttons and enhance report formatting in collection views)
         </div>
         <div>
           <p className="font-bold">
