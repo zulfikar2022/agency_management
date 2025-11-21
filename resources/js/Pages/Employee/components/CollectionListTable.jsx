@@ -66,18 +66,19 @@ function CollectionListTable({ collections }) {
                 </div>
                 <div className="flex flex-col">
                   <p className="font-bold">সাপ্তাহিক কালেকশনযোগ্যঃ</p>
-                  <p>{item?.totalCollectable}</p>
+                  <p>{item?.totalCollectable} টাকা</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-bold">সাপ্তাহিক কালেকশনঃ </p>
-                  <p>{item?.totalCollected}</p>
+                  <p>{item?.totalCollected} টাকা</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-bold">বাকি আছেঃ </p>
                   <p>
                     {item?.totalCollectable - item?.totalCollected > 0
                       ? item?.totalCollectable - item?.totalCollected
-                      : 0}
+                      : 0}{' '}
+                    টাকা
                   </p>
                 </div>
                 <div className="flex flex-col">
