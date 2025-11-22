@@ -1,5 +1,5 @@
 import { WEEKDAYS } from '@/constants';
-import { dateFormatter } from '@/utilityFuntion';
+import { dateFormatter, sanitizeForPDF } from '@/utilityFuntion';
 import {
   Document,
   Font,
@@ -21,6 +21,11 @@ Font.register({
       fontWeight: 'bold',
     },
   ],
+});
+
+Font.register({
+  family: 'Helvetica', // Built-in, but explicit for safety
+  fonts: [{ src: 'Helvetica', fontWeight: 'normal' }],
 });
 
 const styles = StyleSheet.create({
@@ -157,15 +162,17 @@ function IndividualCustomerReport({
             <Text style={{ fontWeight: 'bold' }}>
               কাস্টমারের নামঃ{' '}
               <Text style={{ fontWeight: 'normal' }}>
-                {customer?.name ?? 'নাম নেই'}
+                {sanitizeForPDF(customer?.name) || 'নাম নেই'}
               </Text>
             </Text>
-            <Text style={{ fontWeight: 'bold' }}>
-              কাস্টমারের ঠিকানাঃ{' '}
+            <View>
+              <Text style={{ display: 'block', fontWeight: 'bold' }}>
+                কাস্টমারের ঠিকানাঃ
+              </Text>{' '}
               <Text style={{ fontWeight: 'normal' }}>
                 {customer?.address ?? 'ঠিকানা নেই'}
               </Text>
-            </Text>
+            </View>
             <Text style={{ fontWeight: 'bold' }}>
               মোবাইলঃ{' '}
               <Text style={{ fontWeight: 'normal' }}>

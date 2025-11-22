@@ -8,8 +8,11 @@ use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use App\Models\User;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Inertia\Inertia;
+use Spatie\Browsershot\Browsershot;
 
 class CustomerController extends Controller
 {
@@ -131,6 +134,57 @@ class CustomerController extends Controller
             'total_downpayment' => $total_downpayment_amount,
             
         ]);
+    }
+
+    public function downloadCustomerDetailReport (String $id){
+        
+        $leanUser = request()->get('user');
+        $customer = Customer::findOrFail($id);
+        $purchagesLists = CustomerProduct::where('customer_id', $customer->id)->where('is_deleted', false)->get();
+        // each of the purchasesLists item holda property named total_payable_price, find the sum of all total_payable_price where is_deleted is false and remaining_payable_price > 0
+        $total_payable_price = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('total_payable_price');
+        // find the total downpayment amount from the purchasesLists
+        $total_downpayment_amount = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('downpayment');
+
+        $paymentLists = ProductCustomerMoneyCollection::where('customer_id',  $customer->id)->orderBy('created_at', 'desc')->get();
+        $purchagedProducts = $purchagesLists->map(function ($item) {
+            $product = Product::find($item->product_id);
+            $item['product'] = $product;
+            return $item;
+        });
+
+        // each entry from paymentList has a customer_products_id property, using which fetch the corresponding purchase details from the customer_produdcts table
+        $paymentLists = $paymentLists->map(function ($item) use ($purchagedProducts) {
+            $purchase = $purchagedProducts->find($item->customer_products_id);
+            $item['purchase'] = $purchase;
+            $isUpdated = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $item->id)->exists();
+            $item['isUpdated'] = $isUpdated;
+            $collectingUser = User::find($item->collecting_user_id)->only('id', 'name', 'is_admin', 'is_employee');
+            $item['collectingUser'] = $collectingUser;
+            return $item;
+        });
+
+
+        // dd('inside the controller');
+       $html = view('pdf.customer-report', ['customer' => $customer])->render();
+
+      $pdfData =  Browsershot::html($html)
+            ->noSandbox()
+            ->showBackground()
+            ->format('A4')
+            ->pdf();
+        // get the todays date in the form of 22 NOvember 2023 using php date function
+        $todayDate = date('d F Y');
+        $filename = $customer->name . $todayDate.'-report-' . $todayDate . '.pdf';
+
+        return response($pdfData, 200)
+    ->header('Content-Type', 'application/pdf')
+    ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+
+
+
+
+
     }
 
     /**

@@ -35,12 +35,12 @@ function ResponsiveCustomerTable({ data }) {
                 }
               </p>
             </div>
-            <div className="flex flex-col col-span-1">
+            <div className="flex flex-col col-span-2">
               <p className="font-bold">মোট বাকিঃ </p>
               <p>{customer.total_remaining_payable} টাকা</p>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-2 col-span-5 justify-evenly">
+            <div className="flex flex-col md:flex-row gap-2 col-span-4 justify-evenly">
               <Link
                 href={route('admin.showCustomerDetails', {
                   id: customer.id,

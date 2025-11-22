@@ -34,7 +34,7 @@ Route::get('/employee/customers-who-didnt-pay-today', [EmployeeController::class
 Route::get('/employee/todays-collection', [EmployeeController::class, 'todaysCollection'])->name('employee.todaysCollection');
 
 // today's status route
-Route::get('/employee/todays-status', [EmployeeController::class, 'todaysStatus'])->name('employee.todaysStatus');
+// Route::get('/employee/todays-status', [EmployeeController::class, 'todaysStatus'])->name('employee.todaysStatus');
 
 // render collection page route
 Route::get('/employee/collection-page/{id}', [ProductCustomerMoneyCollectionController::class, 'create'])->name('employee.renderCollectionPage');   

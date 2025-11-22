@@ -36,3 +36,14 @@ export const timeFormatter = (dateString) => {
   // return time in the following manner 02:30 PM
   return dayjs(dateString).format('hh:mm A');
 };
+
+// utils/sanitizeText.js
+export const sanitizeForPDF = (text) => {
+  if (!text) return '';
+  // Replace replacement char, nulls, and control chars; normalize Unicode
+  return text
+    .replace(/�/g, '') // Remove mojibake
+    .replace(/\0/g, '') // Null bytes
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // Zero-width spaces/joiners (remove your hack too)
+    .normalize('NFC'); // Compose Bengali matras properly
+};

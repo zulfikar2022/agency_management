@@ -94,11 +94,11 @@ function SingleCollectionDetails({ collections, collectionsUpdateLogs }) {
                 <div className="flex flex-col md:flex-row gap-3 md:gap-10 mt-2">
                   <div>
                     <p className="font-bold">আপডেটের আগে পরিশোধিতঃ</p>
-                    <span>{log?.collected_amount_before}</span>
+                    <span>{log?.collected_amount_before} টাকা</span>
                   </div>
                   <div>
                     <p className="font-bold">আপডেটের পরে পরিশোধিতঃ</p>
-                    <span>{log?.collected_amount_after}</span>
+                    <span>{log?.collected_amount_after} টাকা</span>
                   </div>
                 </div>
               </div>

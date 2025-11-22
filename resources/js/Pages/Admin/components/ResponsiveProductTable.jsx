@@ -10,7 +10,7 @@ function ResponsiveProductTable({ data }) {
         return (
           <div
             key={product.id}
-            className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-5 py-2 border-b ${product?.is_available ? '' : 'bg-red-100'}`}
+            className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 px-5 py-2 border-b items-center ${product?.is_available ? '' : 'bg-red-100'}`}
           >
             <div className="flex flex-col">
               <p className="font-bold">পণ্যের নামঃ</p>

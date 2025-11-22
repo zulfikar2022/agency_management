@@ -77,7 +77,7 @@ function EmployeeProductLayout({ children }) {
                   আজকের কালেকশন{' '}
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href={route('employee.todaysStatus', {
                     todate: new Date().toISOString().split('T')[0],
@@ -86,7 +86,7 @@ function EmployeeProductLayout({ children }) {
                 >
                   আজকের স্ট্যাটাস{' '}
                 </Link>
-              </li>
+              </li> */}
               {/* <li>
                 <Link>ড্যাশবোর্ডে যান </Link>
               </li> */}
@@ -146,7 +146,7 @@ function EmployeeProductLayout({ children }) {
                 আজকের কালেকশন{' '}
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href={route('employee.todaysStatus', {
                   todate: new Date().toISOString().split('T')[0],
@@ -155,7 +155,7 @@ function EmployeeProductLayout({ children }) {
               >
                 আজকের স্ট্যাটাস{' '}
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link className="text-sm">ড্যাশবোর্ডে যান </Link>
             </li> */}
