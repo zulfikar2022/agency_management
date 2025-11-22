@@ -7,6 +7,7 @@ import { WEEKDAYS } from '@/constants';
 import CollectionListTable from '../components/CollectionListTable';
 
 function CollectionPage({ user, customer, purchases, collections }) {
+  console.log({ purchases });
   let { data, setData, post, processing, errors } = useForm({
     customer_id: customer.id,
     customer_product_id: purchases.map((p) => p?.id),

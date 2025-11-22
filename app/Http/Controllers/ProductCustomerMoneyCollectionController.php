@@ -49,7 +49,6 @@ class ProductCustomerMoneyCollectionController extends Controller
             ->orderBy('collecting_date', 'desc')
             ->get();
        
-
         return Inertia::render('Employee/Products/CollectionPage', [
             'user' => $user,
             'customer' => $customer, 
@@ -227,10 +226,13 @@ class ProductCustomerMoneyCollectionController extends Controller
         $collection_ids = explode('-', $collection_id);
         $collections = ProductCustomerMoneyCollection::whereIn('id', $collection_ids)
             ->get();
+        
         $customer_products_ids = $collections->pluck('customer_products_id')->unique();
+        
 
         // based on the customer_products_ids get the customers_products from the customer_products table
         $customer_products = CustomerProduct::whereIn('id', $customer_products_ids)->get();
+        
         $customer_products->transform(function ($customer_product) {
             $product = Product::find($customer_product->product_id);
             $customer_product->product = $product;

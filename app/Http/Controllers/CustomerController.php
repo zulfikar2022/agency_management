@@ -140,35 +140,66 @@ class CustomerController extends Controller
         
         $leanUser = request()->get('user');
         $customer = Customer::findOrFail($id);
+        // the customer has a property named collection_day and it is in the format of 'monday', 'tuesday', etc. I want to convert it to bengali day name
+        $collectionDay = $customer->collection_day;
+        $bengaliDays = [
+            'saturday' => 'শনিবার',
+            'sunday' => 'রবিবার',
+            'monday' => 'সোমবার',
+            'tuesday' => 'মঙ্গলবার',
+            'wednesday' => 'বুধবার',
+            'thursday' => 'বৃহস্পতিবার',
+            'friday' => 'শুক্রবার',
+        ];
+        $customer->collection_day = $bengaliDays[$collectionDay] ?? $collectionDay;
+
         $purchagesLists = CustomerProduct::where('customer_id', $customer->id)->where('is_deleted', false)->get();
-        // each of the purchasesLists item holda property named total_payable_price, find the sum of all total_payable_price where is_deleted is false and remaining_payable_price > 0
+        $total_remaining_payable = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('remaining_payable_price');
+        
+
+         $total_weekly_payable = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('weekly_payable_price');
+        
         $total_payable_price = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('total_payable_price');
-        // find the total downpayment amount from the purchasesLists
+
         $total_downpayment_amount = $purchagesLists->where('remaining_payable_price', '>', 0)->sum('downpayment');
 
         $paymentLists = ProductCustomerMoneyCollection::where('customer_id',  $customer->id)->orderBy('created_at', 'desc')->get();
+
+        $total_collected_by_kisti = $paymentLists->sum('collected_amount');
+
         $purchagedProducts = $purchagesLists->map(function ($item) {
             $product = Product::find($item->product_id);
             $item['product'] = $product;
             return $item;
         });
-
+        
         // each entry from paymentList has a customer_products_id property, using which fetch the corresponding purchase details from the customer_produdcts table
-        $paymentLists = $paymentLists->map(function ($item) use ($purchagedProducts) {
-            $purchase = $purchagedProducts->find($item->customer_products_id);
-            $item['purchase'] = $purchase;
-            $isUpdated = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $item->id)->exists();
-            $item['isUpdated'] = $isUpdated;
-            $collectingUser = User::find($item->collecting_user_id)->only('id', 'name', 'is_admin', 'is_employee');
-            $item['collectingUser'] = $collectingUser;
-            return $item;
-        });
+        // $paymentLists = $paymentLists->map(function ($item) use ($purchagedProducts) {
+        //     $purchase = $purchagedProducts->find($item->customer_products_id);
+        //     $item['purchase'] = $purchase;
+        //     $isUpdated = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $item->id)->exists();
+        //     $item['isUpdated'] = $isUpdated;
+        //     $collectingUser = User::find($item->collecting_user_id)->only('id', 'name', 'is_admin', 'is_employee');
+        //     $item['collectingUser'] = $collectingUser;
+        //     return $item;
+        // });
+
+        dd($paymentLists);
+        
 
 
         // dd('inside the controller');
-       $html = view('pdf.customer-report', ['customer' => $customer])->render();
+    $html = view('pdf.customer-report', [
+        'customer' => $customer,
+        'total_payable_price' => $total_payable_price,
+        'total_downpayment' => $total_downpayment_amount,
+        'purchased_products' => $purchagedProducts,
+        'total_collected_by_kisti' => $total_collected_by_kisti,
+        'total_weekly_payable' => $total_weekly_payable,
+        'total_remaining_payable' => $total_remaining_payable,
+        ])->render();
 
-      $pdfData =  Browsershot::html($html)
+    $pdfData =  Browsershot::html($html)
             ->noSandbox()
             ->showBackground()
             ->format('A4')
