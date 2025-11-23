@@ -74,7 +74,7 @@ function ShowAllCustomers({ customers, user, totalCustomers }) {
       <div>
         {/* <CustomersTable customers={customers?.data} /> */}
 
-        <div className="container mx-auto">
+        <div className="">
           <ResponsiveCustomerTable data={customers?.data} />
         </div>
       </div>

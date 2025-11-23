@@ -75,6 +75,9 @@ function ShowCustomerDetails({
         <div className="mx-auto md:mx-auto mt-6 p-6 bg-white rounded-lg shadow-md grid grid-cols-1 md:grid-cols-3 gap-3 md:w-3/4 lg:w-2/4 ">
           <div className="border-b md:border-r md:border-b-0 pr-6 pb-6">
             <p>
+              <strong>কাস্টমার আইডিঃ</strong> {customer.id}
+            </p>
+            <p>
               <strong>নাম:</strong> {customer.name}
             </p>
             {customer.fathers_name && (

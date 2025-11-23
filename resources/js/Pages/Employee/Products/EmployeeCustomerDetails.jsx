@@ -30,6 +30,9 @@ function EmployeeCustomerDetails({ customer, purchases, collections }) {
         <div className="p-5 border-b container md:mx-auto mb-6 flex flex-col md:flex-row h-full md:justify-between">
           <div className="">
             <p>
+              <strong> কাস্টমার আইডিঃ</strong> {customer.id}
+            </p>
+            <p>
               <span className="font-semibold">কাস্টমার নাম:</span>{' '}
               {customer?.name}
             </p>
