@@ -148,7 +148,7 @@ function ShowCustomerDetails({
                 rel="noopener noreferrer"
                 className="btn btn-xs btn-outline mb-3 md:mb-0"
               >
-                রিপোর্ট ডাউনলোড করুন
+                রিপোর্ট তৈরি করুন
               </a>
             )}
             <Link

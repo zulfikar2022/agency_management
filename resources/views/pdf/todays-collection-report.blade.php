@@ -26,11 +26,11 @@
         }
         .title { font-size: 28px; font-weight: bold; text-align: center; margin: 30px 0; }
     </style>
-    <title>আজকের কালেকশন</title>
+    <title>কিস্তির রিপোর্ট</title>
 </head>
 <body>
     <div>
-        <h1 class="title">কালেকশন রিপোর্ট</h1>
+        <h1 class="title">কিস্তির রিপোর্ট</h1>
     </div>
     <div>
         <p style="font-weight:bold">রিপোর্ট তৈরির তারিখঃ <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('j F Y (l)') }}</span> </p>
