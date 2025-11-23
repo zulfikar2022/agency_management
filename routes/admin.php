@@ -89,7 +89,7 @@ Route::get('/admin/customers/not-paid-today', [CustomerController::class, 'custo
 // todays collections
 Route::get('/admin/customers/todays-collections', [ProductCustomerMoneyCollectionController::class, 'todaysCollections'])->name('admin.todaysCollections');
 
-// route for customer have to paid today 
+// route for customer have paid today 
 Route::get('/admin/customers/paid-today', [CustomerController::class, 'customersPaidToday'])->name('admin.customerHaveToPayToday');
 // delete customer
 

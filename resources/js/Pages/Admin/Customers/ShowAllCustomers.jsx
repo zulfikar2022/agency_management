@@ -25,7 +25,7 @@ function ShowAllCustomers({ customers, user, totalCustomers }) {
           <span className="font-bold">{customers?.data.length}</span> জন
         </p>
       </div>
-      <div className="flex flex-col md:flex-row justify-evenly items-center mb-4">
+      <div className="flex flex-col md:flex-row justify-between mb-4">
         <div className="mb-4 flex flex-col content-start  gap-2  md:flex-row items-center md:ml-3.5">
           <input
             type="text"

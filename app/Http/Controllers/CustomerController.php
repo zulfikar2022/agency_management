@@ -297,6 +297,7 @@ class CustomerController extends Controller
        $user = request()->get('user');
        $today = request()->query('today');
        $search = request()->query('search', '');
+       
 
     // implement search functionality   
     $customers = Customer::where('is_deleted', false)
@@ -312,6 +313,7 @@ class CustomerController extends Controller
         })
         ->orderBy('created_at', 'desc')
         ->paginate(10);
+      
          $customers->getCollection()->transform(function ($customer) {
                     $purchases = CustomerProduct::where('customer_id', $customer->id)
                         ->where('is_deleted', false)
@@ -319,6 +321,7 @@ class CustomerController extends Controller
                     $customer->purchases = $purchases;
                     return $customer;
                 });
+                // dd($customers);
     $totalCustomers = Customer::where('is_deleted', false)
         ->where('collection_day', $today)
         ->count();
