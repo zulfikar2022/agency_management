@@ -107,6 +107,25 @@
         <div>
             <h1 class="title">কিস্তির তালিকা</h1>
         </div>
+        <div>
+            @foreach ($collections as $key => $collection)
+                <div style="border-bottom:1px solid grey; padding: 10px; margin-bottom: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                   <div>
+                       <p style="font-weight: bold; padding: 0px;">সংগ্রহের তারিখঃ </p>
+                       <p style="font-weight: normal; padding: 0px;">{{ date('j F Y (l)', strtotime($key)) }}</p>
+                   </div>
+                   <div>
+                       <p style="font-weight: bold; padding: 0px;">সংগ্রহযোগ্য পরিমাণঃ  </p>
+                       <p style="font-weight: normal; padding: 0px;">{{ $collection['collectable_amount'] ?? '0' }} টাকা</p>
+                   </div>
+                   <div>
+                       <p style="font-weight: bold; padding: 0px;">সংগ্রহকৃত পরিমাণঃ   </p>
+                       <p style="font-weight: normal; padding: 0px;">{{ $collection['collected_amount'] ?? '0' }} টাকা</p>
+                   </div>
+                </div>
+            
+            @endforeach
+        </div>
     </div>
     
     <!-- total_remaining_payable -->

@@ -7,15 +7,13 @@ function ResponsiveTable({ data, actionData = null }) {
   }
 
   return (
-    <div className="container md:mx-auto sm:mx-10 mt-10">
+    <div className="mx-0 md:mx-3 mt-10">
       {data?.map((item, index) => {
         let pairs = Object.entries(item);
 
         return (
           <div
-            onClick={() => {
-              //  router.get(route("profile.edit"));
-            }}
+            onClick={() => {}}
             key={index}
             className={`grid grid-cols-1 ${colClasses[pairs.length + (actionData ? 1 : 0)]} gap-2 mb-4 border-b pb-2 px-5 md:px-0`}
           >

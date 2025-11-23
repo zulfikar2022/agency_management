@@ -179,11 +179,6 @@ class EmployeeController extends Controller
         $todate = request()->query('todate');
         $today =  request()->query('today');
         $search = request()->query('search', '');
-
-        // $customersIdsPaidToday = ProductCustomerMoneyCollection::where('collecting_date', $todate)
-        //     ->pluck('customer_id')
-        //     ->toArray();
-        // $customersIdsPaidToday = array_unique($customersIdsPaidToday);
             
         $customersIds = ProductCustomerMoneyCollection::where('collecting_date', $todate)
             ->pluck('customer_id')
@@ -217,7 +212,7 @@ class EmployeeController extends Controller
         return Inertia::render('Employee/Products/NotPaidToday', [
             'user' => $user,
             'customers' => $customers, 
-            'totalCustomers' => count($customersIds)
+            'totalCustomers' => count($customers)
         ]);
     }
     public function todaysCollection(Request $request){

@@ -1,6 +1,23 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
+import Swal from 'sweetalert2';
 
 function EmployeeDashboardLayout({ children }) {
+  const handleLogout = () => {
+    Swal.fire({
+      title: 'আপনি কি আসলেই লগআউট করতে চান?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#09090b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'হ্যাঁ, লগআউট করুন!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.post(route('logout'), {
+          replace: true,
+        });
+      }
+    });
+  };
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -67,7 +84,11 @@ function EmployeeDashboardLayout({ children }) {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">{/* <a className="btn">Button</a> */}</div>
+      <div className="navbar-end">
+        <button onClick={handleLogout} className="btn btn-xs btn-neutral">
+          লগআউট করুন
+        </button>
+      </div>
     </div>
   );
 }

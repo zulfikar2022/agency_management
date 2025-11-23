@@ -173,20 +173,25 @@ class CustomerController extends Controller
             return $item;
         });
         
-        // each entry from paymentList has a customer_products_id property, using which fetch the corresponding purchase details from the customer_produdcts table
-        // $paymentLists = $paymentLists->map(function ($item) use ($purchagedProducts) {
-        //     $purchase = $purchagedProducts->find($item->customer_products_id);
-        //     $item['purchase'] = $purchase;
-        //     $isUpdated = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $item->id)->exists();
-        //     $item['isUpdated'] = $isUpdated;
-        //     $collectingUser = User::find($item->collecting_user_id)->only('id', 'name', 'is_admin', 'is_employee');
-        //     $item['collectingUser'] = $collectingUser;
-        //     return $item;
-        // });
+    $grouped = [];
 
-        dd($paymentLists);
-        
+    foreach ($paymentLists as $item) {
+    $date = $item->collecting_date ?? $item['collecting_date']; // supports both object & array
 
+    if (!isset($grouped[$date])) {
+        // First time we see this date → initialize with sums and the earliest created_at
+        $grouped[$date] = [
+            'collecting_date'=> $date,
+            'collectable_amount'=> 0,
+            'collected_amount'=> 0,
+            'created_at'=> $item->created_at,
+        ];
+    }
+
+    // Sum the amounts
+    $grouped[$date]['collectable_amount'] += $item->collectable_amount ?? $item['collectable_amount'];
+    $grouped[$date]['collected_amount']   += $item->collected_amount   ?? $item['collected_amount'];
+}
 
         // dd('inside the controller');
     $html = view('pdf.customer-report', [
@@ -197,26 +202,21 @@ class CustomerController extends Controller
         'total_collected_by_kisti' => $total_collected_by_kisti,
         'total_weekly_payable' => $total_weekly_payable,
         'total_remaining_payable' => $total_remaining_payable,
+        'collections' => $grouped,
         ])->render();
 
-    $pdfData =  Browsershot::html($html)
-            ->noSandbox()
-            ->showBackground()
-            ->format('A4')
-            ->pdf();
-        // get the todays date in the form of 22 NOvember 2023 using php date function
+    $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
         $todayDate = date('d F Y');
         $filename = $customer->name . $todayDate.'-report-' . $todayDate . '.pdf';
 
         return response($pdfData, 200)
     ->header('Content-Type', 'application/pdf')
     ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
-
-
-
-
-
-    }
+}
 
     /**
      * Show the form for editing the specified resource.

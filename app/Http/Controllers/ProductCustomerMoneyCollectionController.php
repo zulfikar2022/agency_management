@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Spatie\Browsershot\Browsershot;
 
 class ProductCustomerMoneyCollectionController extends Controller
 {
@@ -475,5 +476,70 @@ class ProductCustomerMoneyCollectionController extends Controller
         
 
         
+    }
+
+    public function downloadTodaysCollectionReport(Request $request){
+        $todate = $request->input('todate');
+        $collections = ProductCustomerMoneyCollection::where('collecting_date', $todate)->get();
+        $collections->map(function ($collection) {
+            $customer = Customer::find($collection->customer_id);
+            $collection->customer = $customer;
+        });
+
+        // $formattedDate = \Carbon\Carbon::parse($todate)->format('d F Y (l)');
+        
+        $grouped = [];
+
+        foreach ($collections as $item) {
+            $date = $item->customer_id ?? $item['customer_id']; // supports both object & array
+            $formattedDate = $item->collecting_date ?? $item['collecting_date'];
+
+            if (!isset($grouped[$date])) {
+                // First time we see this date → initialize with sums and the earliest created_at
+                $grouped[$date] = [
+                    'customer_id'=> $date,
+                    'collectable_amount' => 0,
+                    'collected_amount'=> 0,
+                    'collecting_date'=> $item->collecting_date ?? $item['collecting_date'],
+                    'customer'=> $item->customer ?? $item['customer'],
+                    'created_at'=> $item->created_at ?? $item['created_at'],
+                ];
+            }
+
+            // Sum the amounts
+            $grouped[$date]['collectable_amount'] += $item->collectable_amount ?? $item['collectable_amount'];
+            $grouped[$date]['collected_amount']  += $item->collected_amount   ?? $item['collected_amount'];
+
+            // Keep the earliest created_at (optional: remove if you always want the very first one only)
+            $currentCreatedAt = $item->created_at ?? $item['created_at'];
+            if ($currentCreatedAt < $grouped[$date]['created_at']) {
+                $grouped[$date]['created_at'] = $currentCreatedAt;
+            }
+        }
+        $total_collected_amount = 0;
+        foreach ($grouped as $group) {
+            $total_collected_amount += $group['collected_amount'];
+        }
+        // dd($grouped);
+        
+        $html = view('pdf.todays-collection-report', [
+            'collections' => $grouped,
+            'reportDate' => \Carbon\Carbon::parse($todate)->format('d F Y (l)'),
+            'total_collected_amount' => $total_collected_amount,
+        ])->render();
+
+        // from 2025-11-25 to 25 November 2025
+        
+    $pdfData =  Browsershot::html($html)
+            ->noSandbox()
+            ->showBackground()
+            ->format('A4')
+            ->pdf();
+        // get the todays date in the form of 22 NOvember 2023 using php date function
+        $filename = "$formattedDate-report.pdf";
+
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
 }

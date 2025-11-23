@@ -50,7 +50,11 @@ Route::get('/admin/create-customer', [CustomerController::class, 'create'])->nam
 // store customer route
 Route::post('/admin/store-customer', [CustomerController::class, 'store'])->name('admin.storeCustomer');
 
+// route for downloading customer detail report
 Route::get('/admin/download-customer-report/{id}', [CustomerController::class, 'downloadCustomerDetailReport'])->name('admin.downloadCustomerDetailReport');
+
+// route for downloading today's collection report
+Route::get('/admin/download-todays-collection-report', [ProductCustomerMoneyCollectionController::class, 'downloadTodaysCollectionReport'])->name('admin.downloadTodaysCollectionReport');
 
 
 

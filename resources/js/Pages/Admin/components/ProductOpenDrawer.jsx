@@ -99,6 +99,11 @@ function ProductOpenDrawer() {
             আজকের কালেকশন
           </Link>
         </li>
+        <li>
+          <Link href={route('admin.dashboard')} className="ml-3">
+            ড্যাশবোর্ডে যান
+          </Link>
+        </li>
       </ul>
     </div>
   );
