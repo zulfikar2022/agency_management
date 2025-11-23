@@ -23,7 +23,7 @@
                 @inertia
             </div>
             <footer className="bg-gray-800 text-white py-4">
-                <p class="text-center">This site is created by zulfikar mahmud</p>
+                <!-- <p class="text-center">This site is created by zulfikar mahmud</p> -->
             </footer>
     
 

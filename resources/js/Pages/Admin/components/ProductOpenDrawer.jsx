@@ -12,6 +12,14 @@ function ProductOpenDrawer() {
       <ul className="menu bg-base-200 min-h-full w-80 p-4">
         {/* Sidebar content here */}
         <li>
+          <Link
+            href={route('admin.dashboard')}
+            className="ml-3 btn btn-xs btn-neutral mb-4"
+          >
+            ড্যাশবোর্ডে যান
+          </Link>
+        </li>
+        <li>
           <p className="hover:bg-white hover:cursor-auto font-bold underline">
             {' '}
             পণ্য নিয়ন্ত্রণ
@@ -97,11 +105,6 @@ function ProductOpenDrawer() {
             className="ml-3"
           >
             আজকের কালেকশন
-          </Link>
-        </li>
-        <li>
-          <Link href={route('admin.dashboard')} className="ml-3">
-            ড্যাশবোর্ডে যান
           </Link>
         </li>
       </ul>
