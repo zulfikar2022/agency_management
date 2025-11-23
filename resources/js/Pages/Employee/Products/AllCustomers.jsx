@@ -36,12 +36,12 @@ function AllCustomers({ customers, totalCustomers }) {
       <p className="text-center">
         এই পৃষ্ঠায় আছেন: <span className="font-bold">{data?.length}</span> জন
       </p>
-      <div className="ml-7 md:ml-20 flex flex-col md:flex-row gap-4 mt-5 justify-evenly">
-        <div className="flex flex-col md:flex-row mb-4">
+      <div className="my-5 grid grid-cols-1 md:grid-cols-2 gap-4 ml-3 md:ml-5 ">
+        <div className="flex flex-col md:flex-row mb-4 mr-3 md:mr-0 ">
           <input
             type="text"
             placeholder="কাস্টমার অনুসন্ধান করুন..."
-            className="input input-bordered w-full max-w-xs mr-3 mb-3 md:mb-0"
+            className="input input-bordered w-full max-w-xs mr-2 mb-2 md:mb-0"
             value={searchTerm}
             name="search"
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -54,7 +54,7 @@ function AllCustomers({ customers, totalCustomers }) {
             অনুসন্ধান করুন
           </Link>
         </div>
-        <div className="flex flex-col md:flex-row mb-4">
+        <div className="flex flex-col md:flex-row mb-4 justify-end mr-3 md:mr-0 ">
           {/* make a dropdown to select a day from weekdays  */}
           <select
             className="select select-bordered w-full max-w-xs"
