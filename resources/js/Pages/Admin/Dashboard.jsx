@@ -6,6 +6,9 @@ function Dashboard({
   totalCustomers,
   sevenDayCollections,
   purchasesSummary,
+  stockProductsTotalPrice,
+  soldProductsTotalPrice,
+  totalCollectedAmount,
 }) {
   return (
     <AdminDashboardLayout>
@@ -14,6 +17,9 @@ function Dashboard({
           totalCustomers={totalCustomers}
           sevenDayCollections={sevenDayCollections}
           purchasesSummary={purchasesSummary}
+          stockProductsTotalPrice={stockProductsTotalPrice}
+          soldProductsTotalPrice={soldProductsTotalPrice}
+          totalCollectedAmount={totalCollectedAmount}
         />
       </div>
     </AdminDashboardLayout>

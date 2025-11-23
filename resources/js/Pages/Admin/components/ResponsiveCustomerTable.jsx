@@ -12,8 +12,12 @@ function ResponsiveCustomerTable({ data }) {
         return (
           <div
             key={customer.id}
-            className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-14 gap-4 px-5 py-2 border-b items-center`}
+            className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-15 gap-4 px-5 py-2 border-b items-center`}
           >
+            <div className="flex flex-col col-span-1">
+              <p className="font-bold">আইডিঃ</p>
+              <p>{customer.id}</p>
+            </div>
             <div className="flex flex-col col-span-2">
               <p className="font-bold">গ্রাহকের নামঃ</p>
               <p>{customer.name}</p>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +30,9 @@
     <title>কিস্তির রিপোর্ট</title>
 </head>
 <body>
+     <div>
+        <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
+    </div>
     <div>
         <h1 class="title">কিস্তির রিপোর্ট</h1>
     </div>

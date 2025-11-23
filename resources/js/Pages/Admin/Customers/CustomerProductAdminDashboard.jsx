@@ -5,10 +5,10 @@ function CustomerProductAdminDashboard({
   totalCustomers,
   sevenDayCollections,
   purchasesSummary,
+  stockProductsTotalPrice,
+  soldProductsTotalPrice,
+  totalCollectedAmount,
 }) {
-  console.log(purchasesSummary);
-  console.log(JSON.stringify(purchasesSummary));
-
   let dates = Object.keys(sevenDayCollections);
   const collectedAmounts = dates.map(
     (date) => sevenDayCollections[date].collected_amount
@@ -125,11 +125,42 @@ function CustomerProductAdminDashboard({
     <div>
       <div className="grid items-center grid-cols-1 md:grid-cols-16 gap-2">
         <div className="grid-cols-1 md:col-span-3">
-          <p className="font-bold text-blue-700">মোট কাস্টমারঃ </p>
-          <p>
-            <span className="text-3xl font-bold">{totalCustomers}</span>
-            <span>&nbsp;{'জন'}</span>
-          </p>
+          <div className="border-b pb-2 mb-1">
+            <p className="font-bold text-blue-700">মোট কাস্টমারঃ </p>
+            <p>
+              <span className="text-3xl font-bold">{totalCustomers}</span>
+              <span>&nbsp;{'জন'}</span>
+            </p>
+          </div>
+          <div className="border-b pb-2 mb-1">
+            <p className="font-bold text-green-700">স্টকে পণ্যের মোট মূল্যঃ </p>
+            <p>
+              <span className="text-3xl font-bold">
+                {stockProductsTotalPrice.toLocaleString()}
+              </span>
+              <span>&nbsp;{'টাকা'}</span>
+            </p>
+          </div>
+          <div className="border-b pb-2 mb-1">
+            <p className="font-bold text-green-700">
+              বিক্রিত পণ্যের মোট মূল্যঃ{' '}
+            </p>
+            <p>
+              <span className="text-3xl font-bold">
+                {soldProductsTotalPrice.toLocaleString()}
+              </span>
+              <span>&nbsp;{'টাকা'}</span>
+            </p>
+          </div>
+          <div className="border-b pb-2 mb-1">
+            <p className="font-bold text-green-700">মোট সংগৃহীত পরিমাণঃ </p>
+            <p>
+              <span className="text-3xl font-bold">
+                {totalCollectedAmount.toLocaleString()}
+              </span>
+              <span>&nbsp;{'টাকা'}</span>
+            </p>
+          </div>
         </div>
         <div className=" gird-cols-1 md:col-span-13">
           <Chart options={options} series={series} type="bar" height={350} />

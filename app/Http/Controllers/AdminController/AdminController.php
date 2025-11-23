@@ -30,9 +30,7 @@ class AdminController extends Controller
         $collections = ProductCustomerMoneyCollection::whereIn('collecting_date', $last7Days)->select('collecting_date', 'collected_amount', 'collectable_amount')
             ->get();
 
-        // group the collections by collecting_date and sum the collected_amount and collectable_amount
-
-        // second feature: total collected amount and total collectable amount for the last 7 days (DONE)
+        
         $groupedCollections = [];
         foreach ($collections as $collection) {
             $date = $collection->collecting_date;
@@ -73,11 +71,29 @@ class AdminController extends Controller
             $groupedPurchases[$productId]['total_remaining_payable_price'] += $purchase->remaining_payable_price;
         }
 
+        $stock_products_total_price = Product::where('is_deleted', false)->where('is_available', true)->get()->reduce(function ($carry, $product) {
+            return $carry + ($product->current_quantity * $product->buying_price_per_product);
+        }, 0);
+
+        // sold products total price
+        $sold_products_total_price = CustomerProduct::where('is_deleted', false)->where('remaining_payable_price', '>', 0)->get()->reduce(function ($carry, $purchase) {
+            return $carry + $purchase->total_payable_price;
+        }, 0);
+
+        $temaining_purchases_ids = CustomerProduct::where('is_deleted', false)->where('remaining_payable_price', '>', 0)->pluck('id')->toArray();
+        
+        $total_collected_amount = ProductCustomerMoneyCollection::whereIn('customer_products_id', $temaining_purchases_ids)->sum('collected_amount');
+
+        $total_downpayment_amount = CustomerProduct::where('remaining_payable_price', '>', 0)->get()->sum('downpayment');
+
         return Inertia::render('Admin/Dashboard', [
             'user' => $leanUser,
             'totalCustomers' => $totalCustomers, 
             'sevenDayCollections' => $groupedCollections,
-            'purchasesSummary' => $groupedPurchases
+            'purchasesSummary' => $groupedPurchases, 
+            'stockProductsTotalPrice' => $stock_products_total_price,
+            'soldProductsTotalPrice' => $sold_products_total_price,
+            'totalCollectedAmount' => $total_collected_amount + $total_downpayment_amount,
         ]);
     }
 

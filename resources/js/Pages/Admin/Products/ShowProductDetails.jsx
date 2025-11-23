@@ -4,6 +4,7 @@ import GoBack from '../components/GoBack';
 
 function ShowProductDetails({ product, update_logs }) {
   const { previousUrl } = usePage().props;
+  console.log('Product Details:', product);
   return (
     <LayoutForProduct>
       <GoBack
@@ -17,22 +18,26 @@ function ShowProductDetails({ product, update_logs }) {
           >
             <h1 className="text-2xl font-bold">পণ্যের বিস্তারিত তথ্য</h1>
             <p>
-              <span className="font-bold">নাম:</span> {product.name}
+              <span className="font-bold">নামঃ </span> {product.name}
             </p>
             <p>
-              <span className="font-bold">সরবরাহকারী:</span>{' '}
+              <span className="font-bold">সরবরাহকারীঃ </span>{' '}
               {product.supplier_name}
             </p>
             <p>
-              <span className="font-bold">ক্রয়কৃত পরিমাণ:</span>{' '}
+              <span className="font-bold">ক্রয়কৃত পরিমাণঃ </span>{' '}
               {product.initial_quantity}
             </p>
             <p>
-              <span className="font-bold">বর্তমান পরিমাণ:</span>{' '}
+              <span className="font-bold">বর্তমান পরিমাণঃ </span>{' '}
               {product.current_quantity}
             </p>
             <p>
-              <span className="font-bold">অবস্থা:</span>{' '}
+              <span className="font-bold">একটি পণ্যের ক্রয়মূল্যঃ </span>{' '}
+              {product.buying_price_per_product}
+            </p>
+            <p>
+              <span className="font-bold">অবস্থাঃ</span>{' '}
               {product.is_available ? 'এভেইলেবল' : 'আনএভেইলেবল'}
             </p>
             <div>
