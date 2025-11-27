@@ -4,7 +4,7 @@ function ResponsiveProductTable({ data }) {
   if (data.length === 0) {
     return <div className="text-center my-10 text-gray-500">কোন পণ্য নেই</div>;
   }
-  console.log(data);
+
   return (
     <div>
       {data?.map((product, index) => {

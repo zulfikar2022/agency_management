@@ -5,8 +5,6 @@ import ResponsiveCustomerDetailsTableForEmployee from '../components/ResponsiveC
 import CollectionListTable from '../components/CollectionListTable';
 
 function EmployeeCustomerDetails({ customer, purchases, collections }) {
-  console.log(purchases);
-
   const totalPrice = purchases.reduce(
     (total, purchase) => total + (purchase?.total_payable_price || 0),
     0
@@ -20,7 +18,7 @@ function EmployeeCustomerDetails({ customer, purchases, collections }) {
     (total, purchase) => total + (purchase?.downpayment || 0),
     0
   );
-  console.log(totalDownpayment);
+
   return (
     <EmployeeProductLayout>
       <div>

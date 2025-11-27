@@ -20,7 +20,6 @@ function TodaysCollection({
   const formattedDateForQuery = dayjs(formattedDate, 'D MMMM YYYY').format(
     'YYYY-MM-DD'
   );
-  console.log('formattedDateForQuery:', formattedDateForQuery);
 
   const customersPaidIds = collections.map(
     (collection) => collection.customer.id

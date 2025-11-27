@@ -64,7 +64,6 @@ function TodaysCollection({
     });
   });
 
-  console.log(showableCollectionData);
   return (
     <EmployeeProductLayout>
       <p className="font-bold text-center text-2xl my-5">আজকের কালেকশন</p>

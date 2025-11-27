@@ -3,7 +3,8 @@ import { Link } from '@inertiajs/react';
 import dayjs from 'dayjs';
 
 function CollectionListTable({ collections }) {
-  console.log(collections);
+  const today = dayjs().format('YYYY-MM-DD');
+
   const uniqueDays = [];
   const sameDayCollections = [];
   // const sameDayCollectionsIds = [];
@@ -55,6 +56,8 @@ function CollectionListTable({ collections }) {
         <h2 className="text-center text-2xl font-bold">কিস্তির তালিকা</h2>
         <div className={`container mx-auto px-4 `}>
           {sameDayCollections.map((item, index) => {
+            // const creationDate = dayjs(item?.created_at).format('YYYY-MM-DD');
+
             return (
               <div
                 key={item.date}
@@ -81,16 +84,18 @@ function CollectionListTable({ collections }) {
                     টাকা
                   </p>
                 </div>
-                <div className="flex flex-col">
-                  <Link
-                    href={route('employee.updateCollectionPage', {
-                      collection_id: item?.id,
-                    })}
-                    className="btn btn-xs btn-outline"
-                  >
-                    আপডেট করুন
-                  </Link>
-                </div>
+                {today == item?.date && (
+                  <div className="flex flex-col">
+                    <Link
+                      href={route('employee.updateCollectionPage', {
+                        collection_id: item?.id,
+                      })}
+                      className="btn btn-xs btn-outline"
+                    >
+                      আপডেট করুন
+                    </Link>
+                  </div>
+                )}
               </div>
             );
           })}

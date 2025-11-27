@@ -228,6 +228,11 @@ class ProductCustomerMoneyCollectionController extends Controller
         $collections = ProductCustomerMoneyCollection::whereIn('id', $collection_ids)
             ->get();
         
+        $today = date('Y-m-d');
+        if($today != $collections[0]->collecting_date){
+            return abort(404);
+        }
+        
         $customer_products_ids = $collections->pluck('customer_products_id')->unique();
         
 
@@ -250,6 +255,7 @@ class ProductCustomerMoneyCollectionController extends Controller
         //get customers ids  in an array for each collection from each collection
         $customer_ids = $collections->pluck('customer_id')->unique();
         if($customer_ids->count() > 1){
+            
             return abort(404);
         } 
 
@@ -279,7 +285,12 @@ class ProductCustomerMoneyCollectionController extends Controller
         ]);
 
         $total_updated_collected_amount = array_sum($validated_data['collected_amounts']);
-
+        
+        // for date level validation purpose
+        $today = date('Y-m-d');
+        if($today != ProductCustomerMoneyCollection::find($validated_data['collection_ids'][0])->collecting_date){
+            return abort(404);
+        }
 
 
         // fetch all the entries from product_customer_money_collections table based on the customer_id

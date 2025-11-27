@@ -38,8 +38,6 @@ function SellProduct({ customer, products, user_id }) {
       return;
     }
 
-    console.log('Submitting data:', data);
-
     post(route('admin.sellProductToCustomer'));
   };
 
