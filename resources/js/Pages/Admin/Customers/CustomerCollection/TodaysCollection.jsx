@@ -2,10 +2,7 @@ import { useState } from 'react';
 import AdminTodaysCollectionResponsiveTable from '../../components/AdminTodaysCollectionResponsiveTable';
 import LayoutForProduct from '../../layouts/LayoutForProduct';
 import dayjs from 'dayjs';
-import { Link, router, usePage } from '@inertiajs/react';
-import CollectionReport from '../../Reports/CollectionReport';
-import { dateFormatter } from '@/utilityFuntion';
-import { pdf } from '@react-pdf/renderer';
+import { Link, usePage } from '@inertiajs/react';
 
 function TodaysCollection({
   collections,

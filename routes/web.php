@@ -16,9 +16,15 @@ Route::get('/', function () {
         }
 
         if ($user?->is_admin && $user->is_activated && !$user->is_deleted) {
-
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
+    }
+
+    // make the user log out if logged in
+    if ($user) {
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
     }
 
     return redirect()->route('login')->withErrors([

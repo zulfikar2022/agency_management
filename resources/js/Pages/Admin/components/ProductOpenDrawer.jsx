@@ -107,6 +107,17 @@ function ProductOpenDrawer() {
             আজকের কালেকশন
           </Link>
         </li>
+        <li>
+          <p className="hover:bg-white hover:cursor-auto font-bold underline">
+            {' '}
+            ইউজার নিয়ন্ত্রণ
+          </p>
+        </li>
+        <li>
+          <Link href={route('admin.showAllUsers')} className="ml-3">
+            সকল ইউজার দেখুন
+          </Link>
+        </li>
       </ul>
     </div>
   );

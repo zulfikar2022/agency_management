@@ -120,6 +120,11 @@ Route::get('/admin/customers/{customer_id}/purchases/{purchase_id}', [CustomerCo
 // Route::get('/admin/customers/{customer_id}/collections?todate=', [CustomerController::class, 'showCustomerCollections'])->name('admin.showCustomerCollectionDetails');
 
 
+// show all users route
+Route::get('/admin/users', [AdminController::class, 'showAllUsers'])->name('admin.showAllUsers');
+
+// employee power toggle route
+Route::post('/admin/toggle-employee-power', [AdminController::class, 'toggleEmployeePower'])->name('admin.toggleEmployeePower');
 
 
 });

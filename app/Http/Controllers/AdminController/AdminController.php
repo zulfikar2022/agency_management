@@ -97,6 +97,32 @@ class AdminController extends Controller
         ]);
     }
 
-    // create product page
+    // show all users controller 
+    public function showAllUsers(){
+        $leanUser = request()->get('user');
+
+        $users = User::where('is_deleted', false)->get();
+
+        return Inertia::render('Admin/Users/AllUsers', [
+            'users' => $users,
+        ]);
+    }
+
+    // employee power toggle controller
+    public function toggleEmployeePower(Request $request){
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+        
+        $user = User::findOrFail($validatedData['user_id']);
+        // dd($user);
+        // toggle the is_employee field
+        if($user->is_admin){
+            return redirect()->back()->with('error', 'একজন অ্যাডমিনের এমপ্লয়ী ক্ষমতা পরিবর্তন করা যাবে না।');
+        }
+        $user->is_activated = !$user->is_activated;
+        $user->save();  
+        return redirect()->route('admin.showAllUsers');
+    }
    
 }
