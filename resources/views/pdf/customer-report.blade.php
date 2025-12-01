@@ -33,6 +33,9 @@
     </style>
 </head>
 <body>
+    <!-- <div>
+        <img src="{{ asset('images/organization_logo.png') }}" alt="Organization Logo">
+    </div> -->
       <div>
         <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
     </div>
