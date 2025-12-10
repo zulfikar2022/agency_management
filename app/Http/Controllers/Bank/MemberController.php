@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bank;
 use App\Http\Controllers\Controller;
 use App\Models\Bank\Member;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MemberController extends Controller
 {
@@ -13,7 +14,8 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        
+        return Inertia::render('Admin/Bank/BankAllMembers');
     }
 
     /**

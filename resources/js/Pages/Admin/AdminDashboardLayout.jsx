@@ -54,7 +54,7 @@ function AdminDashboardLayout({ children }) {
                   <Link href={route('admin.showProducts')}>পণ্য</Link>
                 </li>
                 <li>
-                  <a>সঞ্চয় ও ঋণ </a>
+                  <Link href={route('admin.bank.members')}>সঞ্চয় ও ঋণ </Link>
                 </li>
               </ul>
             </div>
@@ -66,7 +66,7 @@ function AdminDashboardLayout({ children }) {
                 <Link href={route('admin.showProducts')}>পণ্য</Link>
               </li>
               <li>
-                <a>সঞ্চয় ও ঋণ </a>
+                <Link href={route('admin.bank.members')}>সঞ্চয় ও ঋণ </Link>
               </li>
             </ul>
           </div>

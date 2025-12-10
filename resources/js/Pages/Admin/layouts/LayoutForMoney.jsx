@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import MoneyOpenDrawer from '../components/MoneyOpenDrawer';
 
 function LayoutForMoney({ children }) {
   return (
@@ -31,7 +32,7 @@ function LayoutForMoney({ children }) {
                 <Link href={route('admin.showProducts')}>পণ্য</Link>
               </li>
               <li>
-                <a>সঞ্চয় ও ঋণ </a>
+                <Link href={route('admin.bank.members')}>সঞ্চয় ও ঋণ </Link>
               </li>
             </ul>
           </div>
@@ -43,12 +44,27 @@ function LayoutForMoney({ children }) {
               <Link href={route('admin.showProducts')}>পণ্য</Link>
             </li>
             <li>
-              <a>সঞ্চয় ও ঋণ </a>
+              <Link href={route('admin.bank.members')}>সঞ্চয় ও ঋণ </Link>
             </li>
           </ul>
         </div>
-        <div className="navbar-end">
-          <a className="btn">Money Management</a>
+        {/* <div className="navbar-end"> */}
+        <div className="drawer drawer-end navbar-end">
+          <input
+            id="money-drawer-control"
+            type="checkbox"
+            className="drawer-toggle"
+          />
+          <div className="drawer-content">
+            {/* Page content here */}
+            <label
+              htmlFor="money-drawer-control"
+              className="drawer-button btn btn-neutral"
+            >
+              ঋণ ও সঞ্চয় নিয়ন্ত্রণ প্যানেল
+            </label>
+          </div>
+          <MoneyOpenDrawer />
         </div>
       </div>
       {children}

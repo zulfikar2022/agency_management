@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('address');
+            $table->string("nid_number");
+            $table->string('fathers_name');
+            $table->string('mothers_name');
+            $table->integer('admission_fee');
+            $table->integer('total_loan')->default(0);
+            $table->integer('total_deposit')->default(0);
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

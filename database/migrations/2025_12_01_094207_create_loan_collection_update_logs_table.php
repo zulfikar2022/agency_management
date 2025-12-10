@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('loan_collection_update_logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('loan_collection_id')->constrained('loan_collections');
+            $table->foreignId('updating_user_id')->constrained('users');
+            $table->integer('paid_amount_before_update');
+            $table->integer('paid_amount_after_update');
             $table->timestamps();
         });
     }
