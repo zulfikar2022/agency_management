@@ -19,4 +19,6 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
     Route::get('/admin/bank/not-deposited-today', [MemberController::class, 'notDepositedToday'])->name('admin.bank.not_deposited_today');
 
     Route::get('/admin/bank/not-installmented-today', [MemberController::class, 'notInstallmentedToday'])->name('admin.bank.not_installmented_today');
+
+    Route::post('/admin/bank/store-customer', [MemberController::class, 'store'])->name('admin.bank.storeCustomer');
 });

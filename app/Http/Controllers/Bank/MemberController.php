@@ -14,8 +14,10 @@ class MemberController extends Controller
      */
     public function index()
     {
-        
-        return Inertia::render('Admin/Bank/BankAllMembers');
+        $members = Member::where('is_deleted', false)->orderBy('id', 'desc')->get();
+        return Inertia::render('Admin/Bank/BankAllMembers', [
+            'members' => $members,
+        ]);
     }
     public function allDepositingMembers(){
         return Inertia::render('Admin/Bank/AllDepositingMembers');
@@ -50,7 +52,29 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:500',
+            'nid_number' => 'required|string|max:255|unique:members,nid_number',
+            'fathers_name' => 'required|string|max:255',
+            'mothers_name' => 'required|string|max:255',
+            'admission_fee' => 'required|numeric|min:0',
+        ]);
+
+        // have to crate an instance of member model withe the validated data and also some more inforation with default values. The fields are named: total_loan = 0, total_deposit = 0, and is_deleted = false
+        $member = new Member();
+        $member->name = $validated['name'];
+        $member->address = $validated['address'];
+        $member->nid_number = $validated['nid_number'];
+        $member->fathers_name = $validated['fathers_name'];
+        $member->mothers_name = $validated['mothers_name'];
+        $member->admission_fee = $validated['admission_fee'];
+        $member->total_loan = 0;    
+        $member->total_deposit = 0;
+        $member->is_deleted = false;
+        $member->save();
+
+        return redirect()->route('admin.bank.members');
     }
 
     /**
