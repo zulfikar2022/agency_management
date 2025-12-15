@@ -17,13 +17,32 @@ class MemberController extends Controller
         
         return Inertia::render('Admin/Bank/BankAllMembers');
     }
+    public function allDepositingMembers(){
+        return Inertia::render('Admin/Bank/AllDepositingMembers');
+    }
+    public function allLoanMembers(){
+        return Inertia::render('Admin/Bank/AllLoanerMembers');
+    }
 
+    public function depositedToday(){
+        return Inertia::render('Admin/Bank/DepositedTodayMembers');
+    }
+
+    public function providedInstallmentToday(){
+        return Inertia::render('Admin/Bank/InstallmentedTodayMembers');
+    }
+    public function notDepositedToday(){
+        return Inertia::render('Admin/Bank/NotDepositedTodayMembers');
+    }
+    public function notInstallmentedToday(){
+        return Inertia::render('Admin/Bank/NotInstallmentedTodayMembers');
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Bank/AddNewMember');
     }
 
     /**

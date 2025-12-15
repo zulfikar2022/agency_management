@@ -1,0 +1,14 @@
+import LayoutForMoney from '../layouts/LayoutForMoney';
+
+function AllDepositingMember() {
+  return (
+    <LayoutForMoney>
+      <div>
+        <h2 className="font-bold text-3xl text-center my-4">
+          সকল জমাদানকারী সদস্যগণ দেখুন{' '}
+        </h2>
+      </div>
+    </LayoutForMoney>
+  );
+}
+export default AllDepositingMember;
