@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bank\Member;
+use App\Models\Bank\MemberUpdateLog;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class MemberController extends Controller
@@ -105,6 +108,42 @@ class MemberController extends Controller
     public function update(Request $request, Member $member)
     {
         //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:500',
+            'nid_number' => 'required|string|max:255|unique:members,nid_number,'.$member->id,
+            'fathers_name' => 'required|string|max:255',
+            'mothers_name' => 'required|string|max:255',
+            'admission_fee' => 'required|numeric|min:0',
+        ]);
+        // dd($validated);
+        // create an entry to the member_update_logs table 
+        $member_update_log = new MemberUpdateLog();
+        $member_update_log->member_id = $member->id;
+        $member_update_log->name_before_update = $member->name;
+        $member_update_log->address_before_update = $member->address;
+        $member_update_log->nid_number_before_update = $member->nid_number;
+        $member_update_log->fathers_name_before_update = $member->fathers_name;
+        $member_update_log->mothers_name_before_update = $member->mothers_name;
+
+        $member_update_log->name_after_update = $validated['name'];
+        $member_update_log->address_after_update = $validated['address'];
+        $member_update_log->nid_number_after_update = $validated['nid_number'];
+        $member_update_log->fathers_name_after_update = $validated['fathers_name'];
+        $member_update_log->mothers_name_after_update = $validated['mothers_name'];
+        $member_update_log->updating_user_id = Auth::id();
+
+        $member_update_log->save();
+        // update the member with the validated data
+        $member->name = $validated['name'];
+        $member->address = $validated['address'];
+        $member->nid_number = $validated['nid_number'];
+        $member->fathers_name = $validated['fathers_name'];
+        $member->mothers_name = $validated['mothers_name'];
+        $member->admission_fee = $member->admission_fee * 100;
+
+        $member->save();
+        return redirect()->route('admin.bank.member_details', ['member' => $member->id]);
     }
 
     /**

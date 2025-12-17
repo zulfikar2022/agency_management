@@ -26,26 +26,26 @@ function UpdateMember({ member }) {
     }).then((result) => {
       if (result.isConfirmed) {
         console.log(data);
-        // Assuming the route name is admin.bank.updateCustomer
-        // patch(route('admin.bank.updateCustomer', member.id), {
-        //   preserveScroll: true,
-        //   onSuccess: () => {
-        //     toast.success('তথ্য সফলভাবে আপডেট করা হয়েছে!', {
-        //       position: 'top-center',
-        //       autoClose: 3000,
-        //       theme: 'dark',
-        //       transition: Bounce,
-        //     });
-        //   },
-        //   onError: () => {
-        //     toast.error('আপডেট করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', {
-        //       position: 'top-center',
-        //       autoClose: 3000,
-        //       theme: 'dark',
-        //       transition: Bounce,
-        //     });
-        //   },
-        // });
+        // Assuming the route name is admin.bank.update_member
+        patch(route('admin.bank.update_member', member.id), {
+          preserveScroll: true,
+          onSuccess: () => {
+            toast.success('তথ্য সফলভাবে আপডেট করা হয়েছে!', {
+              position: 'top-center',
+              autoClose: 3000,
+              theme: 'dark',
+              transition: Bounce,
+            });
+          },
+          onError: () => {
+            toast.error('আপডেট করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', {
+              position: 'top-center',
+              autoClose: 3000,
+              theme: 'dark',
+              transition: Bounce,
+            });
+          },
+        });
       }
     });
   };
