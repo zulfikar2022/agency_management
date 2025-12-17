@@ -29,10 +29,16 @@ function MemberTable({ members }) {
             <p>{member?.total_loan}</p>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-3">
-            <Link className="btn btn-xs btn-outline w-full mr-0 md:w-auto">
+            <Link
+              href={route('admin.bank.member_details', member.id)}
+              className="btn btn-xs btn-outline w-full mr-0 md:w-auto"
+            >
               বিস্তারিত দেখুন
             </Link>
-            <Link className="btn btn-xs btn-outline w-full md:w-auto">
+            <Link
+              href={route('admin.bank.edit_member', member.id)}
+              className="btn btn-xs btn-neutral w-full md:w-auto"
+            >
               আপডেট করুন
             </Link>
           </div>

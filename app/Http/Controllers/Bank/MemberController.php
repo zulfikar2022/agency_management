@@ -68,7 +68,7 @@ class MemberController extends Controller
         $member->nid_number = $validated['nid_number'];
         $member->fathers_name = $validated['fathers_name'];
         $member->mothers_name = $validated['mothers_name'];
-        $member->admission_fee = $validated['admission_fee'];
+        $member->admission_fee = $validated['admission_fee'] * 100; // store in cents
         $member->total_loan = 0;    
         $member->total_deposit = 0;
         $member->is_deleted = false;
@@ -83,6 +83,9 @@ class MemberController extends Controller
     public function show(Member $member)
     {
         //
+        return Inertia::render('Admin/Bank/MemberDetails', [
+            'member' => $member,
+        ]);
     }
 
     /**
@@ -91,6 +94,9 @@ class MemberController extends Controller
     public function edit(Member $member)
     {
         //
+        return Inertia::render('Admin/Bank/UpdateMember', [
+            'member' => $member,
+        ]);
     }
 
     /**

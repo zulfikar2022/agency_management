@@ -1,0 +1,109 @@
+import { Link } from '@inertiajs/react';
+import LayoutForMoney from '../layouts/LayoutForMoney';
+
+function MemberDetails({ member }) {
+  console.log(member);
+  const {
+    name,
+    address,
+    admission_fee,
+    fathers_name,
+    mothers_name,
+    nid_number,
+    total_deposit,
+    total_loan,
+    id,
+  } = member;
+  return (
+    <LayoutForMoney>
+      <div className="min-h-screen bg-base-200 py-8">
+        <div className="max-w-2xl mx-auto">
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="card-title text-2xl mb-1">{name}</h2>
+                  <p className="text-sm text-base-content/60">
+                    মেম্বার আইডি:{' '}
+                    <span className="font-bold text-2xl text-black">{id}</span>
+                  </p>
+                </div>
+                {/* <div className="badge badge-neutral p-3">সক্রিয়</div> */}
+              </div>
+
+              <div className="space-y-6">
+                {/* Financial Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* <div className="bg-base-200 p-4 rounded-lg text-center">
+                    <div className="text-xs text-base-content/60 mb-1">
+                      ভর্তি ফি
+                    </div>
+                    <div className="font-bold text-lg">{admission_fee}</div>
+                  </div> */}
+                  <div className="bg-primary/10 p-4 rounded-lg text-center border border-primary/20">
+                    <div className="text-xs text-primary mb-1">মোট সঞ্চয়</div>
+                    <div className="font-bold text-lg text-primary">
+                      {total_deposit / 100}
+                    </div>
+                  </div>
+                  <div className="bg-error/10 p-4 rounded-lg text-center border border-error/20">
+                    <div className="text-xs text-error mb-1">মোট ঋণ</div>
+                    <div className="font-bold text-lg text-error">
+                      {total_loan / 100}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Information List */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg border-b pb-2">
+                    বিস্তারিত তথ্য
+                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="">
+                      <span className="font-bold mr-1">পিতার নাম:</span>
+                      <span className="">{fathers_name || 'N/A'}</span>
+                    </div>
+                    <div className="">
+                      <span className="font-bold mr-1">মাতার নাম:</span>
+                      <span className="">{mothers_name || 'N/A'}</span>
+                    </div>
+                    <div className="">
+                      <span className="font-bold mr-1">
+                        জাতীয় পরিচয়পত্র নম্বর:
+                      </span>
+                      <span className="">{nid_number || 'N/A'}</span>
+                    </div>
+                    <div className="">
+                      <span className="font-bold mr-1">ঠিকানা:</span>
+                      <span className="">{address}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="card-actions justify-end mt-8 pt-4 border-t">
+                <Link
+                  href={route('admin.bank.members')}
+                  className="btn btn-outline btn-xs w-full md:w-fit"
+                >
+                  সকল সদস্য দেখুন
+                </Link>
+                <Link
+                  href={route('admin.bank.edit_member', id)}
+                  className="btn btn-neutral btn-xs px-8 w-full md:w-fit"
+                >
+                  আপডেট করুন
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </LayoutForMoney>
+  );
+}
+
+export default MemberDetails;
