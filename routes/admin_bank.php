@@ -22,8 +22,13 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::post('/admin/bank/store-customer', [MemberController::class, 'store'])->name('admin.bank.storeCustomer');
 
+    Route::get('/admin/bank/deposit-account/{member}', [MemberController::class, 'depositAccount'])->name('admin.bank.deposit_account');
+    Route::post('/admin/bank/create-deposit-account/{member}', [MemberController::class, 'createDepositAccount'])->name('admin.bank.create_deposit_account');
+
     Route::get('/admin/bank/member-details/{member}', [MemberController::class, 'show'])->name('admin.bank.member_details');
     Route::get('/admin/bank/edit-member/{member}', [MemberController::class, 'edit'])->name('admin.bank.edit_member');
 
     Route::patch('/admin/bank/update-member/{member}', [MemberController::class, 'update'])->name('admin.bank.update_member');
+
+    
 });

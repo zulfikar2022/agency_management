@@ -1,8 +1,14 @@
 import { Link } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
+import dayjs from 'dayjs';
 
-function MemberDetails({ member }) {
-  console.log(member);
+function MemberDetails({
+  member,
+  has_deposit_account,
+  has_loan,
+  deposit_account,
+}) {
+  console.log({ deposit_account });
   const {
     name,
     address,
@@ -20,7 +26,7 @@ function MemberDetails({ member }) {
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <div className="flex justify-between items-start mb-6">
+              <div className="flex justify-between items-start mb-6 border-b">
                 <div>
                   <h2 className="card-title text-2xl mb-1">{name}</h2>
                   <p className="text-sm text-base-content/60">
@@ -29,6 +35,44 @@ function MemberDetails({ member }) {
                   </p>
                 </div>
                 {/* <div className="badge badge-neutral p-3">সক্রিয়</div> */}
+              </div>
+              <div className="grid gird-cols-1 md:grid-cols-2 gap-2 mb-6 border-b pb-2">
+                {!has_deposit_account ? (
+                  <Link
+                    href={route('admin.bank.deposit_account', id)}
+                    className="btn btn-xs btn-primary"
+                  >
+                    সঞ্চয়ী সদস্য হিসেবে অন্তর্ভুক্ত করুন
+                  </Link>
+                ) : (
+                  <Link className="btn btn-xs btn-primary">
+                    সঞ্চয়ের বিস্তারিত দেখুন
+                  </Link>
+                )}
+                {!has_loan ? (
+                  <Link className="btn btn-xs btn-error">ঋণ প্রদান করুন</Link>
+                ) : (
+                  <Link className="btn btn-xs btn-error">
+                    ঋণের কিস্তির বিস্তারিত দেখুন
+                  </Link>
+                )}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {has_deposit_account && (
+                  <div>
+                    <p className="text-center text-xl underline mb-2">
+                      সঞ্চয়ী একাউন্টের বিস্তারিত
+                    </p>
+                    <p className="font-bold">
+                      একাউন্ট তৈরির তারিখঃ{' '}
+                      <span className="text-slate-500">
+                        {dayjs(deposit_account?.created_at).format(
+                          'D MMMM YYYY'
+                        )}
+                      </span>{' '}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-6">

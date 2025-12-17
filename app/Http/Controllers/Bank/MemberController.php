@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank\Deposit;
+use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
 use App\Models\Bank\MemberUpdateLog;
-
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -41,6 +43,32 @@ class MemberController extends Controller
     }
     public function notInstallmentedToday(){
         return Inertia::render('Admin/Bank/NotInstallmentedTodayMembers');
+    }
+
+    public function depositAccount(Member $member){
+        return Inertia::render('Admin/Bank/CreateDepositAccount', [
+            'member' => $member,
+        ]);
+    }
+
+    public function createDepositAccount(Request $request, Member $member){
+        $validated = $request->validate([
+            'daily_deposit_amount' => 'required|numeric|min:1',
+        ]);
+        
+        $today_date = now()->toDate();
+        // dd($today_date->modify('+115 days'));
+        // 
+
+        // create deposit account for the member
+        $deposit = new Deposit();
+        $deposit->member_id = $member->id;
+        $deposit->creating_user_id = Auth::id();
+        $deposit->daily_deposit_amount = $validated['daily_deposit_amount'] * 100; // store in cents
+        $deposit->last_depositing_predictable_date = $today_date->modify('+115 days');
+        $deposit->save();
+
+        return redirect()->route('admin.bank.member_details', ['member' => $member->id]);
     }
     /**
      * Show the form for creating a new resource.
@@ -85,9 +113,15 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        //
+        
+        $has_deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->exists();
+        $has_loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->exists();
+        $deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->first();
         return Inertia::render('Admin/Bank/MemberDetails', [
             'member' => $member,
+            'has_deposit_account' => $has_deposit_account,
+            'has_loan' => $has_loan,
+            'deposit_account' => $deposit_account,
         ]);
     }
 
