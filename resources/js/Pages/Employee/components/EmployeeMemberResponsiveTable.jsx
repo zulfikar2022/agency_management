@@ -38,7 +38,14 @@ function EmployeeMemberResponsiveTable({ members }) {
             <div className="md:col-span-4 flex flex-col md:flex-row gap-2">
               <Link className="btn btn-outline btn-xs">বিস্তারিত দেখুন</Link>
               {member?.deposit_account && (
-                <Link className="btn btn-neutral btn-xs">সঞ্চয় জমা</Link>
+                <Link
+                  href={route('employee.bank.collect_deposit', {
+                    member: member.id,
+                  })}
+                  className="btn btn-neutral btn-xs"
+                >
+                  সঞ্চয় জমা
+                </Link>
               )}
               {member?.total_loan > 0 && (
                 <Link className="btn btn-outline btn-xs">কিস্তি উত্তোলন</Link>

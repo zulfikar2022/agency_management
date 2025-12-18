@@ -1,8 +1,10 @@
 import { Link } from '@inertiajs/react';
+import { ToastContainer } from 'react-toastify';
 
 function EmployeeBankLayout({ children }) {
   return (
     <div>
+      <ToastContainer />
       <div className="navbar">
         <div className="navbar-start">
           <div className="dropdown">
