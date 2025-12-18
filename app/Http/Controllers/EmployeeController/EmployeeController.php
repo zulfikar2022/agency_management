@@ -316,14 +316,13 @@ class EmployeeController extends Controller
         $members = Member::where('is_deleted', false)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    // ->orWhere('phone_number', 'like', '%' . $search . '%')
                     ->orWhere('address', 'like', '%' . $search . '%')
-                    ->orWhere('nid_number', 'like', '%' . $search . '%')
                     ->orWhere('fathers_name', 'like', '%' . $search . '%')
                     ->orWhere('mothers_name', 'like', '%' . $search . '%')
                     ->orWhere('id', 'like', '%' . $search . '%');
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
         // from all the members search into the deposits table to see if the member has a deposit account, if yes then attach the deposit account to the member instance as deposit_account property
