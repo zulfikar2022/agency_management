@@ -143,7 +143,7 @@ class DepositController extends Controller
      */
     public function update(Request $request, Deposit $deposit)
     {
-        //
+        
     }
 
     /**

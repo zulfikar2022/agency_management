@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Bank\DepositCollectionController;
 use App\Http\Controllers\Bank\DepositController;
 use App\Http\Controllers\Bank\MemberController;
 use App\Http\Controllers\EmployeeController\EmployeeController;
@@ -15,4 +16,6 @@ Route::group(['middleware' => ['auth','employeeonly']], function(){
     Route::get('/employee/bank/not-deposited-today', [DepositController::class, 'notDepositedToday'])->name('employee.bank.not_deposited_today');
 
     Route::get('/employee/bank/member-details/{member}', [MemberController::class, 'memberDetailsForEmployee'])->name('employee.bank.member_details');
+
+    Route::patch('/employee/bank/update-deposit/{depositCollection}', [DepositCollectionController::class, 'update'])->name('employee.bank.update_deposit');
 });

@@ -5,6 +5,7 @@ import { Pencil } from 'lucide-react';
 import { useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
+import DepositCollectionUpdateModal from './DepositCollectionUpdateModal';
 
 function EmployeeMemberDetails({
   member,
@@ -62,15 +63,17 @@ function EmployeeMemberDetails({
                         <Pencil className="text-blue-700" />
                       </p>
                     )}
+                    <DepositCollectionUpdateModal
+                      open={open}
+                      onCloseModal={onCloseModal}
+                      collection={collection}
+                    />
                   </div>
                 );
               })
             )}
           </div>
-          <DepositCollectionUpdateModal
-            open={open}
-            onCloseModal={onCloseModal}
-          />
+
           <div>
             <h2 className="font-bold text-center">কিস্তির তালিকা</h2>
           </div>
@@ -84,19 +87,3 @@ function EmployeeMemberDetails({
 }
 
 export default EmployeeMemberDetails;
-
-function DepositCollectionUpdateModal({ open, onCloseModal }) {
-  return (
-    <Modal
-      styles={{
-        modal: { minWidth: '300px' },
-        overlay: { backgroundColor: 'rgba(0, 0, 20, 0.5)' },
-      }}
-      open={open}
-      onClose={onCloseModal}
-      center
-    >
-      <h2>Simple centered modal</h2>
-    </Modal>
-  );
-}
