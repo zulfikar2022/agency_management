@@ -2,13 +2,19 @@ import dayjs from 'dayjs';
 import EmployeeBankLayout from '../layouts/EmployeeBankLayout';
 import { Link } from '@inertiajs/react';
 import { Pencil } from 'lucide-react';
+import { useState } from 'react';
+import { Modal } from 'react-responsive-modal';
+import 'react-responsive-modal/styles.css';
 
 function EmployeeMemberDetails({
   member,
   total_deposited_amount,
   deposit_collections,
 }) {
-  console.log(deposit_collections);
+  const [open, setOpen] = useState(false);
+  const onOpenModal = () => setOpen(true);
+  const onCloseModal = () => setOpen(false);
+
   const handleEditDepositCollection = (e) => {
     console.log('Edit deposit collection clicked');
   };
@@ -52,10 +58,7 @@ function EmployeeMemberDetails({
                     </p>
                     {new Date().toISOString().split('T')[0] ===
                       collection?.deposit_date && (
-                      <p
-                        className="hover:cursor-pointer"
-                        onClick={handleEditDepositCollection}
-                      >
+                      <p className="hover:cursor-pointer" onClick={onOpenModal}>
                         <Pencil className="text-blue-700" />
                       </p>
                     )}
@@ -64,6 +67,10 @@ function EmployeeMemberDetails({
               })
             )}
           </div>
+          <DepositCollectionUpdateModal
+            open={open}
+            onCloseModal={onCloseModal}
+          />
           <div>
             <h2 className="font-bold text-center">কিস্তির তালিকা</h2>
           </div>
@@ -77,3 +84,19 @@ function EmployeeMemberDetails({
 }
 
 export default EmployeeMemberDetails;
+
+function DepositCollectionUpdateModal({ open, onCloseModal }) {
+  return (
+    <Modal
+      styles={{
+        modal: { minWidth: '300px' },
+        overlay: { backgroundColor: 'rgba(0, 0, 20, 0.5)' },
+      }}
+      open={open}
+      onClose={onCloseModal}
+      center
+    >
+      <h2>Simple centered modal</h2>
+    </Modal>
+  );
+}
