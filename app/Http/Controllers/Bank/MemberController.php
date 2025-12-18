@@ -8,6 +8,7 @@ use App\Models\Bank\DepositCollection;
 use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
 use App\Models\Bank\MemberUpdateLog;
+use App\Models\Withdraw;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +67,7 @@ class MemberController extends Controller
         $deposit->member_id = $member->id;
         $deposit->creating_user_id = Auth::id();
         $deposit->daily_deposit_amount = $validated['daily_deposit_amount'] * 100; // store in cents
-        $deposit->last_depositing_predictable_date = $today_date->modify('+365 days');
+        $deposit->last_depositing_predictable_date = $today_date->modify('+1 year');
         $deposit->save();
 
         return redirect()->route('admin.bank.member_details', ['member' => $member->id]);
@@ -135,6 +136,11 @@ class MemberController extends Controller
         $today_date = new DateTime(now());
         $date_diff = $deposit_account_creating_date->diff($today_date);
         $days_difference_of_deposit = $date_diff->days;
+
+        // withdraw details
+        $withdraws =  Withdraw::where('deposit_id', $deposit_account->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
         
 
         return Inertia::render('Admin/Bank/MemberDetails', [
@@ -145,6 +151,8 @@ class MemberController extends Controller
             'number_of_deposit_collections' => $number_of_deposit_collections,
             'days_difference_of_deposit' => $days_difference_of_deposit,
             'has_loan' => $has_loan,
+            // withdraw information bellow
+            'withdraws' => $withdraws,
         ]);
     }
 

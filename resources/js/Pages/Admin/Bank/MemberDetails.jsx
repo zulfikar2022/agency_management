@@ -10,8 +10,9 @@ function MemberDetails({
   total_deposited_amount,
   number_of_deposit_collections,
   days_difference_of_deposit,
+  withdraws,
 }) {
-  console.log({ days_difference_of_deposit });
+  console.log({ withdraws });
   const {
     name,
     address,
