@@ -44,7 +44,7 @@ function EmployeeBankLayout({ children }) {
               </li>
               <li>
                 <Link
-                  // href={route('employee.allCustomers')}
+                  href={route('employee.bank.not_deposited_today')}
                   className="text-sm"
                 >
                   আজ যারা সঞ্চয় দেয়নি
@@ -81,7 +81,7 @@ function EmployeeBankLayout({ children }) {
             </li>
             <li>
               <Link
-                // href={route('employee.allCustomers')}
+                href={route('employee.bank.not_deposited_today')}
                 className="text-sm"
               >
                 আজ যারা সঞ্চয় দেয়নি

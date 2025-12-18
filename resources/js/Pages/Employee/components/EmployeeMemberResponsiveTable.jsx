@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 
 function EmployeeMemberResponsiveTable({ members }) {
+  console.log(members);
   return (
     <div>
       {members.length === 0 ? (
@@ -36,7 +37,14 @@ function EmployeeMemberResponsiveTable({ members }) {
 
             {/* Actions - Occupies 4 out of 12 columns */}
             <div className="md:col-span-4 flex flex-col md:flex-row gap-2">
-              <Link className="btn btn-outline btn-xs">বিস্তারিত দেখুন</Link>
+              <Link
+                href={route('employee.bank.member_details', {
+                  member: member.id,
+                })}
+                className="btn btn-outline btn-xs"
+              >
+                বিস্তারিত দেখুন
+              </Link>
               {member?.deposit_account && (
                 <Link
                   href={route('employee.bank.collect_deposit', {

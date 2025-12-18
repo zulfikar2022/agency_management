@@ -22,11 +22,11 @@ function MemberTable({ members }) {
           </div>
           <div className="flex flex-col">
             <p className="font-bold">মোট সঞ্চয়</p>
-            <p>{member?.total_deposit}</p>
+            <p>{member?.total_deposit / 100}</p>
           </div>
           <div className="flex flex-col">
             <p className="font-bold">মোট লোন</p>
-            <p>{member?.total_loan}</p>
+            <p>{member?.total_loan / 100}</p>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-3">
             <Link

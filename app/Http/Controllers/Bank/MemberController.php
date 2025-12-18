@@ -158,6 +158,28 @@ class MemberController extends Controller
         ]);
     }
 
+    public function memberDetailsForEmployee(Member $member)
+    {
+        $deposit = Deposit::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->where('last_depositing_predictable_date', '>=', now()->format('Y-m-d'))
+            ->first();
+        $deposit_collections = DepositCollection::where('deposit_id', $deposit?->id)
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $total_deposited_amount = 0;
+
+        foreach($deposit_collections as $collection){
+            $total_deposited_amount += $collection->deposit_amount;
+        }        
+        return Inertia::render('Employee/Bank/EmployeeMemberDetails', [
+            'member' => $member,
+            'total_deposited_amount' => $total_deposited_amount,
+            'deposit_collections' => $deposit_collections,
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

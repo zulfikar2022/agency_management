@@ -6,9 +6,7 @@ function BankAllMembers({ members }) {
   return (
     <LayoutForMoney>
       <div>
-        <h2 className="font-bold text-3xl text-center my-4">
-          সকল সদস্য দেখুন{' '}
-        </h2>
+        <h2 className="font-bold text-3xl text-center my-4"> সকল সদস্য</h2>
         <div className="container mx-auto">
           <MemberTable members={members} />
         </div>

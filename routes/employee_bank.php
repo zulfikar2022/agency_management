@@ -13,4 +13,6 @@ Route::group(['middleware' => ['auth','employeeonly']], function(){
     Route::post('/employee/bank/store-deposit', [DepositController::class, 'store'])->name('employee.bank.store_deposit');
 
     Route::get('/employee/bank/not-deposited-today', [DepositController::class, 'notDepositedToday'])->name('employee.bank.not_deposited_today');
+
+    Route::get('/employee/bank/member-details/{member}', [MemberController::class, 'memberDetailsForEmployee'])->name('employee.bank.member_details');
 });
