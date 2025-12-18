@@ -32,11 +32,12 @@ function EmployeeBankLayout({ children }) {
               <li>
                 <Link
                   className="text-sm"
-                  //   href={route('employee.customersThatPayToday', {
+                  //   href={route('employee.bank.members', {
                   //     today: new Date()
                   //       .toLocaleDateString(undefined, { weekday: 'long' })
                   //       .toLowerCase(),
                   //   })}
+                  href={route('employee.bank.members')}
                 >
                   সকল সদস্য
                 </Link>
@@ -73,6 +74,7 @@ function EmployeeBankLayout({ children }) {
                 //       .toLocaleDateString(undefined, { weekday: 'long' })
                 //       .toLowerCase(),
                 //   })}
+                href={route('employee.bank.members')}
               >
                 সকল সদস্য
               </Link>

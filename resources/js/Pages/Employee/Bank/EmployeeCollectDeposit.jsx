@@ -27,7 +27,6 @@ function EmployeeCollectDeposit({ member, deposit }) {
         post(route('employee.bank.store_deposit'), {
           preserveScroll: true,
           onSuccess: () => {
-            console.log('Deposit successful');
             toast.success('জমা সফলভাবে সম্পন্ন হয়েছে!', {
               position: 'top-center',
               autoClose: 3000,
@@ -35,13 +34,18 @@ function EmployeeCollectDeposit({ member, deposit }) {
               transition: Bounce,
             });
           },
-          onError: () => {
-            toast.error('জমা করতে ব্যর্থ হয়েছে। তথ্য যাচাই করুন।', {
-              position: 'top-center',
-              autoClose: 3000,
-              theme: 'dark',
-              transition: Bounce,
-            });
+          onError: (error) => {
+            console.error('Deposit failed:', error);
+            toast.error(
+              error?.deposit_amount ||
+                'জমা করতে ব্যর্থ হয়েছে। তথ্য যাচাই করুন।',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                theme: 'dark',
+                transition: Bounce,
+              }
+            );
           },
         });
       }

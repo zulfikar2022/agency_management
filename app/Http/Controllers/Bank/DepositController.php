@@ -69,6 +69,23 @@ class DepositController extends Controller
 
     }
 
+    public function notDepositedToday(){
+       $today = now()->format('Y-m-d');
+
+       $todays_deposit_ids = DepositCollection::where('deposit_date', $today)
+            ->where('is_deleted', false)
+            ->pluck('deposit_id')
+            ->toArray();
+        $members_not_deposits_today = Deposit::whereNotIn('id', $todays_deposit_ids)
+            ->where('is_deleted', false)
+            ->with('member')
+            ->get();
+
+        return Inertia::render('Employee/Bank/EmployeeNotDepositedToday', [
+            'members' => $members_not_deposits_today,
+        ]);
+    }
+
     /**
      * Display the specified resource.
      */
