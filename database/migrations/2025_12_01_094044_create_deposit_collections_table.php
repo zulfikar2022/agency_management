@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('deposit_collections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('deposit_id')->constrained('deposits');
-            $table->foreignId('collecting_user_id')->constrained('users');
+            $table->foreignId('deposit_id')->constrained('deposits')->onDelete('cascade');
+            $table->foreignId('collecting_user_id')->constrained('users')->onDelete('cascade');
             $table->integer('deposit_amount');
             $table->date('deposit_date');
             $table->boolean('is_deleted')->default(false);

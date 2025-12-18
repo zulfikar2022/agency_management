@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('loan_update_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('loan_id')->constrained('loans');
-            $table->foreignId('updating_user_id')->constrained('users');
+            $table->foreignId('loan_id')->constrained('loans')->onDelete('cascade');
+            $table->foreignId('updating_user_id')->constrained('users')->onDelete('cascade');
             $table->integer('total_loan_before_update');
             $table->integer('total_loan_after_update');
             $table->integer('safety_money_before_update');

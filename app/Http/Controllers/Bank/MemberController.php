@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bank\Deposit;
+use App\Models\Bank\DepositCollection;
 use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
 use App\Models\Bank\MemberUpdateLog;
@@ -65,7 +66,7 @@ class MemberController extends Controller
         $deposit->member_id = $member->id;
         $deposit->creating_user_id = Auth::id();
         $deposit->daily_deposit_amount = $validated['daily_deposit_amount'] * 100; // store in cents
-        $deposit->last_depositing_predictable_date = $today_date->modify('+115 days');
+        $deposit->last_depositing_predictable_date = $today_date->modify('+365 days');
         $deposit->save();
 
         return redirect()->route('admin.bank.member_details', ['member' => $member->id]);
@@ -114,14 +115,36 @@ class MemberController extends Controller
     public function show(Member $member)
     {
         
-        $has_deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->exists();
+       
         $has_loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->exists();
-        $deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->first();
+        $deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->where('last_depositing_predictable_date' , '>', now())->first();
+
+        // details of deposit account if exists
+        $deposit_account_id = $deposit_account ? $deposit_account->id : null;
+        $daily_deposit_collections = DepositCollection::where('deposit_id', $deposit_account_id)
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $total_deposited_amount =  0;
+        foreach($daily_deposit_collections as $collection){
+            $total_deposited_amount += $collection->amount;
+        }
+        $number_of_deposit_collections = $daily_deposit_collections->count();
+
+        $deposit_account_creating_date = new DateTime($deposit_account->created_at);
+        $today_date = new DateTime(now());
+        $date_diff = $deposit_account_creating_date->diff($today_date);
+        $days_difference_of_deposit = $date_diff->days;
+        
+
         return Inertia::render('Admin/Bank/MemberDetails', [
             'member' => $member,
-            'has_deposit_account' => $has_deposit_account,
-            'has_loan' => $has_loan,
+            'has_deposit_account' => $deposit_account ? true : false,
             'deposit_account' => $deposit_account,
+            'total_deposited_amount' => $total_deposited_amount,
+            'number_of_deposit_collections' => $number_of_deposit_collections,
+            'days_difference_of_deposit' => $days_difference_of_deposit,
+            'has_loan' => $has_loan,
         ]);
     }
 

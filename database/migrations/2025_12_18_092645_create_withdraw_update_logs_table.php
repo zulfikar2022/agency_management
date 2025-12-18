@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('loan_collection_update_logs', function (Blueprint $table) {
+        Schema::create('withdraw_update_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('loan_collection_id')->constrained('loan_collections')->onDelete('cascade');
+            $table->foreignId('withdraw_id')->constrained('withdraws')->onDelete('cascade');
             $table->foreignId('updating_user_id')->constrained('users')->onDelete('cascade');
-            $table->integer('paid_amount_before_update');
-            $table->integer('paid_amount_after_update');
+            $table->integer('withdraw_amount_before_update')->default(0);
+            $table->integer('withdraw_amount_after_update')->default(0);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('loan_collection_update_logs');
+        Schema::dropIfExists('withdraw_update_logs');
     }
 };

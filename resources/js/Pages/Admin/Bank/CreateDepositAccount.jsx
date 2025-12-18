@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import Swal from 'sweetalert2';
-import { toast } from 'react-toastify';
+import { Bounce, toast } from 'react-toastify';
 
 function CreateDepositAccount({ member }) {
   console.log(member);

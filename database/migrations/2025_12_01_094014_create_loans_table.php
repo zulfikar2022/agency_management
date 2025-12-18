@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained('members');
-            $table->foreignId('creating_user_id')->constrained('users');
+            $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
+            $table->foreignId('creating_user_id')->constrained('users')->onDelete('cascade');
             $table->integer('total_loan');
             $table->integer('safety_money');
             $table->integer('share_money');

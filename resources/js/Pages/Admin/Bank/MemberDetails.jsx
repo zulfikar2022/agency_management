@@ -7,8 +7,11 @@ function MemberDetails({
   has_deposit_account,
   has_loan,
   deposit_account,
+  total_deposited_amount,
+  number_of_deposit_collections,
+  days_difference_of_deposit,
 }) {
-  console.log({ deposit_account });
+  console.log({ days_difference_of_deposit });
   const {
     name,
     address,
@@ -70,6 +73,21 @@ function MemberDetails({
                           'D MMMM YYYY'
                         )}
                       </span>{' '}
+                    </p>
+                    <p className="font-bold">
+                      দৈনিক সঞ্চয়ী পরিমাণঃ{' '}
+                      <span className="text-slate-500">
+                        {deposit_account?.daily_deposit_amount / 100} টাকা
+                      </span>
+                    </p>
+                    <p className="font-bold">
+                      সঞ্চয়ের শেষ তারিখঃ
+                      <span className="text-slate-500">
+                        {' '}
+                        {dayjs(
+                          deposit_account?.last_depositing_predictable_date
+                        ).format('D MMMM YYYY')}
+                      </span>
                     </p>
                   </div>
                 )}

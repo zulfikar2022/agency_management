@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('deposit_update_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('deposit_id')->constrained('deposits');
-            $table->foreignId('updating_user_id')->constrained('users');
+            $table->foreignId('deposit_id')->constrained('deposits')->onDelete('cascade');
+            $table->foreignId('updating_user_id')->constrained('users')->onDelete('cascade');
             $table->integer('daily_deposit_amount_before_update');
             $table->integer('daily_deposit_amount_after_update');
             $table->timestamps();

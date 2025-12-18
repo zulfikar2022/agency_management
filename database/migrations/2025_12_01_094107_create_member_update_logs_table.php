@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('member_update_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained('members');
-            $table->foreignId('updating_user_id')->constrained('users');
+            $table->foreignId('member_id')->constrained('members')->onDelete('cascade');
+            $table->foreignId('updating_user_id')->constrained('users')->onDelete('cascade');
             $table->string('name_before_update');
             $table->string('name_after_update');
             $table->string('address_before_update');
