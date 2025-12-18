@@ -78,7 +78,7 @@ function EmployeeDashboardLayout({ children }) {
             </Link>
           </li>
           <li>
-            <Link href={'#'} className="text-xl">
+            <Link href={route('employee.bank.members')} className="text-xl">
               সঞ্চয় ও ঋণের কালেকশন
             </Link>
           </li>

@@ -7,6 +7,7 @@ function AddNewMember() {
   const { data, setData, post, processing, errors } = useForm({
     name: 'fake name',
     address: 'fake address',
+    phone_number: '0123456789',
     nid_number: '1234567',
     fathers_name: 'fake fathers name',
     mothers_name: 'fake mothers name',
@@ -116,6 +117,30 @@ function AddNewMember() {
                     <label className="label">
                       <span className="label-text-alt text-error">
                         {errors.address}
+                      </span>
+                    </label>
+                  )}
+                </div>
+
+                {/* Phone Number (Required) */}
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">
+                      ফোন নম্বর <span className="text-error">*</span>
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`input input-bordered w-full ${errors.phone_number ? 'input-error' : ''}`}
+                    value={data.phone_number}
+                    required
+                    onChange={(e) => setData('phone_number', e.target.value)}
+                    placeholder="0123456789"
+                  />
+                  {errors.phone_number && (
+                    <label className="label">
+                      <span className="label-text-alt text-error">
+                        {errors.phone_number}
                       </span>
                     </label>
                   )}

@@ -87,6 +87,7 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
             'address' => 'required|string|max:500',
             'nid_number' => 'required|string|max:255|unique:members,nid_number',
             'fathers_name' => 'required|string|max:255',
@@ -97,6 +98,7 @@ class MemberController extends Controller
         // have to crate an instance of member model withe the validated data and also some more inforation with default values. The fields are named: total_loan = 0, total_deposit = 0, and is_deleted = false
         $member = new Member();
         $member->name = $validated['name'];
+        $member->phone_number = $validated['phone_number'];
         $member->address = $validated['address'];
         $member->nid_number = $validated['nid_number'];
         $member->fathers_name = $validated['fathers_name'];
@@ -107,7 +109,7 @@ class MemberController extends Controller
         $member->is_deleted = false;
         $member->save();
 
-        return redirect()->route('admin.bank.members');
+        return redirect()->route( 'admin.bank.members');
     }
 
     /**
@@ -132,13 +134,13 @@ class MemberController extends Controller
         }
         $number_of_deposit_collections = $daily_deposit_collections->count();
 
-        $deposit_account_creating_date = new DateTime($deposit_account->created_at);
+        $deposit_account_creating_date = new DateTime($deposit_account?->created_at ?? now());
         $today_date = new DateTime(now());
         $date_diff = $deposit_account_creating_date->diff($today_date);
         $days_difference_of_deposit = $date_diff->days;
 
         // withdraw details
-        $withdraws =  Withdraw::where('deposit_id', $deposit_account->id)
+        $withdraws =  Withdraw::where('deposit_id', $deposit_account?->id)
             ->orderBy('created_at', 'desc')
             ->get();
         

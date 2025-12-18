@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\EmployeeController;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank\Deposit;
+use App\Models\Bank\Member;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
@@ -303,6 +305,42 @@ class EmployeeController extends Controller
             'customer' => $customer, 
             'purchases' => $purchases,
             'collections' => $collections
+        ]);
+    }
+
+    // BANK PART
+    public function allBankMembers(){
+        $user = request()->get('user');
+        $search = request()->query('search', '');
+
+        $members = Member::where('is_deleted', false)
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    ->orWhere('address', 'like', '%' . $search . '%')
+                    ->orWhere('nid_number', 'like', '%' . $search . '%')
+                    ->orWhere('fathers_name', 'like', '%' . $search . '%')
+                    ->orWhere('mothers_name', 'like', '%' . $search . '%')
+                    ->orWhere('id', 'like', '%' . $search . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // from all the members search into the deposits table to see if the member has a deposit account, if yes then attach the deposit account to the member instance as deposit_account property
+        $members->getCollection()->transform(function ($member) {
+            $deposit_account = Deposit::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                ->first();
+            $member->deposit_account = $deposit_account;
+            return $member;
+        });
+
+        $totalMembers = User::where('is_deleted', false)
+            ->count();
+
+        return Inertia::render('Employee/Bank/EmployeeAllMembers', [
+            'members' => $members,
+            'totalMembers' => $totalMembers
         ]);
     }
 
