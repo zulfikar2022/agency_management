@@ -2,7 +2,6 @@ import LayoutForMoney from '../layouts/LayoutForMoney';
 import MemberTable from './components/MemberTable';
 
 function BankAllMembers({ members }) {
-  console.log(members);
   return (
     <LayoutForMoney>
       <div>

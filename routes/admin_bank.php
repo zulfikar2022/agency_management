@@ -33,5 +33,7 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::get('/admin/bank/provide-loan/{member}', [LoanController::class, 'create'])->name('admin.bank.provide_loan');
 
+    Route::post('/admin/bank/store-loan', [LoanController::class, 'store'])->name('admin.bank.store_loan');
+
     
 });

@@ -1,9 +1,11 @@
 import { Link } from '@inertiajs/react';
 import MoneyOpenDrawer from '../components/MoneyOpenDrawer';
+import { ToastContainer } from 'react-toastify';
 
 function LayoutForMoney({ children }) {
   return (
     <div>
+      <ToastContainer />
       <div className="navbar bg-slate-100 shadow-sm">
         <div className="navbar-start">
           <div className="dropdown">

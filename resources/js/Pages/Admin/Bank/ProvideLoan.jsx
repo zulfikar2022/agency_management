@@ -30,17 +30,27 @@ function ProvideLoan({ member }) {
       cancelButtonText: 'না',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log('data: ', data);
-        // post(route('admin.loans.store'), {
-        //   preserveScroll: true,
-        //   onSuccess: () => {
-        //     reset();
-        //     toast.success('ঋণ প্রদান সফল হয়েছে!', {
-        //       theme: 'dark',
-        //       transition: Bounce,
-        //     });
-        //   },
-        // });
+        post(route('admin.bank.store_loan'), {
+          preserveScroll: true,
+          onSuccess: (data) => {
+            reset();
+            toast.success('ঋণ প্রদান সফল হয়েছে!', {
+              theme: 'dark',
+              transition: Bounce,
+              position: 'top-center',
+            });
+          },
+          onError: (error) => {
+            toast.error(
+              error?.message || 'ঋণ প্রদান ব্যর্থ হয়েছে। আবার চেষ্টা করুন।',
+              {
+                theme: 'dark',
+                transition: Bounce,
+                position: 'top-center',
+              }
+            );
+          },
+        });
       }
     });
   };
@@ -54,13 +64,16 @@ function ProvideLoan({ member }) {
               <h2 className="card-title text-2xl mb-2 text-neutral">
                 সদস্যকে ঋণ দিন
               </h2>
-              <div className="text-sm text-base-content/70 mb-6 border-b pb-4">
-                সদস্যের নাম:{' '}
-                <span className="font-bold text-base-content">
-                  {member?.name}
-                </span>
-                <br />
-                সদস্য আইডি: <span className="font-mono">#{member?.id}</span>
+              <div className="text-sm mb-6 border-b pb-4">
+                <p className="font-bold">
+                  {' '}
+                  সদস্যের নাম:{' '}
+                  <span className="font-normal text-lg">{member?.name}</span>
+                </p>
+                <p className="font-bold">
+                  সদস্য আইডি:{' '}
+                  <span className="font-normal text-lg">{member?.id}</span>
+                </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -75,7 +88,7 @@ function ProvideLoan({ member }) {
                     </label>
                     <input
                       type="number"
-                      placeholder="যেমন: ১০০০০"
+                      placeholder="যেমন: 10000"
                       className={`input input-bordered ${errors.total_loan ? 'input-error' : ''}`}
                       value={data.total_loan}
                       onChange={(e) => setData('total_loan', e.target.value)}
@@ -97,7 +110,7 @@ function ProvideLoan({ member }) {
                     </label>
                     <input
                       type="number"
-                      placeholder="যেমন: ৫০০"
+                      placeholder="যেমন: 500"
                       className={`input input-bordered ${errors.safety_money ? 'input-error' : ''}`}
                       value={data.safety_money}
                       onChange={(e) => setData('safety_money', e.target.value)}
