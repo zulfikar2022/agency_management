@@ -56,8 +56,14 @@ class LoanCollectionController extends Controller
      */
     public function create(Member $member)
     {
+        // find the loan instance of the member
+        $loan = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_amount', '>', 0)
+            ->first();         
         return Inertia::render('Employee/Bank/EmployeeCollectInstallment', [
             'member' => $member,
+            'loan' => $loan,
         ]);
     }
 
