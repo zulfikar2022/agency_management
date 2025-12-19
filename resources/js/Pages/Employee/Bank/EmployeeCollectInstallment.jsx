@@ -33,7 +33,7 @@ function EmployeeCollectInstallment({ member, loan }) {
           preserveScroll: true,
           onSuccess: () => {
             reset('paid_amount');
-            toast.success('ঋণ আদায় সফলভাবে সম্পন্ন হয়েছে!', {
+            toast.success('কিস্তি আদায় সফলভাবে সম্পন্ন হয়েছে!', {
               position: 'top-center',
               autoClose: 3000,
               theme: 'dark',
@@ -42,12 +42,16 @@ function EmployeeCollectInstallment({ member, loan }) {
           },
           onError: (error) => {
             console.error('Installment collection failed:', error);
-            toast.error('তথ্য সংরক্ষণ করা যায়নি। পুনরায় চেষ্টা করুন।', {
-              position: 'top-center',
-              autoClose: 3000,
-              theme: 'dark',
-              transition: Bounce,
-            });
+            toast.error(
+              error?.paid_amount ||
+                ' তথ্য সংরক্ষণ করা যায়নি। পুনরায় চেষ্টা করুন।',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                theme: 'dark',
+                transition: Bounce,
+              }
+            );
           },
         });
       }
@@ -65,7 +69,16 @@ function EmployeeCollectInstallment({ member, loan }) {
                 <p className="font-bold">
                   {' '}
                   সদস্য:{' '}
-                  <span className="font-normal">{member?.name || 'N/A'}</span>
+                  <span className="font-normal text-lg">
+                    {member?.name || 'N/A'}
+                  </span>
+                </p>
+                <p className="font-bold">
+                  {' '}
+                  আইডি:{' '}
+                  <span className="font-normal text-lg">
+                    {member?.id || 'N/A'}
+                  </span>
                 </p>
               </div>
 

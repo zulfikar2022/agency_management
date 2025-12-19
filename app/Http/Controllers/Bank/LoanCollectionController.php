@@ -90,7 +90,7 @@ class LoanCollectionController extends Controller
             ->where('is_deleted', false)
             ->first();
         if ($existing_collection) {
-            return redirect()->back()->withErrors(['paid_amount' => 'এই ঋণের জন্য আজকের তারিখে একটি কিস্তি ইতিমধ্যেই সংগ্রহ করা হয়েছে।'])->withInput();
+            return redirect()->back()->withErrors(['paid_amount' => 'এই ঋণের জন্য আজকের তারিখে একটি কিস্তি ইতিমধ্যেই সংগ্রহ করা হয়েছে।']);
         }   
 
         DB::transaction(function () use ($validated, $loan) {
