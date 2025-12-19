@@ -56,7 +56,14 @@ function EmployeeMemberResponsiveTable({ members }) {
                 </Link>
               )}
               {member?.total_loan > 0 && (
-                <Link className="btn btn-outline btn-xs">কিস্তি উত্তোলন</Link>
+                <Link
+                  href={route('employee.bank.collect_installment', {
+                    member: member.id,
+                  })}
+                  className="btn btn-outline btn-xs"
+                >
+                  কিস্তি উত্তোলন
+                </Link>
               )}
             </div>
           </div>

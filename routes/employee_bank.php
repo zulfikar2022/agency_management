@@ -21,4 +21,6 @@ Route::group(['middleware' => ['auth','employeeonly']], function(){
     Route::patch('/employee/bank/update-deposit/{depositCollection}', [DepositCollectionController::class, 'update'])->name('employee.bank.update_deposit');
 
     Route::get('/employee/bank/not-installment-today', [LoanCollectionController::class, 'notInstallmentedToday'])->name('employee.bank.not_installment_today');
+
+    Route::get('/employee/bank/collect-installment/{member}', [LoanCollectionController::class, 'create'])->name('employee.bank.collect_installment');
 });
