@@ -7,6 +7,8 @@ use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class LoanCollectionController extends Controller
@@ -72,7 +74,44 @@ class LoanCollectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'loan_id' => 'required|exists:loans,id',
+            'paid_amount' => 'required|numeric|min:0.01',
+        ]);
+
+        $loan = Loan::find($validated['loan_id']);
+        if ($validated['paid_amount'] * 100 > $loan->remaining_payable_amount) {
+            return redirect()->back()->withErrors(['paid_amount' => 'যত টাকা বাকি আছে তার থেকে বেশি পরিশোধ করতে পারবেন না। '])->withInput();
+        }
+
+        $toay = now()->format('Y-m-d');
+        $existing_collection = LoanCollection::where('loan_id', $validated['loan_id'])
+            ->where('paying_date', $toay)
+            ->where('is_deleted', false)
+            ->first();
+        if ($existing_collection) {
+            return redirect()->back()->withErrors(['paid_amount' => 'এই ঋণের জন্য আজকের তারিখে একটি কিস্তি ইতিমধ্যেই সংগ্রহ করা হয়েছে।'])->withInput();
+        }   
+
+        DB::transaction(function () use ($validated, $loan) {
+            $loan_collection = new LoanCollection();
+            $loan_collection->loan_id = $validated['loan_id'];
+            $loan_collection->collecting_user_id = Auth::id();
+            $loan_collection->paid_amount = $validated['paid_amount'] * 100; // store in cents
+            $loan_collection->paying_date = now()->format('Y-m-d');
+            $loan_collection->is_deleted = false;
+            $loan_collection->save();
+
+            // update the loan's remaining_payable_amount
+            // $loan = Loan::find($validated['loan_id']);
+            $loan->remaining_payable_amount -= $validated['paid_amount'] * 100;
+            $loan->save();
+        });
+        
+        return redirect()->route('employee.bank.member_details', [
+            'member' => Loan::find($validated['loan_id'])->member_id
+        ])->with('success', 'Installment collected successfully.');
+       
     }
 
     /**

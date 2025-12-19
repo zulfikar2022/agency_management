@@ -4,16 +4,22 @@ import { Bounce, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 function EmployeeCollectInstallment({ member, loan }) {
-  console.log(loan);
+  const remaining_payable_amount = loan.remaining_payable_amount / 100;
+  console.log(remaining_payable_amount);
+
   const { data, setData, post, processing, errors, reset } = useForm({
-    paid_amount: loan?.daily_payable_amount / 100 || '',
+    paid_amount:
+      remaining_payable_amount >= loan?.daily_payable_amount / 100
+        ? loan?.daily_payable_amount / 100
+        : remaining_payable_amount || '',
     loan_id: loan?.id,
   });
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     Swal.fire({
-      text: `${member?.name}-এর নিকট থেকে ${data.paid_amount} টাকা ঋণ আদায়ের তথ্যটি নিশ্চিত করতে চান?`,
+      text: `${member?.name}-এর নিকট থেকে ${data.paid_amount} টাকা কিস্তি আদায়ের তথ্যটি নিশ্চিত করতে চান?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#09090b',
@@ -23,21 +29,27 @@ function EmployeeCollectInstallment({ member, loan }) {
     }).then((result) => {
       if (result.isConfirmed) {
         // Adjust the route name to match your web.php
-        // post(route('admin.loans.collect-payment'), {
-        //   preserveScroll: true,
-        //   onSuccess: () => {
-        //     reset('paid_amount');
-        //     toast.success('ঋণ আদায় সফলভাবে সম্পন্ন হয়েছে!', {
-        //       position: 'top-center',
-        //       autoClose: 3000,
-        //       theme: 'dark',
-        //       transition: Bounce,
-        //     });
-        //   },
-        //   onError: () => {
-        //     toast.error('তথ্য সংরক্ষণ করা যায়নি। পুনরায় চেষ্টা করুন।');
-        //   },
-        // });
+        post(route('employee.bank.store_installment'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            reset('paid_amount');
+            toast.success('ঋণ আদায় সফলভাবে সম্পন্ন হয়েছে!', {
+              position: 'top-center',
+              autoClose: 3000,
+              theme: 'dark',
+              transition: Bounce,
+            });
+          },
+          onError: (error) => {
+            console.error('Installment collection failed:', error);
+            toast.error('তথ্য সংরক্ষণ করা যায়নি। পুনরায় চেষ্টা করুন।', {
+              position: 'top-center',
+              autoClose: 3000,
+              theme: 'dark',
+              transition: Bounce,
+            });
+          },
+        });
       }
     });
   };
@@ -71,6 +83,7 @@ function EmployeeCollectInstallment({ member, loan }) {
                     </span>
                     <input
                       type="number"
+                      max={remaining_payable_amount}
                       inputMode="numeric"
                       className={`input input-bordered w-full ${errors.paid_amount ? 'input-error' : ''}`}
                       value={data.paid_amount}
