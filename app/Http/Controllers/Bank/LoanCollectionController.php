@@ -3,11 +3,46 @@
 namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
+use App\Models\Bank\Member;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class LoanCollectionController extends Controller
 {
+
+    function notInstallmentedToday()
+    {
+        //
+        $search = request()->query('search', '');
+        $today = now()->format('Y-m-d');
+        $todays_collections = LoanCollection::where('paying_date', $today)
+            ->where('is_deleted', false)
+            ->get()
+            ->pluck('loan_id')
+            ->toArray();
+
+            // find loans which are not in todays_collections and have remaining_payable_amount > 0
+        $loans_not_paid_today = Loan::whereNotIn('id', $todays_collections)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_amount', '>', 0)
+            ->get();
+        $members = Member::whereIn('id', $loans_not_paid_today->pluck('member_id'))
+        ->where('is_deleted', false)
+        ->where(function ($query) use ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                // ->orWhere('phone_number', 'like', '%' . $search . '%')
+                ->orWhere('id', 'like', '%' . $search . '%');
+        })
+        ->paginate(10);
+        // dd($members);
+
+        return Inertia::render('Employee/Bank/EmployeeNotInstallmantedToday', [
+            'members' => $members,
+        ]);
+
+    }
     /**
      * Display a listing of the resource.
      */

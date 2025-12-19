@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Bank\DepositCollectionController;
 use App\Http\Controllers\Bank\DepositController;
+use App\Http\Controllers\Bank\LoanCollectionController;
 use App\Http\Controllers\Bank\MemberController;
 use App\Http\Controllers\EmployeeController\EmployeeController;
 use Illuminate\Support\Facades\Route;
@@ -18,4 +19,6 @@ Route::group(['middleware' => ['auth','employeeonly']], function(){
     Route::get('/employee/bank/member-details/{member}', [MemberController::class, 'memberDetailsForEmployee'])->name('employee.bank.member_details');
 
     Route::patch('/employee/bank/update-deposit/{depositCollection}', [DepositCollectionController::class, 'update'])->name('employee.bank.update_deposit');
+
+    Route::get('/employee/bank/not-installment-today', [LoanCollectionController::class, 'notInstallmentedToday'])->name('employee.bank.not_installment_today');
 });

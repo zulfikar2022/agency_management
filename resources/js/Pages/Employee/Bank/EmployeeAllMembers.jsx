@@ -5,7 +5,6 @@ import { Link } from '@inertiajs/react';
 import Pagination from '@/Pages/Admin/components/Pagination';
 
 function EmployeeAllMembers({ members, totalMembers }) {
-  console.log(members);
   const pagination = { ...members, data: [] };
   const [searchTerm, setSearchTerm] = useState('');
   return (

@@ -6,6 +6,7 @@ import { Bounce, toast } from 'react-toastify';
 
 function DepositCollectionUpdateModal({ open, onCloseModal, collection }) {
   // Initialize Inertia form
+  console.log(collection);
   const { data, setData, patch, processing, errors } = useForm({
     deposit_amount: collection ? collection.deposit_amount / 100 : '',
     id: collection?.id || '',

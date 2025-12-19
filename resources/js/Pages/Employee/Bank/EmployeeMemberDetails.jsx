@@ -15,6 +15,9 @@ function EmployeeMemberDetails({
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+  const todays_collection = deposit_collections.find((collection) => {
+    return collection.deposit_date === new Date().toISOString().split('T')[0];
+  });
 
   const handleEditDepositCollection = (e) => {
     console.log('Edit deposit collection clicked');
@@ -63,17 +66,16 @@ function EmployeeMemberDetails({
                         <Pencil className="text-blue-700" />
                       </p>
                     )}
-                    <DepositCollectionUpdateModal
-                      open={open}
-                      onCloseModal={onCloseModal}
-                      collection={collection}
-                    />
                   </div>
                 );
               })
             )}
           </div>
-
+          <DepositCollectionUpdateModal
+            open={open}
+            onCloseModal={onCloseModal}
+            collection={todays_collection}
+          />
           <div>
             <h2 className="font-bold text-center">কিস্তির তালিকা</h2>
           </div>

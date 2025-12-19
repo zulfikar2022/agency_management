@@ -1,6 +1,7 @@
 import LayoutForMoney from '../layouts/LayoutForMoney';
 
-function NotInstallmentedTodayMembers() {
+function NotInstallmentedTodayMembers({ members }) {
+  console.log(members);
   return (
     <LayoutForMoney>
       <div>

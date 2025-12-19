@@ -53,9 +53,7 @@ function EmployeeBankLayout({ children }) {
               <li>
                 <Link
                   className="text-sm"
-                  //   href={route('employee.customersPaidToday', {
-                  //     todate: new Date().toISOString().split('T')[0],
-                  //   })}
+                  href={route('employee.bank.not_installment_today')}
                 >
                   আজ যারা ঋণের কিস্তি দেয়নি
                 </Link>
@@ -67,15 +65,7 @@ function EmployeeBankLayout({ children }) {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
             <li>
-              <Link
-                className="text-sm"
-                //   href={route('employee.customersThatPayToday', {
-                //     today: new Date()
-                //       .toLocaleDateString(undefined, { weekday: 'long' })
-                //       .toLowerCase(),
-                //   })}
-                href={route('employee.bank.members')}
-              >
+              <Link className="text-sm" href={route('employee.bank.members')}>
                 সকল সদস্য
               </Link>
             </li>
@@ -90,9 +80,7 @@ function EmployeeBankLayout({ children }) {
             <li>
               <Link
                 className="text-sm"
-                //   href={route('employee.customersPaidToday', {
-                //     todate: new Date().toISOString().split('T')[0],
-                //   })}
+                href={route('employee.bank.not_installment_today')}
               >
                 আজ যারা ঋণের কিস্তি দেয়নি
               </Link>
