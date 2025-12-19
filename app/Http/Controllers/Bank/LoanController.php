@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bank\Loan;
+use App\Models\Bank\Member;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+
+// use Inertia\Inertia;
 
 class LoanController extends Controller
 {
@@ -19,9 +23,11 @@ class LoanController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Member $member)
     {
-        //
+        return Inertia::render('Admin/Bank/ProvideLoan', [
+            'member' => $member,
+        ]);
     }
 
     /**

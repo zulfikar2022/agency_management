@@ -54,7 +54,14 @@ function MemberDetails({
                   </Link>
                 )}
                 {!has_loan ? (
-                  <Link className="btn btn-xs btn-error">ঋণ প্রদান করুন</Link>
+                  <Link
+                    href={route('admin.bank.provide_loan', {
+                      member: id,
+                    })}
+                    className="btn btn-xs btn-error"
+                  >
+                    ঋণ প্রদান করুন
+                  </Link>
                 ) : (
                   <Link className="btn btn-xs btn-error">
                     ঋণের কিস্তির বিস্তারিত দেখুন

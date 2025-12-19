@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Bank\LoanController;
 use App\Http\Controllers\Bank\MemberController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,8 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
     Route::get('/admin/bank/edit-member/{member}', [MemberController::class, 'edit'])->name('admin.bank.edit_member');
 
     Route::patch('/admin/bank/update-member/{member}', [MemberController::class, 'update'])->name('admin.bank.update_member');
+
+    Route::get('/admin/bank/provide-loan/{member}', [LoanController::class, 'create'])->name('admin.bank.provide_loan');
 
     
 });
