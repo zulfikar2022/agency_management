@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import { Link } from '@inertiajs/react';
+import { ArrowLeft } from 'lucide-react';
 
 function WithdrawLists({ withdraws, member, deposits }) {
   //   console.log(withdraws[0]);
@@ -9,6 +10,19 @@ function WithdrawLists({ withdraws, member, deposits }) {
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
+        <div className="pl-10 mt-4">
+          <Link
+            href={route('admin.bank.member_details', {
+              member: member?.id,
+            })}
+            className="text-blue-700 underline "
+          >
+            {' '}
+            <span className="flex">
+              <ArrowLeft /> <span>ফিরে যান</span>
+            </span>{' '}
+          </Link>
+        </div>
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
