@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 function WithdrawLists({ withdraws, member, deposits }) {
-  //   console.log(withdraws[0]);
+  console.log(withdraws);
   const today = new Date().toISOString().split('T')[0];
   console.log(withdraws[1].created_at.split('T')[0]);
   return (
@@ -48,33 +48,75 @@ function WithdrawLists({ withdraws, member, deposits }) {
                     {withdraws.map((withdraw) => {
                       const isTodaysWithdraw =
                         today === withdraw.created_at.split('T')[0];
-                      console.log({ isTodaysWithdraw });
                       return (
-                        <div
-                          key={withdraw.id}
-                          className={`border-b p-2 grid grid-cols-1  ${isTodaysWithdraw && 'md:grid-cols-3'} ${!isTodaysWithdraw && 'md:grid-cols-2'}  gap-4 items-center`}
-                        >
-                          <p className="font-bold">
-                            তারিখঃ <br />
-                            <span className="font-normal">
-                              {dayjs(withdraw.created_at).format('D MMMM YYYY')}
-                            </span>
-                          </p>
-                          <p className="font-bold">
-                            পরিমাণঃ <br />
-                            <span className="font-normal">
-                              {withdraw.withdraw_amount / 100} টাকা
-                            </span>
-                          </p>
-                          {isTodaysWithdraw && (
-                            <Link
-                              href={route('admin.bank.withdraw_update', {
-                                withdraw: withdraw.id,
-                              })}
-                              className="btn btn-xs btn-warning"
-                            >
-                              আপডেট করুন
-                            </Link>
+                        <div key={withdraw.id} className="border-b">
+                          <div
+                            className={`p-2 grid grid-cols-1  ${isTodaysWithdraw && 'md:grid-cols-3'} ${!isTodaysWithdraw && 'md:grid-cols-2'}  gap-4 items-center`}
+                          >
+                            <p className="font-bold">
+                              তারিখঃ <br />
+                              <span className="font-normal">
+                                {dayjs(withdraw.created_at).format(
+                                  'D MMMM YYYY'
+                                )}
+                              </span>
+                            </p>
+                            <p className="font-bold">
+                              পরিমাণঃ <br />
+                              <span className="font-normal">
+                                {withdraw?.withdraw_amount / 100} টাকা
+                              </span>
+                            </p>
+                            {isTodaysWithdraw && (
+                              <Link
+                                href={route('admin.bank.withdraw_update', {
+                                  withdraw: withdraw.id,
+                                })}
+                                className="btn btn-xs btn-warning"
+                              >
+                                আপডেট করুন
+                              </Link>
+                            )}
+                          </div>
+                          {withdraw.updates.length === 0 ? null : (
+                            <div>
+                              <div className="mt-2 ml-4">
+                                <p className="text-center italic underline">
+                                  আপডেটের বিবরণঃ
+                                </p>
+                                {withdraw.updates.map((update) => {
+                                  return (
+                                    <div
+                                      key={update.id}
+                                      className=" mb-2 pb-1 grid grid-cols-1 md:grid-cols-3 gap-4"
+                                    >
+                                      <p className="font-bold">
+                                        আপডেটের আগের পরিমাণঃ <br />
+                                        <span className="font-normal">
+                                          {update.withdraw_amount_before_update /
+                                            100}{' '}
+                                          টাকা
+                                        </span>
+                                      </p>
+                                      <p className="font-bold">
+                                        আপডেটের পরিমাণ পরিমাণঃ <br />
+                                        <span className="font-normal">
+                                          {update.withdraw_amount_after_update /
+                                            100}{' '}
+                                          টাকা
+                                        </span>
+                                      </p>
+                                      <p className="font-bold">
+                                        আপডেট করেছেনঃ <br />
+                                        <span className="font-normal">
+                                          {update.updating_user_name}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
                           )}
                         </div>
                       );

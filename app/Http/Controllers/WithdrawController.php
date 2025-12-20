@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bank\Deposit;
 use App\Models\Bank\Member;
+use App\Models\User;
 use App\Models\Withdraw;
 use App\Models\WithdrawUpdateLogs;
 use Illuminate\Http\Request;
@@ -38,6 +39,17 @@ class WithdrawController extends Controller
         $withdraws =  Withdraw::where('deposit_id', $deposit->id)
             ->orderBy('created_at', 'desc')
             ->get();
+
+        $withdraws->transform(function ($item) {
+            $updates = WithdrawUpdateLogs::where('withdraw_id', $item->id)->orderBy('created_at', 'desc')->get();
+            $updates->transform(function ($update) {
+                $updating_user = User::find($update->updating_user_id);
+                $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown';
+                return $update;
+            });
+            $item->updates = $updates;
+            return $item;
+        });
 
         return Inertia::render('Admin/Bank/WithdrawLists', [
             'member' => $member,

@@ -38,11 +38,8 @@ function DepositCollections({ deposit_collections, member }) {
         ) : (
           <div className="max-w-2xl mx-auto mt-6">
             {deposit_collections.map((collection) => (
-              <div className="border-b ">
-                <div
-                  key={collection.id}
-                  className="p-4 grid grid-cols-1 md:grid-cols-2 justify-center gap-4"
-                >
+              <div key={collection.id} className="border-b ">
+                <div className="p-4 grid grid-cols-1 md:grid-cols-2 justify-center gap-4">
                   <p className="font-bold">
                     তারিখঃ <br />
                     <span className="font-normal">
@@ -68,7 +65,6 @@ function DepositCollections({ deposit_collections, member }) {
                       আপডেটের বিবরণঃ
                     </p>
                     {collection.updates.map((update) => {
-                      console.log(update);
                       return (
                         <div
                           key={update.id}
