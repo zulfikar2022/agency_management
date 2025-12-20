@@ -1,0 +1,74 @@
+import dayjs from 'dayjs';
+import LayoutForMoney from '../layouts/LayoutForMoney';
+import { Link } from '@inertiajs/react';
+
+function WithdrawLists({ withdraws, member, deposits }) {
+  //   console.log(withdraws[0]);
+  const today = new Date().toISOString().split('T')[0];
+  console.log(withdraws[1].created_at.split('T')[0]);
+  return (
+    <LayoutForMoney>
+      <div className="min-h-screen bg-base-200 py-8">
+        <div className="max-w-2xl mx-auto">
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body">
+              <div className="flex justify-between items-start mb-6 border-b">
+                <div>
+                  <h2 className="card-title text-2xl mb-1">
+                    উত্তোলনের তালিকা - {member.name}
+                  </h2>
+                  <p className="text-sm text-base-content/60">
+                    মেম্বার আইডি:{' '}
+                    <span className="font-bold text-2xl text-black">
+                      {member.id}
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                {withdraws.length === 0 ? (
+                  <p className="text-center mt-4">কোনো উত্তোলন পাওয়া যায়নি।</p>
+                ) : (
+                  <div>
+                    {withdraws.map((withdraw) => {
+                      const isTodaysWithdraw =
+                        today === withdraw.created_at.split('T')[0];
+                      console.log({ isTodaysWithdraw });
+                      return (
+                        <div
+                          key={withdraw.id}
+                          className={`border-b p-2 grid grid-cols-1  ${isTodaysWithdraw && 'md:grid-cols-3'} ${!isTodaysWithdraw && 'md:grid-cols-2'}  gap-4 items-center`}
+                        >
+                          <p className="font-bold">
+                            তারিখঃ <br />
+                            <span className="font-normal">
+                              {dayjs(withdraw.created_at).format('D MMMM YYYY')}
+                            </span>
+                          </p>
+                          <p className="font-bold">
+                            পরিমাণঃ <br />
+                            <span className="font-normal">
+                              {withdraw.withdraw_amount / 100} টাকা
+                            </span>
+                          </p>
+                          {isTodaysWithdraw && (
+                            <Link className="btn btn-xs btn-warning">
+                              আপডেট করুন
+                            </Link>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </LayoutForMoney>
+  );
+}
+
+export default WithdrawLists;

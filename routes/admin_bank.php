@@ -40,5 +40,7 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::post('/admin/bank/store-withdraw-money', [WithdrawController::class, 'store'])->name('admin.bank.store_withdraw_money');
 
+    Route::get('/admin/bank/withdraw-list/{deposit}', [WithdrawController::class, 'withdrawLists'])->name('admin.bank.withdraw_lists');
+
     
 });

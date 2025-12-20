@@ -12,7 +12,7 @@ function MemberDetails({
   days_difference_of_deposit,
   withdraws,
 }) {
-  console.log({ deposit_account });
+  // console.log({ withdraws });
   const {
     name,
     address,
@@ -77,6 +77,15 @@ function MemberDetails({
                     className="btn btn-xs btn-warning"
                   >
                     টাকা উত্তোলন করুন
+                  </Link>
+
+                  <Link
+                    href={route('admin.bank.withdraw_lists', {
+                      deposit: deposit_account?.id,
+                    })}
+                    className="btn btn-xs btn-info"
+                  >
+                    উত্তোলনের বিস্তারিত দেখুন
                   </Link>
                 </div>
               )}

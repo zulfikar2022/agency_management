@@ -7,12 +7,14 @@ use App\Models\Bank\Member;
 use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 use function Symfony\Component\Clock\now;
 
 class WithdrawController extends Controller
 {
+
 
     public function withdrawMoney(Member $member)
     {
@@ -26,6 +28,20 @@ class WithdrawController extends Controller
         return Inertia::render('Admin/Bank/WithdrawMoney', [
             'member' => $member,
             'deposit_id' => $deposit_id,
+        ]);
+    }
+
+    public function withdrawLists(Deposit $deposit){
+        $member = Member::find($deposit->member_id);
+
+        $withdraws =  Withdraw::where('deposit_id', $deposit->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('Admin/Bank/WithdrawLists', [
+            'member' => $member,
+            'deposit' => $deposit,
+            'withdraws' => $withdraws,
         ]);
     }
     /**
@@ -62,15 +78,19 @@ class WithdrawController extends Controller
             return back()->withErrors(['withdraw_amount' => 'যতটাকা আছে তার থেকে বেশি টাকা উত্তোলন করা যাবে না।']);
         }
 
-        $withdraw = new Withdraw();
-        $withdraw->deposit_id = $validated['deposit_id'];
-        $withdraw->withdrawing_user_id = Auth::id();
-        $withdraw->withdraw_amount = $validated['withdraw_amount'] * 100; // store in cents
-        $withdraw->save();
+        DB::transaction(function() use ($validated, $member, $total_deposit_cents) {
+            $withdraw = new Withdraw();
+            $withdraw->deposit_id = $validated['deposit_id'];
+            $withdraw->withdrawing_user_id = Auth::id();
+            $withdraw->withdraw_amount = $validated['withdraw_amount'] * 100; // store in cents
+            $withdraw->save();
 
-        // update the member's total deposit
-        $member->total_deposit = $total_deposit_cents - ($validated['withdraw_amount'] * 100);
-        $member->save();
+            // update the member's total deposit
+            $member->total_deposit = $total_deposit_cents - ($validated['withdraw_amount'] * 100);
+            $member->save();
+        });
+
+        
 
         return redirect()->route('admin.bank.member_details', ['member' => $member->id]);
     }
