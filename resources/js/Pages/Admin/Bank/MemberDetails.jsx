@@ -12,7 +12,7 @@ function MemberDetails({
   days_difference_of_deposit,
   withdraws,
 }) {
-  console.log({ withdraws });
+  console.log({ deposit_account });
   const {
     name,
     address,
@@ -40,7 +40,7 @@ function MemberDetails({
                 </div>
                 {/* <div className="badge badge-neutral p-3">সক্রিয়</div> */}
               </div>
-              <div className="grid gird-cols-1 md:grid-cols-2 gap-2 mb-6 border-b pb-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6 border-b pb-2">
                 {!has_deposit_account ? (
                   <Link
                     href={route('admin.bank.deposit_account', id)}
@@ -68,6 +68,18 @@ function MemberDetails({
                   </Link>
                 )}
               </div>
+              {has_deposit_account && member?.total_deposit > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6 border-b pb-2">
+                  <Link
+                    href={route('admin.bank.withdraw_money', {
+                      member: id,
+                    })}
+                    className="btn btn-xs btn-warning"
+                  >
+                    টাকা উত্তোলন করুন
+                  </Link>
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 {has_deposit_account && (
                   <div>

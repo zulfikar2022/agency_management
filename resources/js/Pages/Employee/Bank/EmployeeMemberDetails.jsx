@@ -13,8 +13,9 @@ function EmployeeMemberDetails({
   total_deposited_amount,
   deposit_collections,
   loan_collections,
+  withdraws,
 }) {
-  // console.log(loan_collections);
+  console.log(withdraws);
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
@@ -30,6 +31,11 @@ function EmployeeMemberDetails({
     return collection.paying_date === new Date().toISOString().split('T')[0];
   });
 
+  const total_withdrawn_amount = withdraws.reduce(
+    (total, withdraw) => total + withdraw?.withdraw_amount,
+    0
+  );
+
   return (
     <EmployeeBankLayout>
       <div className="mx-2 md:mx-0">
@@ -39,7 +45,21 @@ function EmployeeMemberDetails({
           </p>
           <p className="font-bold">
             মোট সঞ্চয়ঃ{' '}
-            <span className="font-normal">{total_deposited_amount / 100}</span>
+            <span className="font-normal">
+              {total_deposited_amount / 100} টাকা{' '}
+            </span>
+          </p>
+          <p className="font-bold">
+            মোট উত্তোলনঃ{' '}
+            <span className="font-normal">
+              {total_withdrawn_amount / 100} টাকা
+            </span>
+          </p>
+          <p className="font-bold">
+            একাউন্টে অবশিষ্ট আছে{' '}
+            <span className="font-normal">
+              {(total_deposited_amount - total_withdrawn_amount) / 100} টাকা
+            </span>
           </p>
         </div>
       </div>
@@ -87,7 +107,7 @@ function EmployeeMemberDetails({
           <div>
             <h2 className="font-bold text-center">কিস্তির তালিকা</h2>
             {loan_collections.length === 0 ? (
-              <p className="text-center mt-4">কোনো সঞ্চয় পাওয়া যায়নি।</p>
+              <p className="text-center mt-4">কোনো কিস্তি পাওয়া যায়নি।</p>
             ) : (
               loan_collections.map((collection) => {
                 return (
@@ -128,6 +148,31 @@ function EmployeeMemberDetails({
           />
           <div>
             <h2 className="font-bold text-center">টাকা উত্তোলন তালিকা</h2>
+            {withdraws.length === 0 ? (
+              <p className="text-center mt-4">কোনো উত্তোলন পাওয়া যায়নি।</p>
+            ) : (
+              withdraws.map((withdraw) => {
+                return (
+                  <div
+                    key={withdraw?.id}
+                    className="border-b p-1 flex justify-between items-center"
+                  >
+                    <p className="font-bold">
+                      তারিখঃ <br />
+                      <span className="font-normal">
+                        {dayjs(withdraw?.created_at).format('D MMMM YYYY')}
+                      </span>
+                    </p>
+                    <p className="font-bold">
+                      পরিমাণঃ <br />
+                      <span className="font-normal">
+                        {withdraw?.withdraw_amount / 100} টাকা
+                      </span>
+                    </p>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </div>

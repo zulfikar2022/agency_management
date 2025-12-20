@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Bank\LoanController;
 use App\Http\Controllers\Bank\MemberController;
+use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth','adminonly']], function(){
@@ -34,6 +35,10 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
     Route::get('/admin/bank/provide-loan/{member}', [LoanController::class, 'create'])->name('admin.bank.provide_loan');
 
     Route::post('/admin/bank/store-loan', [LoanController::class, 'store'])->name('admin.bank.store_loan');
+
+    Route::get('/admin/bank/withdraw-money/{member}', [WithdrawController::class, 'withdrawMoney'])->name('admin.bank.withdraw_money');
+
+    Route::post('/admin/bank/store-withdraw-money', [WithdrawController::class, 'store'])->name('admin.bank.store_withdraw_money');
 
     
 });

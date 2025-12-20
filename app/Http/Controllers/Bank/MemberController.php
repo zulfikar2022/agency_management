@@ -179,6 +179,10 @@ class MemberController extends Controller
             ->get();
         $total_deposited_amount = 0;
 
+        $withdraws =  Withdraw::where('deposit_id', $deposit?->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         foreach($deposit_collections as $collection){
             $total_deposited_amount += $collection->deposit_amount;
         }        
@@ -187,6 +191,7 @@ class MemberController extends Controller
             'total_deposited_amount' => $total_deposited_amount,
             'deposit_collections' => $deposit_collections,
             'loan_collections' => $loan_collections,
+            'withdraws' => $withdraws,
         ]);
     }
 
