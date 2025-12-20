@@ -4,9 +4,9 @@ import 'react-responsive-modal/styles.css';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
 
-function DepositCollectionUpdateModal({ open, onCloseModal, collection }) {
+function LoanCollectionUpdateModal({ open, onCloseModal, collection }) {
   const { data, setData, patch, processing, errors } = useForm({
-    deposit_amount: collection ? collection.deposit_amount / 100 : '',
+    paid_amount: collection ? collection.paid_amount / 100 : '',
     id: collection?.id || '',
   });
 
@@ -17,7 +17,7 @@ function DepositCollectionUpdateModal({ open, onCloseModal, collection }) {
     e.preventDefault();
 
     Swal.fire({
-      text: 'আপনি কি জমার পরিমাণ পরিবর্তন করতে চান?',
+      text: 'আপনি কি কিস্তির পরিমাণ পরিবর্তন করতে চান?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#09090b',
@@ -28,14 +28,14 @@ function DepositCollectionUpdateModal({ open, onCloseModal, collection }) {
       if (result.isConfirmed) {
         // Replace 'admin.deposits.update' with your actual route name
         patch(
-          route('employee.bank.update_deposit', {
-            depositCollection: collection?.id,
+          route('employee.bank.update_installment', {
+            loanCollection: collection?.id,
           }),
           {
             preserveScroll: true,
             onSuccess: () => {
               onCloseModal();
-              toast.success('সঞ্চয় সফলভাবে আপডেট করা হয়েছে!', {
+              toast.success('কিস্তি সফলভাবে আপডেট করা হয়েছে!', {
                 theme: 'dark',
                 transition: Bounce,
                 position: 'top-center',
@@ -43,8 +43,8 @@ function DepositCollectionUpdateModal({ open, onCloseModal, collection }) {
             },
             onFailure: (error) => {
               toast.error(
-                error?.deposit_amount ||
-                  'সঞ্চয় আপডেট করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।',
+                error?.paid_amount ||
+                  'কিস্তি আপডেট করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।',
                 {
                   theme: 'dark',
                   transition: Bounce,
@@ -54,6 +54,8 @@ function DepositCollectionUpdateModal({ open, onCloseModal, collection }) {
             },
           }
         );
+
+        console.log('form data: ', data);
       }
     });
   };
@@ -75,28 +77,30 @@ function DepositCollectionUpdateModal({ open, onCloseModal, collection }) {
     >
       <div className="p-6">
         <h2 className="text-xl font-bold mb-4 border-b pb-2">
-          সঞ্চয় আপডেট করুন
+          কিস্তি আপডেট করুন
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Amount Field */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium">জমার পরিমাণ (টাকা)</span>
+              <span className="label-text font-medium">
+                কিস্তির পরিমাণ (টাকা)
+              </span>
             </label>
             <input
               type="number"
               inputMode="numeric"
-              className={`input input-bordered w-full ${errors.deposit_amount ? 'input-error' : ''}`}
-              value={data.deposit_amount}
-              onChange={(e) => setData('deposit_amount', e.target.value)}
+              className={`input input-bordered w-full ${errors.paid_amount ? 'input-error' : ''}`}
+              value={data.paid_amount}
+              onChange={(e) => setData('paid_amount', e.target.value)}
               placeholder="পরিমাণ লিখুন"
               required
             />
-            {errors.deposit_amount && (
+            {errors.paid_amount && (
               <label className="label">
                 <span className="label-text-alt text-error">
-                  {errors.deposit_amount}
+                  {errors.paid_amount}
                 </span>
               </label>
             )}
@@ -128,4 +132,4 @@ function DepositCollectionUpdateModal({ open, onCloseModal, collection }) {
     </Modal>
   );
 }
-export default DepositCollectionUpdateModal;
+export default LoanCollectionUpdateModal;

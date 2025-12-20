@@ -25,4 +25,6 @@ Route::group(['middleware' => ['auth','employeeonly']], function(){
     Route::get('/employee/bank/collect-installment/{member}', [LoanCollectionController::class, 'create'])->name('employee.bank.collect_installment');
 
     Route::post('/employee/bank/store-installment', [LoanCollectionController::class, 'store'])->name('employee.bank.store_installment');
+
+    Route::patch('/employee/bank/update-installment/{loanCollection}', [LoanCollectionController::class, 'update'])->name('employee.bank.update_installment');
 });

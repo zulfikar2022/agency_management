@@ -6,22 +6,30 @@ import { useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import DepositCollectionUpdateModal from './DepositCollectionUpdateModal';
+import LoanCollectionUpdateModal from './LoanCollectionUpdateModal';
 
 function EmployeeMemberDetails({
   member,
   total_deposited_amount,
   deposit_collections,
+  loan_collections,
 }) {
+  // console.log(loan_collections);
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+
+  const [openLoanModal, setOpenLoanModal] = useState(false);
+  const onOpenLoanModal = () => setOpenLoanModal(true);
+  const onCloseLoanModal = () => setOpenLoanModal(false);
+
   const todays_collection = deposit_collections.find((collection) => {
     return collection.deposit_date === new Date().toISOString().split('T')[0];
   });
+  const todays_loan_collection = loan_collections.find((collection) => {
+    return collection.paying_date === new Date().toISOString().split('T')[0];
+  });
 
-  const handleEditDepositCollection = (e) => {
-    console.log('Edit deposit collection clicked');
-  };
   return (
     <EmployeeBankLayout>
       <div className="mx-2 md:mx-0">
@@ -78,7 +86,46 @@ function EmployeeMemberDetails({
           />
           <div>
             <h2 className="font-bold text-center">কিস্তির তালিকা</h2>
+            {loan_collections.length === 0 ? (
+              <p className="text-center mt-4">কোনো সঞ্চয় পাওয়া যায়নি।</p>
+            ) : (
+              loan_collections.map((collection) => {
+                return (
+                  <div
+                    key={collection?.id}
+                    className="border-b p-1 flex justify-between items-center"
+                  >
+                    <p className="font-bold">
+                      তারিখঃ <br />
+                      <span className="font-normal">
+                        {dayjs(collection?.created_at).format('D MMMM YYYY')}
+                      </span>
+                    </p>
+                    <p className="font-bold">
+                      পরিমাণঃ <br />
+                      <span className="font-normal">
+                        {collection?.paid_amount / 100} টাকা
+                      </span>
+                    </p>
+                    {new Date().toISOString().split('T')[0] ===
+                      collection?.paying_date && (
+                      <p
+                        className="hover:cursor-pointer"
+                        onClick={onOpenLoanModal}
+                      >
+                        <Pencil className="text-blue-700" />
+                      </p>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
+          <LoanCollectionUpdateModal
+            open={openLoanModal}
+            onCloseModal={onCloseLoanModal}
+            collection={todays_loan_collection}
+          />
           <div>
             <h2 className="font-bold text-center">টাকা উত্তোলন তালিকা</h2>
           </div>
