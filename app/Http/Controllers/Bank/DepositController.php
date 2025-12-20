@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Bank;
 use App\Http\Controllers\Controller;
 use App\Models\Bank\Deposit;
 use App\Models\Bank\DepositCollection;
+use App\Models\Bank\DepositCollectionUpdateLog;
 use App\Models\Bank\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +15,32 @@ use Inertia\Inertia;
 
 class DepositController extends Controller
 {
+
+    public function depositCollections(Deposit $deposit){
+        $member = Member::find($deposit->member_id);
+
+        $deposit_collections =  DepositCollection::where('deposit_id', $deposit->id)   
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $deposit_collections->transform(function ($item) {
+            $updates = DepositCollectionUpdateLog::where('deposit_collection_id', $item->id)->orderBy('created_at', 'desc')->get();
+            $updates->transform(function ($update) {
+                $updating_user = User::find($update->updating_user_id);
+                $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown';
+                return $update;
+            });
+            $item->updates = $updates;
+            return $item;
+        });
+
+        return Inertia::render('Admin/Bank/DepositCollections', [
+            'member' => $member,
+            // 'deposit' => $deposit,
+            'deposit_collections' => $deposit_collections,
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */

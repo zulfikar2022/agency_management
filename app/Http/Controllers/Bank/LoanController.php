@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bank\Loan;
+use App\Models\Bank\LoanCollection;
+use App\Models\Bank\LoanCollectionUpdateLog;
 use App\Models\Bank\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +19,33 @@ use function Symfony\Component\Clock\now;
 
 class LoanController extends Controller
 {
+    public function loanInstallmentCollections(Loan $loan){
+        $member = Member::find($loan->member_id);
+
+        $loan_installment_collections = LoanCollection::where('loan_id', $loan->id)   
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // transform each loan_installment_collections item: from the id of loan_colection find to the loan_collection_update_logs and attach to the item as updates
+        $loan_installment_collections->transform(function ($item) {
+            $updates = LoanCollectionUpdateLog::where('loan_collection_id', $item->id)->orderBy('created_at', 'desc')->get();
+            // each update has a field named updating_user_id, find the user name from the id and attach to the update as updating_user_name
+            $updates->transform(function ($update) {
+                $updating_user = User::find($update->updating_user_id);
+                $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown';
+                return $update;
+            });
+            $item->updates = $updates;
+            return $item;
+        });
+
+        return Inertia::render('Admin/Bank/LoanCollections', [
+            'member' => $member,
+            // 'loan' => $loan,
+            'loan_collections' => $loan_installment_collections,
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */

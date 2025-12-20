@@ -11,6 +11,7 @@ function MemberDetails({
   number_of_deposit_collections,
   days_difference_of_deposit,
   withdraws,
+  loan,
 }) {
   // console.log({ withdraws });
   const {
@@ -49,7 +50,12 @@ function MemberDetails({
                     সঞ্চয়ী সদস্য হিসেবে অন্তর্ভুক্ত করুন
                   </Link>
                 ) : (
-                  <Link className="btn btn-xs btn-primary">
+                  <Link
+                    href={route('admin.bank.deposit_collections', {
+                      deposit: deposit_account?.id,
+                    })}
+                    className="btn btn-xs btn-primary"
+                  >
                     সঞ্চয়ের বিস্তারিত দেখুন
                   </Link>
                 )}
@@ -63,7 +69,12 @@ function MemberDetails({
                     ঋণ প্রদান করুন
                   </Link>
                 ) : (
-                  <Link className="btn btn-xs btn-error">
+                  <Link
+                    href={route('admin.bank.loan_installment_collections', {
+                      loan: loan?.id,
+                    })}
+                    className="btn btn-xs btn-error"
+                  >
                     ঋণের কিস্তির বিস্তারিত দেখুন
                   </Link>
                 )}

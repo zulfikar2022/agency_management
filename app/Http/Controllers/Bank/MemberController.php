@@ -120,6 +120,7 @@ class MemberController extends Controller
     {
         
        
+        $loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->first();
         $has_loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->exists();
         $deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->where('last_depositing_predictable_date' , '>', now())->first();
 
@@ -156,6 +157,7 @@ class MemberController extends Controller
             'has_loan' => $has_loan,
             // withdraw information bellow
             'withdraws' => $withdraws,
+            'loan' => $loan,
         ]);
     }
 

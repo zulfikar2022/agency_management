@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Bank\DepositController;
 use App\Http\Controllers\Bank\LoanController;
 use App\Http\Controllers\Bank\MemberController;
 use App\Http\Controllers\WithdrawController;
@@ -45,6 +46,10 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
     Route::get('/admin/bank/withdraw-update/{withdraw}', [WithdrawController::class, 'edit'])->name('admin.bank.withdraw_update');
 
     Route::patch('/admin/bank/save-updated-withdraw/{withdraw}', [WithdrawController::class, 'update'])->name('admin.bank.update_withdraw');
+
+    Route::get('/admin/bank/deposit-collections/{deposit}', [DepositController::class, 'depositCollections'])->name('admin.bank.deposit_collections');
+
+    Route::get('/admin/bank/loan-installment-collections/{loan}', [LoanController::class, 'loanInstallmentCollections'])->name('admin.bank.loan_installment_collections');
 
     
 });
