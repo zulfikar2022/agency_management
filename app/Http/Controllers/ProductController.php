@@ -51,7 +51,7 @@ class ProductController extends Controller
         ->where(function($query) use ($search){
              $query->where('name', 'like', "%{$search}%")
                   ->orWhere('supplier_name', 'like', "%{$search}%")
-                  ->orWhere('id', 'like', "%{$search}%");
+                  ->orWhere('id', $search);
         })
         ->orderBy('created_at', 'desc')->paginate(50);
 
@@ -88,7 +88,7 @@ class ProductController extends Controller
         ->where(function($query) use ($search){
              $query->where('name', 'like', "%{$search}%")
                   ->orWhere('supplier_name', 'like', "%{$search}%")
-                  ->orWhere('id', 'like', "%{$search}%");
+                  ->orWhere('id', $search);
         })
         ->orderBy('created_at', 'desc')->paginate(50);
         $numberOfProducts = Product::where('is_deleted', false)->where('is_available', true)->count();
@@ -113,7 +113,7 @@ class ProductController extends Controller
         ->where(function($query) use ($search){
              $query->where('name', 'like', "%{$search}%")
                   ->orWhere('supplier_name', 'like', "%{$search}%")
-                  ->orWhere('id', 'like', "%{$search}%");
+                  ->orWhere('id', $search);
         })
         ->orderBy('created_at', 'desc')->paginate(50);
         

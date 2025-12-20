@@ -36,7 +36,7 @@ class LoanCollectionController extends Controller
         ->where(function ($query) use ($search) {
             $query->where('name', 'like', '%' . $search . '%')
                 // ->orWhere('phone_number', 'like', '%' . $search . '%')
-                ->orWhere('id', 'like', '%' . $search . '%');
+                ->orWhere('id',  $search );
         })
         ->paginate(10);
         // dd($members);

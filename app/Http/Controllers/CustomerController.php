@@ -309,7 +309,7 @@ class CustomerController extends Controller
                 ->orWhere('nid_number', 'like', '%' . $search . '%')
                 ->orWhere('fathers_name', 'like', '%' . $search . '%')
                 ->orWhere('mothers_name', 'like', '%' . $search . '%')
-                ->orWhere('id', 'like', '%' . $search . '%');
+                ->orWhere('id',  $search);
         })
         ->orderBy('created_at', 'desc')
         ->paginate(10);
@@ -354,7 +354,7 @@ class CustomerController extends Controller
                     ->orWhere('address', 'like', '%' . $search . '%')
                     ->orWhere('nid_number', 'like', '%' . $search . '%')
                     ->orWhere('fathers_name', 'like', '%' . $search . '%')
-                    ->orWhere('id', 'like', '%' . $search . '%')
+                    ->orWhere('id',  $search)
                     ->orWhere('mothers_name', 'like', '%' . $search . '%');
             })
             ->orderBy('created_at', 'desc')
@@ -400,7 +400,7 @@ class CustomerController extends Controller
                     ->orWhere('address', 'like', '%' . $search . '%')
                     ->orWhere('nid_number', 'like', '%' . $search . '%')
                     ->orWhere('fathers_name', 'like', '%' . $search . '%')
-                    ->orWhere('id', 'like', '%' . $search . '%')
+                    ->orWhere('id',  $search )
                     ->orWhere('mothers_name', 'like', '%' . $search . '%');
             })
             ->orderBy('created_at', 'desc')
