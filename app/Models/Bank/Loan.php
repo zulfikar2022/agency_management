@@ -17,5 +17,6 @@ class Loan extends Model
         'loan_fee',
         'daily_payable_amount',
         'is_deleted',
+        'last_paying_date',
     ];
 }

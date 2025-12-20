@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
+use function Symfony\Component\Clock\now;
+
 // use Inertia\Inertia;
 
 class LoanController extends Controller
@@ -75,6 +77,7 @@ class LoanController extends Controller
                 'total_loan' => $total_loan,
                 'safety_money' => $safety_money,
                 'total_payable_amount' => $total_payable,
+                'last_paying_date' => now()->modify('+115 days')->format('Y-m-d'),
                 'remaining_payable_amount' => $remaining_payable,
                 'share_money' => $share_money,
                 'loan_fee' => $loan_fee,
