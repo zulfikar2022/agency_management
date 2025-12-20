@@ -97,10 +97,10 @@ function LoanCollectionUpdateModal({ open, onCloseModal, collection }) {
               placeholder="পরিমাণ লিখুন"
               required
             />
-            {errors.paid_amount && (
+            {errors?.paid_amount && (
               <label className="label">
                 <span className="label-text-alt text-error">
-                  {errors.paid_amount}
+                  {errors?.paid_amount}
                 </span>
               </label>
             )}
