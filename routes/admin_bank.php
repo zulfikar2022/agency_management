@@ -42,5 +42,9 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::get('/admin/bank/withdraw-list/{deposit}', [WithdrawController::class, 'withdrawLists'])->name('admin.bank.withdraw_lists');
 
+    Route::get('/admin/bank/withdraw-update/{withdraw}', [WithdrawController::class, 'edit'])->name('admin.bank.withdraw_update');
+
+    Route::patch('/admin/bank/save-updated-withdraw/{withdraw}', [WithdrawController::class, 'update'])->name('admin.bank.update_withdraw');
+
     
 });

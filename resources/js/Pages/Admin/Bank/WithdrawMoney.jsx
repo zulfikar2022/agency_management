@@ -73,7 +73,7 @@ function WithdrawMoney({ member, deposit_id }) {
                   <span className="font-normal text-lg">{member?.id}</span>{' '}
                 </p>
                 <p className="font-bold">
-                  মোট সঞ্চয়ঃ{' '}
+                  মোট সঞ্চিত আছেঃ{' '}
                   <span className="font-normal text-lg">
                     {member?.total_deposit / 100} টাকা
                   </span>{' '}

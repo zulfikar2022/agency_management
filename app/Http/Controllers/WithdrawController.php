@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bank\Deposit;
 use App\Models\Bank\Member;
 use App\Models\Withdraw;
+use App\Models\WithdrawUpdateLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -108,7 +109,12 @@ class WithdrawController extends Controller
      */
     public function edit(Withdraw $withdraw)
     {
-        //
+        $deposit = Deposit::find($withdraw->deposit_id);
+        $member = Member::find($deposit->member_id);
+        return Inertia::render('Admin/Bank/WithdrawUpdate', [
+            'withdraw' => $withdraw,
+            'member' => $member,
+        ]);
     }
 
     /**
@@ -116,7 +122,39 @@ class WithdrawController extends Controller
      */
     public function update(Request $request, Withdraw $withdraw)
     {
-        //
+        $validated = $request->validate([
+            'withdraw_amount' => 'required|numeric|min:1',
+            'withdraw_id' => 'required|exists:withdraws,id',
+        ]);
+
+        $withdraw_amount = $validated['withdraw_amount'] * 100; // convert to cents
+        $deposit = Deposit::find($withdraw->deposit_id);
+        $member = Member::find($deposit->member_id);
+
+        $total_deposit_before_withdraw = $member->total_deposit + $withdraw->withdraw_amount;
+
+        if($withdraw_amount > $total_deposit_before_withdraw){
+            return back()->withErrors(['withdraw_amount' => 'যতটাকা আছে তার থেকে বেশি টাকা উত্তোলন করা যাবে না।']);
+        }
+
+        // create an instance of withdraw_update_logs
+        DB::transaction(function() use ($withdraw, $withdraw_amount, $member, $total_deposit_before_withdraw) {
+            $withdraw_update_log = new WithdrawUpdateLogs();
+            $withdraw_update_log->withdraw_id = $withdraw->id;
+            $withdraw_update_log->updating_user_id = Auth::id();
+            $withdraw_update_log->withdraw_amount_before_update = $withdraw->withdraw_amount;
+            $withdraw_update_log->withdraw_amount_after_update = $withdraw_amount;
+            $withdraw_update_log->save();
+
+            // update the withdraw record
+            $withdraw->withdraw_amount = $withdraw_amount;
+            $withdraw->save();
+            // update the member's total deposit
+            $member->total_deposit = $total_deposit_before_withdraw - $withdraw_amount;
+            $member->save();
+        });
+
+        return redirect()->route('admin.bank.withdraw_lists', ['deposit' => $deposit->id]);
     }
 
     /**

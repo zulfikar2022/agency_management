@@ -53,7 +53,12 @@ function WithdrawLists({ withdraws, member, deposits }) {
                             </span>
                           </p>
                           {isTodaysWithdraw && (
-                            <Link className="btn btn-xs btn-warning">
+                            <Link
+                              href={route('admin.bank.withdraw_update', {
+                                withdraw: withdraw.id,
+                              })}
+                              className="btn btn-xs btn-warning"
+                            >
                               আপডেট করুন
                             </Link>
                           )}
