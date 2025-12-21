@@ -111,7 +111,7 @@ function CreateDepositAccount({ member }) {
                         প্রসেসিং হচ্ছে...
                       </>
                     ) : (
-                      'টাকা জমা দিন'
+                      'অন্তর্ভুক্ত করুন'
                     )}
                   </button>
                 </div>

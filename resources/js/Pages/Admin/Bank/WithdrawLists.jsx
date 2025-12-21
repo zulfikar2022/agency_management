@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 function WithdrawLists({ withdraws, member, deposits }) {
   console.log(withdraws);
   const today = new Date().toISOString().split('T')[0];
-  console.log(withdraws[1].created_at.split('T')[0]);
+  // console.log(withdraws[1]?.created_at.split('T')[0]);F
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
@@ -47,7 +47,7 @@ function WithdrawLists({ withdraws, member, deposits }) {
                   <div>
                     {withdraws.map((withdraw) => {
                       const isTodaysWithdraw =
-                        today === withdraw.created_at.split('T')[0];
+                        today === withdraw?.created_at.split('T')[0];
                       return (
                         <div key={withdraw.id} className="border-b">
                           <div
@@ -56,7 +56,7 @@ function WithdrawLists({ withdraws, member, deposits }) {
                             <p className="font-bold">
                               তারিখঃ <br />
                               <span className="font-normal">
-                                {dayjs(withdraw.created_at).format(
+                                {dayjs(withdraw?.created_at).format(
                                   'D MMMM YYYY'
                                 )}
                               </span>

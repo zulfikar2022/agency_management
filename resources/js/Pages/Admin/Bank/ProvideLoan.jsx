@@ -1,7 +1,8 @@
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
+import { ArrowLeft } from 'lucide-react';
 
 function ProvideLoan({ member }) {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -58,6 +59,19 @@ function ProvideLoan({ member }) {
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
+        <div className="pl-10 mt-4">
+          <Link
+            href={route('admin.bank.member_details', {
+              member: member?.id,
+            })}
+            className="text-blue-700 underline "
+          >
+            {' '}
+            <span className="flex">
+              <ArrowLeft /> <span>ফিরে যান</span>
+            </span>{' '}
+          </Link>
+        </div>
         <div className="max-w-2xl mx-auto px-4">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">

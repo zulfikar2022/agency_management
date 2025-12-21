@@ -124,15 +124,18 @@ class MemberController extends Controller
         $has_loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->exists();
         $deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->where('last_depositing_predictable_date' , '>', now())->first();
 
+        // dd($deposit_account);
+
         // details of deposit account if exists
         $deposit_account_id = $deposit_account ? $deposit_account->id : null;
         $daily_deposit_collections = DepositCollection::where('deposit_id', $deposit_account_id)
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
             ->get();
+            // dd($daily_deposit_collections);
         $total_deposited_amount =  0;
         foreach($daily_deposit_collections as $collection){
-            $total_deposited_amount += $collection->amount;
+            $total_deposited_amount += $collection->deposit_amount;
         }
         $number_of_deposit_collections = $daily_deposit_collections->count();
 

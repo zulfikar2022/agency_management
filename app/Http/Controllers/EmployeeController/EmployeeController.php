@@ -4,7 +4,9 @@ namespace App\Http\Controllers\EmployeeController;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bank\Deposit;
+use App\Models\Bank\DepositCollection;
 use App\Models\Bank\Loan;
+use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
@@ -14,6 +16,7 @@ use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 
@@ -366,7 +369,98 @@ class EmployeeController extends Controller
     }
 
     public function processDepositAndLoanCollection(Request $request){
-        dd("Inside processDepositAndLoanCollection");
+        $validated = $request->validate([
+            'has_deposit' => 'required|boolean',
+            'has_loan' => 'required|boolean',
+            'deposit_id' => 'nullable|exists:deposits,id',
+            'loan_id' => 'nullable|exists:loans,id',
+            'deposit_amount' => 'nullable|numeric|min:0',
+            'paid_amount' => 'nullable|numeric|min:0',
+        ]);
+        $member = null;
+        if($validated['deposit_id'] != null){
+            $deposit = Deposit::find($validated['deposit_id']);
+            $member = Member::find($deposit->member_id);
+        }
+        else if($validated['loan_id'] != null){
+            $loan = Loan::find($validated['loan_id']);
+            $member = Member::find($loan->member_id);
+        }
+        if($member == null){
+            return redirect()->back()->withErrors(['general' => 'কোনো বৈধ সদস্য পাওয়া যায়নি।'])->withInput();
+        }
+
+        $today = now()->format('Y-m-d');
+
+        if($validated['loan_id'] != null){
+            $loan = Loan::findOrFail($validated['loan_id']);
+            if ($validated['paid_amount'] * 100 > $loan->remaining_payable_amount) {
+                return redirect()->back()->withErrors(['paid_amount' => 'যত টাকা বাকি আছে তার থেকে বেশি পরিশোধ করতে পারবেন না। '])->withInput();
+            }
+
+            
+            $existing_collection = LoanCollection::where('loan_id', $validated['loan_id'])
+                ->where('paying_date', $today)
+                ->where('is_deleted', false)
+                ->first();
+            if ($existing_collection) {
+                return redirect()->back()->withErrors(['paid_amount' => 'এই ঋণের জন্য আজকের তারিখে একটি কিস্তি ইতিমধ্যেই সংগ্রহ করা হয়েছে।']);
+            } 
+        }
+
+        if($validated['deposit_id'] != null){
+            $deposit = Deposit::findOrFail($validated['deposit_id']);
+            $existing_deposit_collection = DepositCollection::where('deposit_id', $validated['deposit_id'])
+                ->where('deposit_date', $today)
+                ->where('is_deleted', false)
+                ->first();
+            if ($existing_deposit_collection) {
+                return redirect()->back()->withErrors(['deposit_amount' => 'এই সদস্যের জন্য আজকের তারিখে একটি সঞ্চয় ইতিমধ্যেই সংগ্রহ করা হয়েছে।']);
+            }
+        }
+        
+        DB::transaction(function () use ($validated){
+            if($validated['deposit_id'] != null){
+                $deposit = Deposit::find($validated['deposit_id']);
+                // create a deposit_collections record
+                $deposit_collection = new DepositCollection();
+
+                $deposit_collection->deposit_id = $validated['deposit_id'];
+                $deposit_collection->collecting_user_id = Auth::id();
+                $deposit_collection->deposit_amount = $validated['deposit_amount'] * 100; // store in cents
+                $deposit_collection->deposit_date = now()->format('Y-m-d');
+                $deposit_collection->is_deleted = false;
+                $deposit_collection->depositable_amount = $deposit->daily_deposit_amount;
+                $deposit_collection->save();
+                // find the member from the deposit_id
+                
+                $member = Member::find($deposit->member_id);
+                $member->total_deposit += $validated['deposit_amount'] * 100;
+                $member->save();
+            }
+
+            if($validated['loan_id'] != null){
+                $loan = Loan::find($validated['loan_id']);
+                 // create a loan_collections record
+                $loan_collection = new LoanCollection();
+                $loan_collection->loan_id = $validated['loan_id'];
+                $loan_collection->collecting_user_id = Auth::id();
+                $loan_collection->paid_amount = $validated['paid_amount'] * 100; // store in cents
+                $loan_collection->paying_date = now()->format('Y-m-d');
+                $loan_collection->is_deleted = false;
+                $loan_collection->save();
+
+                // update the loan's remaining_payable_amount
+                // $loan = Loan::find($validated['loan_id']);
+                $loan->remaining_payable_amount -= $validated['paid_amount'] * 100;
+                $loan->save();
+            }
+            
+       });
+        
+        return redirect()->route('employee.bank.member_details',[
+            'member' => $member->id
+        ] )->with('success', 'সফলভাবে সঞ্চয় ও/অথবা কিস্তি সংগ্রহ সম্পন্ন হয়েছে।');
     }
 
     

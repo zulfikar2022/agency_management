@@ -13,7 +13,7 @@ function MemberDetails({
   withdraws,
   loan,
 }) {
-  // console.log({ withdraws });
+  // console.log(total_deposited_amount);
   const {
     name,
     address,
@@ -120,7 +120,7 @@ function MemberDetails({
                         {deposit_account?.daily_deposit_amount / 100} টাকা
                       </span>
                     </p>
-                    <p className="font-bold">
+                    <p className="font-bold border-b border-dashed mb-2">
                       সঞ্চয়ের শেষ তারিখঃ
                       <span className="text-slate-500">
                         {' '}
@@ -128,6 +128,28 @@ function MemberDetails({
                           deposit_account?.last_depositing_predictable_date
                         ).format('D MMMM YYYY')}
                       </span>
+                    </p>
+
+                    <p className="font-bold">
+                      মোট সঞ্চয়ঃ{' '}
+                      <span className="text-slate-500">
+                        {total_deposited_amount / 100}
+                        &nbsp;টাকা
+                      </span>{' '}
+                    </p>
+                    <p className="font-bold border-b border-dashed mb-2">
+                      মোট উত্তোলনঃ{' '}
+                      <span className="text-slate-500">
+                        {(total_deposited_amount - total_deposit) / 100}
+                        &nbsp;টাকা
+                      </span>{' '}
+                    </p>
+                    <p className="font-bold ">
+                      সঞ্চিত আছেঃ{' '}
+                      <span className="text-slate-500">
+                        {total_deposit / 100}
+                        &nbsp;টাকা
+                      </span>{' '}
                     </p>
                   </div>
                 )}
@@ -142,7 +164,7 @@ function MemberDetails({
                     </div>
                     <div className="font-bold text-lg">{admission_fee}</div>
                   </div> */}
-                  <div className="bg-primary/10 p-4 rounded-lg text-center border border-primary/20">
+                  {/* <div className="bg-primary/10 p-4 rounded-lg text-center border border-primary/20">
                     <div className="text-xs text-primary mb-1">মোট সঞ্চয়</div>
                     <div className="font-bold text-lg text-primary">
                       {total_deposit / 100}
@@ -153,7 +175,7 @@ function MemberDetails({
                     <div className="font-bold text-lg text-error">
                       {total_loan / 100}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Information List */}

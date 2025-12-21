@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 function DepositCollections({ deposit_collections, member }) {
-  console.log(deposit_collections);
+  console.log(member);
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">

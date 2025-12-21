@@ -1,15 +1,17 @@
 import { useForm } from '@inertiajs/react';
 import EmployeeBankLayout from '../layouts/EmployeeBankLayout';
+import Swal from 'sweetalert2';
+import { Bounce, toast } from 'react-toastify';
 
 function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
   //   console.log(deposit, loan);
   // employee.bank.processDepositAndLoanCollection
-  const { data, setData, errors, processing } = useForm({
+  const { data, setData, errors, post, processing, reset } = useForm({
     has_deposit: deposit ? true : false,
     has_loan: loan ? true : false,
 
-    deposit_id: deposit ? deposit.id : null,
-    loan_id: loan ? loan.id : null,
+    deposit_id: deposit ? deposit?.id : null,
+    loan_id: loan ? loan?.id : null,
 
     deposit_amount: deposit ? deposit.daily_deposit_amount / 100 : 0,
     paid_amount: loan ? loan.daily_payable_amount / 100 : 0,
@@ -20,7 +22,44 @@ function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
     (loan?.daily_payable_amount / 100 || 0);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
+    Swal.fire({
+      text: `${member?.name}-এর নিকট থেকে আদায়ের তথ্যটি নিশ্চিত করতে চান?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#09090b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'হ্যাঁ, আদায় করুন',
+      cancelButtonText: 'না',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Adjust the route name to match your web.php
+        post(route('employee.bank.processDepositAndLoanCollection'), {
+          preserveScroll: true,
+          onSuccess: () => {
+            reset('paid_amount');
+            toast.success('কিস্তি আদায় সফলভাবে সম্পন্ন হয়েছে!', {
+              position: 'top-center',
+              autoClose: 3000,
+              theme: 'dark',
+              transition: Bounce,
+            });
+          },
+          onError: (error) => {
+            console.error('Installment collection failed:', error);
+            toast.error(
+              error?.paid_amount ||
+                ' তথ্য সংরক্ষণ করা যায়নি। পুনরায় চেষ্টা করুন।',
+              {
+                position: 'top-center',
+                autoClose: 3000,
+                theme: 'dark',
+                transition: Bounce,
+              }
+            );
+          },
+        });
+      }
+    });
   };
   return (
     <EmployeeBankLayout>
