@@ -53,4 +53,6 @@ Route::put('/employee/process-update-collection', [ProductCustomerMoneyCollectio
 // customer details route
 Route::get('/employee/customer-details/{id}', [EmployeeController::class, 'customerDetails'])->name('employee.customerDetails');
 
+
+
 });

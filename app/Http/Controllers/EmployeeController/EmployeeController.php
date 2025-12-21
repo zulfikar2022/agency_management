@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EmployeeController;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bank\Deposit;
+use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
@@ -330,7 +331,11 @@ class EmployeeController extends Controller
             $deposit_account = Deposit::where('member_id', $member->id)
                 ->where('is_deleted', false)
                 ->first();
+            $loan_acount = Loan::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                ->first();
             $member->deposit_account = $deposit_account;
+            $member->loan_account = $loan_acount;
             return $member;
         });
 
@@ -341,6 +346,27 @@ class EmployeeController extends Controller
             'members' => $members,
             'totalMembers' => $totalMembers
         ]);
+    }
+
+    public function depositAndLoanCollection( $deposit,  $loan){
+        
+        $sendable_deposit = Deposit::find($deposit);
+        $sendable_loan = Loan::find($loan);
+        $member = null;
+        if($sendable_deposit){
+            $member = Member::find($sendable_deposit->member_id);
+        } elseif($sendable_loan){
+            $member = Member::find($sendable_loan->member_id);
+        }
+        return Inertia::render('Employee/Bank/EmployeeDepositAndLoanCollection', [
+            'deposit' => $sendable_deposit,
+            'loan' => $sendable_loan,
+            'member' => $member
+        ]);
+    }
+
+    public function processDepositAndLoanCollection(Request $request){
+        dd("Inside processDepositAndLoanCollection");
     }
 
     

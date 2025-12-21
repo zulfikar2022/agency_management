@@ -45,7 +45,7 @@ function EmployeeMemberResponsiveTable({ members }) {
               >
                 বিস্তারিত দেখুন
               </Link>
-              {member?.deposit_account && (
+              {/* {member?.deposit_account && (
                 <Link
                   href={route('employee.bank.collect_deposit', {
                     member: member.id,
@@ -63,6 +63,19 @@ function EmployeeMemberResponsiveTable({ members }) {
                   className="btn btn-outline btn-xs"
                 >
                   কিস্তি উত্তোলন
+                </Link>
+              )} */}
+              {(member?.deposit_account || member?.loan_account) && (
+                <Link
+                  href={route('employee.bank.depositAndLoanCollection', {
+                    deposit: member?.deposit_account
+                      ? member?.deposit_account?.id
+                      : 0,
+                    loan: member?.loan_account ? member?.loan_account.id : 0,
+                  })}
+                  className="btn btn-xs btn-neutral"
+                >
+                  সংগ্রহ করুন
                 </Link>
               )}
             </div>

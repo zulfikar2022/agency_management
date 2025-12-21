@@ -27,4 +27,8 @@ Route::group(['middleware' => ['auth','employeeonly']], function(){
     Route::post('/employee/bank/store-installment', [LoanCollectionController::class, 'store'])->name('employee.bank.store_installment');
 
     Route::patch('/employee/bank/update-installment/{loanCollection}', [LoanCollectionController::class, 'update'])->name('employee.bank.update_installment');
+
+    Route::get('/employee/bank/deposit-and-loan-collection/{deposit}/{loan}', [EmployeeController::class, 'depositAndLoanCollection'])->name('employee.bank.depositAndLoanCollection');
+
+    Route::post('/employee/bank/process-deposit-and-loan-collection', [EmployeeController::class, 'processDepositAndLoanCollection'])->name('employee.bank.processDepositAndLoanCollection');
 });
