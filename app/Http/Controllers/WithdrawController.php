@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bank\Deposit;
+use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
 use App\Models\User;
 use App\Models\Withdraw;
@@ -83,12 +84,23 @@ class WithdrawController extends Controller
             'withdraw_amount' => 'required|numeric|min:1',
         ]);
 
-        $deposit = Deposit::find($validated['deposit_id']);
-        $member = Member::find($deposit->member_id);
+        $deposit = Deposit::findOrFail($validated['deposit_id']);
+        $member = Member::findOrFail($deposit->member_id);
+        // find the members loan
+        $loan = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_amount', '>', 0)
+            ->first();
         $total_deposit_cents = $member->total_deposit;
 
         if($validated['withdraw_amount'] * 100 > $total_deposit_cents){
             return back()->withErrors(['withdraw_amount' => 'যতটাকা আছে তার থেকে বেশি টাকা উত্তোলন করা যাবে না।']);
+        }
+
+        if ($loan) {
+            if($member->total_deposit - $validated['withdraw_amount'] * 100 < $loan->safety_money){
+                return back()->withErrors(['withdraw_amount' => 'এই উত্তোলনের পর সদস্যের জমা পরিমাণ জামানতের চেয়ে কম হতে পারবে না।']);
+            }
         }
 
         DB::transaction(function() use ($validated, $member, $total_deposit_cents) {

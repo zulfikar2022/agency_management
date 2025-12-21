@@ -3,15 +3,30 @@ import { Link, useForm } from '@inertiajs/react';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
 import { ArrowLeft } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 function ProvideLoan({ member }) {
+  // Track if the user has manually edited the safety money
+  const [isSafetyMoneyManual, setIsSafetyMoneyManual] = useState(false);
+
   const { data, setData, post, processing, errors, reset } = useForm({
     member_id: member?.id,
     total_loan: '',
     safety_money: '',
   });
 
-  // Automatic Calculations
+  // Automatic Calculation Logic
+  // This useEffect runs whenever total_loan changes
+  useEffect(() => {
+    if (!isSafetyMoneyManual && data.total_loan) {
+      const calculatedSafety = (parseFloat(data.total_loan) / 1000) * 150;
+      setData('safety_money', calculatedSafety);
+    } else if (!isSafetyMoneyManual && !data.total_loan) {
+      setData('safety_money', '');
+    }
+  }, [data.total_loan, isSafetyMoneyManual]);
+
+  // Calculations for display
   const totalPayable = data.total_loan ? parseFloat(data.total_loan) * 1.15 : 0;
   const shareMoney = data.total_loan ? parseFloat(data.total_loan) * 0.025 : 0;
   const loanFee = 30;
@@ -33,23 +48,21 @@ function ProvideLoan({ member }) {
       if (result.isConfirmed) {
         post(route('admin.bank.store_loan'), {
           preserveScroll: true,
-          onSuccess: (data) => {
+          onSuccess: () => {
             reset();
-            toast.success('ঋণ প্রদান সফল হয়েছে!', {
+            setIsSafetyMoneyManual(false); // Reset the flag on success
+            toast.success('ঋণ প্রদান সফল হয়েছে!', {
               theme: 'dark',
               transition: Bounce,
               position: 'top-center',
             });
           },
           onError: (error) => {
-            toast.error(
-              error?.message || 'ঋণ প্রদান ব্যর্থ হয়েছে। আবার চেষ্টা করুন।',
-              {
-                theme: 'dark',
-                transition: Bounce,
-                position: 'top-center',
-              }
-            );
+            toast.error(error?.message || 'ঋণ প্রদান ব্যর্থ হয়েছে।', {
+              theme: 'dark',
+              transition: Bounce,
+              position: 'top-center',
+            });
           },
         });
       }
@@ -61,41 +74,41 @@ function ProvideLoan({ member }) {
       <div className="min-h-screen bg-base-200 py-8">
         <div className="pl-10 mt-4">
           <Link
-            href={route('admin.bank.member_details', {
-              member: member?.id,
-            })}
-            className="text-blue-700 underline "
+            href={route('admin.bank.member_details', { member: member?.id })}
+            className="text-blue-700 underline flex items-center gap-1"
           >
-            {' '}
-            <span className="flex">
-              <ArrowLeft /> <span>ফিরে যান</span>
-            </span>{' '}
+            <ArrowLeft size={18} /> <span>ফিরে যান</span>
           </Link>
         </div>
+
         <div className="max-w-2xl mx-auto px-4">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title text-2xl mb-2 text-neutral">
                 সদস্যকে ঋণ দিন
               </h2>
+
               <div className="text-sm mb-6 border-b pb-4">
-                <p className="font-bold">
-                  {' '}
+                <p className="font-bold text-gray-600">
                   সদস্যের নাম:{' '}
-                  <span className="font-normal text-lg">{member?.name}</span>
+                  <span className="font-normal text-black text-lg">
+                    {member?.name}
+                  </span>
                 </p>
-                <p className="font-bold">
+                <p className="font-bold text-gray-600">
                   সদস্য আইডি:{' '}
-                  <span className="font-normal text-lg">{member?.id}</span>
+                  <span className="font-normal text-black text-lg">
+                    {member?.id}
+                  </span>
                 </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Row 1: Loan Amount & Safety Money */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Loan Amount */}
                   <div className="form-control">
                     <label className="label">
-                      <span className="label-text font-semibold">
+                      <span className="label-text font-semibold text-black">
                         ঋণের পরিমাণ (Total Loan){' '}
                         <span className="text-error">*</span>
                       </span>
@@ -115,19 +128,32 @@ function ProvideLoan({ member }) {
                     )}
                   </div>
 
+                  {/* Safety Money (Manual/Auto Hybrid) */}
                   <div className="form-control">
-                    <label className="label">
-                      <span className="label-text font-semibold">
+                    <label className="label flex justify-between">
+                      <span className="label-text font-semibold text-black">
                         জামানত (Safety Money){' '}
                         <span className="text-error">*</span>
                       </span>
+                      {isSafetyMoneyManual && (
+                        <button
+                          type="button"
+                          onClick={() => setIsSafetyMoneyManual(false)}
+                          className="text-[10px] text-blue-600 underline"
+                        >
+                          অটো ক্যালকুলেট ফিরিয়ে আনুন
+                        </button>
+                      )}
                     </label>
                     <input
                       type="number"
                       placeholder="যেমন: 500"
-                      className={`input input-bordered ${errors.safety_money ? 'input-error' : ''}`}
+                      className={`input input-bordered ${errors.safety_money ? 'input-error' : ''} ${!isSafetyMoneyManual ? 'bg-blue-50/30' : ''}`}
                       value={data.safety_money}
-                      onChange={(e) => setData('safety_money', e.target.value)}
+                      onChange={(e) => {
+                        setIsSafetyMoneyManual(true); // Flag that user is typing manually
+                        setData('safety_money', e.target.value);
+                      }}
                       required
                     />
                     {errors.safety_money && (
@@ -138,8 +164,9 @@ function ProvideLoan({ member }) {
                   </div>
                 </div>
 
-                {/* Row 2: Automatic Read-Only Calculations */}
+                {/* Info Cards */}
                 <div className="bg-base-200 p-4 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* ... calculations remain the same ... */}
                   <div className="form-control">
                     <label className="label">
                       <span className="label-text text-xs">
@@ -150,7 +177,6 @@ function ProvideLoan({ member }) {
                       ৳ {totalPayable.toLocaleString()}
                     </div>
                   </div>
-
                   <div className="form-control">
                     <label className="label">
                       <span className="label-text text-xs">
@@ -161,7 +187,6 @@ function ProvideLoan({ member }) {
                       ৳ {dailyPayable.toFixed(2)}
                     </div>
                   </div>
-
                   <div className="form-control">
                     <label className="label">
                       <span className="label-text text-xs">
@@ -172,7 +197,6 @@ function ProvideLoan({ member }) {
                       ৳ {shareMoney.toFixed(2)}
                     </div>
                   </div>
-
                   <div className="form-control">
                     <label className="label">
                       <span className="label-text text-xs">ঋণ ফরম ফি:</span>
@@ -183,7 +207,6 @@ function ProvideLoan({ member }) {
                   </div>
                 </div>
 
-                {/* Submit Button */}
                 <div className="pt-4">
                   <button
                     type="submit"

@@ -84,6 +84,12 @@ class LoanController extends Controller
         if ($loan) {
             return redirect()->back()->withErrors(['message' => 'এই সদস্যের একটি চলমান ঋণ রয়েছে। নতুন ঋণ প্রদান করা যাবে না।'])->withInput();
         }
+
+        $member = Member::findOrFail($validated['member_id']);
+        $total_deposit = $member->total_deposit;
+        if($member->total_deposit < $validated['safety_money'] * 100 ){
+            return redirect()->back()->withErrors(['message' => 'সদস্যের মোট জমার পরিণাম জামানতের চেয়ে কম হতে পারবে না।'])->withInput();
+        }
         
         DB::transaction(function () use ($validated) {
             $member_id = $validated['member_id'];
