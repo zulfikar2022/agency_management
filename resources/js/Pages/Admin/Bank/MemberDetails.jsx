@@ -180,6 +180,59 @@ function MemberDetails({
                     </p>
                   </div>
                 )}
+                {has_loan && (
+                  <div>
+                    <h1 className="text-center text-xl underline mb-2">
+                      ঋণের বিস্তারিত
+                    </h1>
+
+                    <p className="font-bold">
+                      ঋণ গ্রহণের তারিখঃ{' '}
+                      <span className="text-slate-500">
+                        {dayjs(loan.created_at).format('D MMMM YYYY')}
+                      </span>
+                    </p>
+                    <p className="font-bold">
+                      ঋণের পরিমাণঃ{' '}
+                      <span className="text-slate-500">
+                        {loan.total_loan / 100} টাকা
+                      </span>
+                    </p>
+                    <p className="font-bold">
+                      মোট পরিশোধযোগ্যঃ{' '}
+                      <span className="text-slate-500">
+                        {loan.total_payable_amount / 100} টাকা
+                      </span>
+                    </p>
+                    <p className="font-bold">
+                      দৈনিক পরিশোধযোগ্যঃ{' '}
+                      <span className="text-slate-500">
+                        {loan.daily_payable_amount / 100} টাকা
+                      </span>
+                    </p>
+                    <p className="font-bold border-b border-dashed mb-2">
+                      পরিশোধের শেষ তারিখঃ{' '}
+                      <span className="text-slate-500">
+                        {dayjs(loan.last_paying_date).format('D MMMM YYYY')}
+                      </span>
+                    </p>
+                    <p className="font-bold  mb-2">
+                      পরিশোধ হয়েছেঃ{' '}
+                      <span className="text-slate-500">
+                        {(loan.total_payable_amount -
+                          loan.remaining_payable_amount) /
+                          100}{' '}
+                        টাকা
+                      </span>
+                    </p>
+                    <p className="font-bold border-b border-dashed mb-2">
+                      বাকি আছেঃ{' '}
+                      <span className="text-slate-500">
+                        {loan.remaining_payable_amount / 100} টাকা
+                      </span>
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-6">
