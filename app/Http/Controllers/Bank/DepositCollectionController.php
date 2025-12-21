@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bank\Deposit;
 use App\Models\Bank\DepositCollection;
 use App\Models\Bank\DepositCollectionUpdateLog;
+use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,12 +65,27 @@ class DepositCollectionController extends Controller
         $deposit_id = $depositCollection->deposit_id;
         $deposit = Deposit::find($deposit_id);
         $member = Member::find($deposit->member_id);
+        $loan = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_amount', '>', 0)
+            ->first();
 
         // day filter
         $today = now()->format('Y-m-d');
         if($depositCollection->deposit_date != $today){
             return back()->withErrors(['deposit_amount' => 'শুধুমাত্র আজকের তারিখের সঞ্চয় আপডেট করা যাবে।']);
         }
+        if($loan){
+            $safety_money = $loan->safety_money;
+            $todays_deposit_amount = $validated['deposit_amount'] * 100;
+            $total_deposit_after_update = $member->total_deposit - $depositCollection->deposit_amount + $todays_deposit_amount;
+
+            if($total_deposit_after_update < $safety_money){
+                return back()->withErrors(['deposit_amount' => 'এই আপডেটের পর সদস্যের মোট জমা জামানতের চেয়ে কম হয়ে যাবে! ']);
+            }
+            
+        }
+
 
         DB::transaction(function () use ($validated, $depositCollection, $member){
             // update the total_deposit of the member
