@@ -1,9 +1,10 @@
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import { Bounce, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { ArrowLeft } from 'lucide-react';
 
-function WithdrawUpdate({ withdraw, member }) {
+function WithdrawUpdate({ withdraw, member, deposit }) {
   // withdraw is the instance passed from Laravel Controller
   const { data, setData, patch, processing, errors } = useForm({
     // Pre-loading the amount (converting from paisa to Taka)
@@ -57,6 +58,19 @@ function WithdrawUpdate({ withdraw, member }) {
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
+        <div className="pl-10 mt-4">
+          <Link
+            href={route('admin.bank.withdraw_lists', {
+              deposit: deposit?.id,
+            })}
+            className="text-blue-700 underline "
+          >
+            {' '}
+            <span className="flex">
+              <ArrowLeft /> <span>ফিরে যান</span>
+            </span>{' '}
+          </Link>
+        </div>
         <div className="max-w-xl mx-auto px-4">
           <div className="card border border-base-300 bg-base-100 shadow-sm">
             <div className="card-body">

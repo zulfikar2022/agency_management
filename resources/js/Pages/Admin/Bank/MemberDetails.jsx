@@ -208,10 +208,14 @@ function MemberDetails({
                 {/* Information List */}
                 <div className="space-y-4">
                   <h3 className="font-bold text-lg border-b pb-2">
-                    বিস্তারিত তথ্য
+                    ব্যক্তিগত তথ্য
                   </h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="">
+                      <span className="font-bold mr-1"> নামঃ </span>
+                      <span className="">{name || 'N/A'}</span>
+                    </div>
                     <div className="">
                       <span className="font-bold mr-1">পিতার নামঃ </span>
                       <span className="">{fathers_name || 'N/A'}</span>
@@ -222,7 +226,7 @@ function MemberDetails({
                     </div>
                     <div className="">
                       <span className="font-bold mr-1">
-                        জাতীয় পরিচয়পত্র নম্বরঃ
+                        জাতীয় পরিচয়পত্র / জন্মনিবন্ধন নম্বরঃ
                       </span>
                       <span className="">{nid_number || 'N/A'}</span>
                     </div>

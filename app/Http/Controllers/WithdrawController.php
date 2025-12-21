@@ -138,6 +138,7 @@ class WithdrawController extends Controller
         return Inertia::render('Admin/Bank/WithdrawUpdate', [
             'withdraw' => $withdraw,
             'member' => $member,
+            'deposit' => $deposit,
         ]);
     }
 
@@ -153,12 +154,23 @@ class WithdrawController extends Controller
 
         $withdraw_amount = $validated['withdraw_amount'] * 100; // convert to cents
         $deposit = Deposit::find($withdraw->deposit_id);
-        $member = Member::find($deposit->member_id);
+        $member = Member::findOrFail($deposit->member_id);
 
         $total_deposit_before_withdraw = $member->total_deposit + $withdraw->withdraw_amount;
 
         if($withdraw_amount > $total_deposit_before_withdraw){
             return back()->withErrors(['withdraw_amount' => 'যতটাকা আছে তার থেকে বেশি টাকা উত্তোলন করা যাবে না।']);
+        }
+
+        $loan = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->where('remaining_payable_amount', '>', 0)
+            ->first();
+
+        if ($loan) {
+            if($total_deposit_before_withdraw - $withdraw_amount < $loan->safety_money){
+                return back()->withErrors(['withdraw_amount' => 'এই উত্তোলনের পর সদস্যের জমা পরিমাণ জামানতের চেয়ে কম হতে পারবে না।']);
+            }
         }
 
         // create an instance of withdraw_update_logs
