@@ -22,9 +22,23 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = Member::where('is_deleted', false)->orderBy('id', 'desc')->get();
+        $search = request()->query('search', '');
+        
+
+
+        $members = Member::where('is_deleted', false)
+        ->where(function($query) use ($search) {
+            $query->where('name', 'like', '%'.$search.'%')
+                  ->orWhere('phone_number',$search)
+                  ->orWhere('nid_number',  $search)
+                  ->orWhere('id', $search)
+                  ->orWhere('address', 'like', '%'.$search.'%')
+                  ->orWhere('fathers_name', 'like', '%'.$search.'%')
+                  ->orWhere('mothers_name', 'like', '%'.$search.'%');
+        })
+        ->orderBy('id', 'desc')->paginate(10)->withQueryString();
         return Inertia::render('Admin/Bank/BankAllMembers', [
-            'members' => $members,
+            'data' => $members,
         ]);
     }
     public function allDepositingMembers(){
@@ -148,6 +162,14 @@ class MemberController extends Controller
         $withdraws =  Withdraw::where('deposit_id', $deposit_account?->id)
             ->orderBy('created_at', 'desc')
             ->get();
+
+        $update_history = MemberUpdateLog::where('member_id', $member->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // each instance of member_update_logs has a updating_user_id field. We need to get the name of the user who updated the member information from the users table. 
+
+        
         
 
         return Inertia::render('Admin/Bank/MemberDetails', [
@@ -161,6 +183,7 @@ class MemberController extends Controller
             // withdraw information bellow
             'withdraws' => $withdraws,
             'loan' => $loan,
+            'update_history' => $update_history,
         ]);
     }
 
@@ -224,6 +247,7 @@ class MemberController extends Controller
             'fathers_name' => 'required|string|max:255',
             'mothers_name' => 'required|string|max:255',
             'admission_fee' => 'required|numeric|min:0',
+            'phone_number' => 'required|string|max:255',
         ]);
         // dd($validated);
         // create an entry to the member_update_logs table 
@@ -234,12 +258,14 @@ class MemberController extends Controller
         $member_update_log->nid_number_before_update = $member->nid_number;
         $member_update_log->fathers_name_before_update = $member->fathers_name;
         $member_update_log->mothers_name_before_update = $member->mothers_name;
+        $member_update_log->phone_number_before_update = $member->phone_number;
 
         $member_update_log->name_after_update = $validated['name'];
         $member_update_log->address_after_update = $validated['address'];
         $member_update_log->nid_number_after_update = $validated['nid_number'];
         $member_update_log->fathers_name_after_update = $validated['fathers_name'];
         $member_update_log->mothers_name_after_update = $validated['mothers_name'];
+        $member_update_log->phone_number_after_update = $validated['phone_number'];
         $member_update_log->updating_user_id = Auth::id();
 
         $member_update_log->save();
@@ -249,7 +275,8 @@ class MemberController extends Controller
         $member->nid_number = $validated['nid_number'];
         $member->fathers_name = $validated['fathers_name'];
         $member->mothers_name = $validated['mothers_name'];
-        $member->admission_fee = $member->admission_fee * 100;
+        $member->phone_number = $validated['phone_number'];
+        $member->admission_fee = 20 * 100;
 
         $member->save();
         return redirect()->route('admin.bank.member_details', ['member' => $member->id]);

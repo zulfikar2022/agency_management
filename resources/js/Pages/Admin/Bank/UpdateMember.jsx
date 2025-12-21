@@ -1,12 +1,15 @@
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import { Bounce, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { ArrowLeft } from 'lucide-react';
 
 function UpdateMember({ member }) {
+  console.log(member);
   const { data, setData, patch, processing, errors } = useForm({
     name: member.name || '',
     address: member.address || '',
+    phone_number: member?.phone_number || '',
     nid_number: member.nid_number || '',
     fathers_name: member.fathers_name || '',
     mothers_name: member.mothers_name || '',
@@ -52,12 +55,25 @@ function UpdateMember({ member }) {
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
+        <div className="pl-10 mt-4">
+          <Link
+            href={route('admin.bank.member_details', {
+              member: member?.id,
+            })}
+            className="text-blue-700 underline "
+          >
+            {' '}
+            <span className="flex">
+              <ArrowLeft /> <span>ফিরে যান</span>
+            </span>{' '}
+          </Link>
+        </div>
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               {/* Title & Description */}
               <h2 className="card-title text-2xl mb-2">
-                সদস্যের তথ্য পরিবর্তন করুন
+                সদস্যের তথ্য আপডেট করুন
               </h2>
               <p className="text-sm text-base-content/70 mb-6">
                 <span className="text-error">*</span> তথ্য পরিবর্তন শেষে "আপডেট
@@ -111,6 +127,28 @@ function UpdateMember({ member }) {
                   )}
                 </div>
 
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">
+                      ফোন নাম্বারঃ <span className="text-error">*</span>
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`input input-bordered w-full ${errors.phone_number ? 'input-error' : ''}`}
+                    value={data.phone_number}
+                    required
+                    onChange={(e) => setData('phone_number', e.target.value)}
+                  />
+                  {errors.phone_number && (
+                    <label className="label">
+                      <span className="label-text-alt text-error">
+                        {errors.phone_number}
+                      </span>
+                    </label>
+                  )}
+                </div>
+
                 {/* Admission Fee (Read Only) */}
                 <div className="form-control">
                   <label className="label">
@@ -130,7 +168,7 @@ function UpdateMember({ member }) {
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-medium">
-                      জাতীয় পরিচয়পত্র নম্বর{' '}
+                      জাতীয় পরিচয়পত্র নম্বর / জন্মনিবন্ধন নম্বার{' '}
                       <span className="text-error">*</span>
                     </span>
                   </label>

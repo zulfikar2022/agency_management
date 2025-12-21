@@ -11,6 +11,7 @@ function MemberDetails({
   number_of_deposit_collections,
   days_difference_of_deposit,
   withdraws,
+  update_history,
   loan,
 }) {
   // console.log(total_deposited_amount);
@@ -24,7 +25,9 @@ function MemberDetails({
     total_deposit,
     total_loan,
     id,
+    phone_number,
   } = member;
+  console.log(update_history);
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
@@ -35,7 +38,7 @@ function MemberDetails({
                 <div>
                   <h2 className="card-title text-2xl mb-1">{name}</h2>
                   <p className="text-sm text-base-content/60">
-                    মেম্বার আইডি:{' '}
+                    মেম্বার আইডিঃ{' '}
                     <span className="font-bold text-2xl text-black">{id}</span>
                   </p>
                 </div>
@@ -186,22 +189,26 @@ function MemberDetails({
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="">
-                      <span className="font-bold mr-1">পিতার নাম:</span>
+                      <span className="font-bold mr-1">পিতার নামঃ </span>
                       <span className="">{fathers_name || 'N/A'}</span>
                     </div>
                     <div className="">
-                      <span className="font-bold mr-1">মাতার নাম:</span>
+                      <span className="font-bold mr-1">মাতার নামঃ </span>
                       <span className="">{mothers_name || 'N/A'}</span>
                     </div>
                     <div className="">
                       <span className="font-bold mr-1">
-                        জাতীয় পরিচয়পত্র নম্বর:
+                        জাতীয় পরিচয়পত্র নম্বরঃ
                       </span>
                       <span className="">{nid_number || 'N/A'}</span>
                     </div>
                     <div className="">
-                      <span className="font-bold mr-1">ঠিকানা:</span>
+                      <span className="font-bold mr-1">ঠিকানাঃ </span>
                       <span className="">{address}</span>
+                    </div>
+                    <div className="">
+                      <span className="font-bold mr-1">ফোন নাম্বারঃ </span>
+                      <span className="">{phone_number}</span>
                     </div>
                   </div>
                 </div>
@@ -225,6 +232,65 @@ function MemberDetails({
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="container mx-auto py-4 px-4">
+        <h1 className="font-bold text-center text-2xl">আপডেট ইতিহাস</h1>
+        {update_history.length === 0 && (
+          <p className="text-center mt-4">কোনো আপডেট ইতিহাস নেই।</p>
+        )}
+        {update_history.map((update) => (
+          <div key={update.id} className="mb-4 p-4 border rounded-lg">
+            <p className="text-center underline">
+              <span className="font-bold">আপডেটের তারিখঃ </span>
+              {dayjs(update.created_at).format('D MMMM YYYY, h:mm A')}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+              <p>
+                <span className="font-bold">আপডেটের আগে পিতার নামঃ </span>
+                {update.fathers_name_before_update}
+              </p>
+              <p>
+                <span className="font-bold"> আপডেটের পরে পিতার নামঃ </span>
+                {update.fathers_name_after_update}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+              <p>
+                <span className="font-bold">আপডেটের আগে মাতার নামঃ </span>
+                {update.mothers_name_before_update}
+              </p>
+              <p>
+                <span className="font-bold">আপডেটের পরে মাতার নামঃ </span>
+                {update.mothers_name_after_update}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+              <p>
+                <span className="font-bold">
+                  আপডেটের আগে জাতীয় পরিচয়পত্র নম্বরঃ{' '}
+                </span>
+                {update.nid_number_before_update}
+              </p>
+              <p>
+                <span className="font-bold">
+                  আপডেটের পরে জাতীয় পরিচয়পত্র নম্বরঃ{' '}
+                </span>
+                {update.nid_number_after_update}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+              <p>
+                <span className="font-bold">আপডেটের আগে ফোন নাম্বারঃ </span>
+                {update.phone_number_before_update}
+              </p>
+              <p>
+                <span className="font-bold">আপডেটের পরে ফোন নাম্বারঃ </span>
+                {update.phone_number_after_update}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     </LayoutForMoney>
   );

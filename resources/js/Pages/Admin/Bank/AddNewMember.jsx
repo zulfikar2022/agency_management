@@ -173,7 +173,7 @@ function AddNewMember() {
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-medium">
-                      জাতীয় পরিচয়পত্র নম্বর{' '}
+                      জাতীয় পরিচয়পত্র নম্বর / জন্মনিবন্ধন নম্বার{' '}
                       <span className="text-error">*</span>
                       {/* <span className="text-xs text-base-content/60">
                         (Optional)
