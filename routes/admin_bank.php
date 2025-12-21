@@ -51,5 +51,7 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::get('/admin/bank/loan-installment-collections/{loan}', [LoanController::class, 'loanInstallmentCollections'])->name('admin.bank.loan_installment_collections');
 
+    Route::patch('/admin/bank/update-deposit', [DepositController::class, 'update'])->name('admin.bank.update_deposit');
+
     
 });

@@ -169,9 +169,26 @@ class DepositController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Deposit $deposit)
+    public function update(Request $request)
     {
+        $validated = $request->validate([
+            'deposit_id' => 'required|exists:deposits,id',
+            'daily_deposit_amount' => 'required|numeric|min:0',
+        ]);
+
+        $deposit = Deposit::find($validated['deposit_id']);
+        $member = Member::find($deposit->member_id);
+
+        $today = now()->format('Y-m-d');
+        $deposit_date = $deposit->created_at->format('Y-m-d');
+        if($today != $deposit_date){
+            return back()->withErrors(['daily_deposit_amount' => 'শুধুমাত্র আজকের তারিখে তৈরি করা সঞ্চয় একাউন্টের দৈনিক সঞ্চয় পরিমাণ আপডেট করা যাবে।']);
+        }
+
+        $deposit->daily_deposit_amount = $validated['daily_deposit_amount'] * 100;
+        $deposit->save();
         
+        return redirect()->route('admin.bank.member_details', ['member' => $member->id])->with('success', 'সঞ্চয় একাউন্ট সফলভাবে আপডেট করা হয়েছে।');
     }
 
     /**

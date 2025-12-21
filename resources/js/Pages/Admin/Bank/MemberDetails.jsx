@@ -1,6 +1,9 @@
 import { Link } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import dayjs from 'dayjs';
+import { PencilIcon } from 'lucide-react';
+import { useState } from 'react';
+import DepositUpdateModal from './DepositUpdateModal';
 
 function MemberDetails({
   member,
@@ -14,7 +17,16 @@ function MemberDetails({
   update_history,
   loan,
 }) {
-  // console.log(total_deposited_amount);
+  const [open, setOpen] = useState(false);
+  const onOpenModal = () => setOpen(true);
+  const onCloseModal = () => setOpen(false);
+  // today as the format 'YYYY-MM-DD'
+  console.log(deposit_account);
+  const today = dayjs().format('YYYY-MM-DD');
+  const deposit_account_created_date = dayjs(
+    deposit_account?.created_at
+  ).format('YYYY-MM-DD');
+
   const {
     name,
     address,
@@ -27,7 +39,6 @@ function MemberDetails({
     id,
     phone_number,
   } = member;
-  console.log(update_history);
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
@@ -109,14 +120,27 @@ function MemberDetails({
                     <p className="text-center text-xl underline mb-2">
                       সঞ্চয়ী একাউন্টের বিস্তারিত
                     </p>
-                    <p className="font-bold">
-                      একাউন্ট তৈরির তারিখঃ{' '}
-                      <span className="text-slate-500">
-                        {dayjs(deposit_account?.created_at).format(
-                          'D MMMM YYYY'
-                        )}
-                      </span>{' '}
-                    </p>
+                    <div className="flex">
+                      <p className="font-bold">
+                        একাউন্ট তৈরির তারিখঃ{' '}
+                        <span className="text-slate-500">
+                          {dayjs(deposit_account?.created_at).format(
+                            'D MMMM YYYY'
+                          )}
+                        </span>{' '}
+                      </p>{' '}
+                      {today === deposit_account_created_date && (
+                        <PencilIcon
+                          onClick={onOpenModal}
+                          className="text-blue-500 hover:cursor-pointer"
+                        />
+                      )}
+                      <DepositUpdateModal
+                        open={open}
+                        onCloseModal={onCloseModal}
+                        deposit={deposit_account}
+                      />
+                    </div>
                     <p className="font-bold">
                       দৈনিক সঞ্চয়ী পরিমাণঃ{' '}
                       <span className="text-slate-500">
