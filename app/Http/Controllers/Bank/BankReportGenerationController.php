@@ -10,6 +10,7 @@ use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
 use App\Models\User;
+use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -113,16 +114,26 @@ class BankReportGenerationController{
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-        $withdraws = DepositCollection::whereDate('created_at', '>=', $validated['start_date'])
+        $withdraws = Withdraw::whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
             ->get();
+        
+        $total_withdraw = 0;
+        foreach ($withdraws as $withdraw) {
+            $total_withdraw += $withdraw->withdraw_amount;
+            $deposit = Deposit::find($withdraw->deposit_id);
+            $member = Member::find($deposit->member_id);
+            $withdraw->member_name = $member->name;
+            $withdraw->member_id = $member->id;
+        }
 
          $html = view('pdf.bank-withdraw-report', [
             'withdraws' => $withdraws,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
+            'total_withdraw' => $total_withdraw,
         
         ])->render();
 
