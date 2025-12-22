@@ -5,6 +5,7 @@ import { PencilIcon } from 'lucide-react';
 import { useState } from 'react';
 import DepositUpdateModal from './DepositUpdateModal';
 
+// admin.bank.generate_member_details_report
 function MemberDetails({
   member,
   has_deposit_account,
@@ -48,13 +49,28 @@ function MemberDetails({
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
-              <div className="flex justify-between items-start mb-6 border-b">
+              <div className="flex justify-between items-start mb-6 border-b pb-2">
                 <div>
                   <h2 className="card-title text-2xl mb-1">{name}</h2>
                   <p className="text-sm text-base-content/60">
                     মেম্বার আইডিঃ{' '}
                     <span className="font-bold text-2xl text-black">{id}</span>
                   </p>
+                  <a
+                    // href={route('admin.bank.generate_member_details_report', {
+                    //   member: id,
+                    // })}
+                    // className="btn btn-xs btn-outline my-2"
+                    href={route(
+                      'admin.bank.generate_member_details_report',
+                      member.id
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-xs btn-outline md:mb-0"
+                  >
+                    সদস্য রিপোর্ট তৈরি করুন
+                  </a>
                 </div>
                 {/* <div className="badge badge-neutral p-3">সক্রিয়</div> */}
               </div>

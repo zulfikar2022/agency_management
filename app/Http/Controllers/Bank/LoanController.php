@@ -195,6 +195,10 @@ class LoanController extends Controller
             $loan_update_log->total_payable_amount_after_update = $new_total_payable_amount;
             $loan_update_log->save();
 
+            // update member 
+            $member->total_loan = $total_loan;
+            $member->save();
+
             // update the loan instance
             $loan->total_loan = $total_loan;
             $loan->safety_money = $safety_money;

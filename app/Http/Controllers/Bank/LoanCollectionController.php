@@ -168,6 +168,9 @@ class LoanCollectionController extends Controller
         $loan_collection_update_log->paid_amount_after_update = $paid_amount;
         $loan_collection_update_log->save();
 
+       
+
+
         // update the loan collection instance 
         $loan_collection->paid_amount = $paid_amount;
         $loan_collection->save();

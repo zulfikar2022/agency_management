@@ -14,6 +14,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Spatie\Browsershot\Browsershot;
 
 class MemberController extends Controller
 {
@@ -288,5 +289,55 @@ class MemberController extends Controller
     public function destroy(Member $member)
     {
         //
+    }
+
+    // REPORT GENERATION FUNCTIONS
+
+    function generateMemberDetailsReport(Member $member)
+    {
+
+        // find the loan and the deposit instance for the member
+        $loan = Loan::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                ->where('remaining_payable_amount', '>', 0)
+                ->first();
+        $loan_collections = LoanCollection::where('loan_id', $loan?->id)
+                ->where('is_deleted', false)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        $deposit = Deposit::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                // ->where('last_depositing_predictable_date', '>=', now()->format('Y-m-d'))
+                ->first();
+            
+        $deposit_collections = DepositCollection::where('deposit_id', $deposit?->id)
+                ->where('is_deleted', false)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        $withdraw_collections =  Withdraw::where('deposit_id', $deposit?->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $html = view('pdf.member-details-report', [
+        'member' => $member,
+        'loan' => $loan,
+        'deposit' => $deposit,
+        'loan_collections' => $loan_collections,
+        'deposit_collections' => $deposit_collections,
+        'withdraw_collections' => $withdraw_collections,
+        ])->render();
+
+
+    $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename = $member->name . $todayDate.'-report' . '.pdf';
+
+    return response($pdfData, 200)
+    ->header('Content-Type', 'application/pdf')
+    ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
 }

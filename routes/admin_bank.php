@@ -57,5 +57,7 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::patch('/admin/bank/update-loan/{loan}', [LoanController::class, 'update'])->name('admin.bank.update_loan');
 
+    Route::get('/admin/bank/generate-member-details-report/{member}', [MemberController::class, 'generateMemberDetailsReport'])->name('admin.bank.generate_member_details_report');
+
     
 });
