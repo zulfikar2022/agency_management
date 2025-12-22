@@ -94,6 +94,11 @@ class LoanCollectionController extends Controller
             return redirect()->back()->withErrors(['paid_amount' => 'এই ঋণের জন্য আজকের তারিখে একটি কিস্তি ইতিমধ্যেই সংগ্রহ করা হয়েছে।']);
         }   
 
+        $loan_creating_day = $loan->created_at->format('Y-m-d');
+        if ($loan_creating_day == $toay) {
+            return redirect()->back()->withErrors(['paid_amount' => 'ঋণ প্রদান করার একই দিনে কিস্তি সংগ্রহ করা যাবে না।']);
+        }
+
         DB::transaction(function () use ($validated, $loan) {
             $loan_collection = new LoanCollection();
             $loan_collection->loan_id = $validated['loan_id'];

@@ -21,11 +21,14 @@ function MemberDetails({
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
   // today as the format 'YYYY-MM-DD'
-  console.log(deposit_account);
+
   const today = dayjs().format('YYYY-MM-DD');
   const deposit_account_created_date = dayjs(
     deposit_account?.created_at
   ).format('YYYY-MM-DD');
+  const loan_account_created_date = dayjs(loan?.created_at).format(
+    'YYYY-MM-DD'
+  );
 
   const {
     name,
@@ -186,12 +189,25 @@ function MemberDetails({
                       ঋণের বিস্তারিত
                     </h1>
 
-                    <p className="font-bold">
-                      ঋণ গ্রহণের তারিখঃ{' '}
-                      <span className="text-slate-500">
-                        {dayjs(loan.created_at).format('D MMMM YYYY')}
-                      </span>
-                    </p>
+                    <div className="flex ">
+                      <p className="font-bold">
+                        ঋণ গ্রহণের তারিখঃ{' '}
+                        <span className="text-slate-500">
+                          {dayjs(loan.created_at).format('D MMMM YYYY')}
+                        </span>
+                      </p>
+
+                      {today === loan_account_created_date && (
+                        <Link
+                          href={route('admin.bank.edit_loan', {
+                            loan: loan.id,
+                          })}
+                          className="ml-2"
+                        >
+                          <PencilIcon className="text-blue-600 hover:cursor-pointer" />
+                        </Link>
+                      )}
+                    </div>
                     <p className="font-bold">
                       ঋণের পরিমাণঃ{' '}
                       <span className="text-slate-500">
@@ -202,6 +218,12 @@ function MemberDetails({
                       মোট পরিশোধযোগ্যঃ{' '}
                       <span className="text-slate-500">
                         {loan.total_payable_amount / 100} টাকা
+                      </span>
+                    </p>
+                    <p className="font-bold">
+                      জামানতঃ{' '}
+                      <span className="text-slate-500">
+                        {loan.safety_money / 100} টাকা
                       </span>
                     </p>
                     <p className="font-bold">

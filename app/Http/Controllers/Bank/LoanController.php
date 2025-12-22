@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\LoanCollectionUpdateLog;
+use App\Models\Bank\LoanUpdateLog;
 use App\Models\Bank\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -143,15 +144,74 @@ class LoanController extends Controller
      */
     public function edit(Loan $loan)
     {
-        //
+        // dd($loan);
+        $member = Member::find($loan->member_id);
+        return Inertia::render('Admin/Bank/UpdateLoan', [
+            'loan' => $loan,
+            'member' => $member,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Loan $loan)
+    public function update(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'loan_id' => 'required|exists:loans,id',
+            'total_loan' => 'required|numeric|min:1',
+            'safety_money' => 'required|numeric|min:0',
+        ]);
+
+        $safety_money = $validated['safety_money'] * 100;
+        $total_loan = $validated['total_loan'] * 100;   
+
+        $loan = Loan::find($validated['loan_id']);
+        $member = Member::find($loan->member_id);
+
+        $today = now()->format('Y-m-d');
+        $loan_creation_day = $loan->created_at->format('Y-m-d');
+
+        if ($today !== $loan_creation_day) {
+            return redirect()->back()->withErrors(['message' => 'শুধুমাত্র ঋণ তৈরির দিনে ঋণ আপডেট করা যেতে পারে।'])->withInput();
+        }
+
+        if($member->total_deposit < $safety_money ){
+            return redirect()->back()->withErrors(['message' => 'সদস্যের মোট জমার পরিণাম জামানতের চেয়ে কম হতে পারবে না।'])->withInput();
+        }
+
+        DB::transaction(function() use($total_loan, $validated, $loan, $member, $safety_money){
+            
+            // create an instance of loan_update_logs
+            $loan_update_log = new LoanUpdateLog();
+            $loan_update_log->loan_id = $loan->id;
+            $loan_update_log->updating_user_id = Auth::id();
+            $loan_update_log->total_loan_before_update = $loan->total_loan;
+            $loan_update_log->total_loan_after_update = $total_loan;
+            $loan_update_log->safety_money_before_update = $loan->safety_money;
+            $loan_update_log->safety_money_after_update = $safety_money;
+            $loan_update_log->total_payable_amount_before_update = $loan->total_payable_amount;
+            $new_total_payable_amount = $total_loan + ($total_loan * 0.15);
+            $loan_update_log->total_payable_amount_after_update = $new_total_payable_amount;
+            $loan_update_log->save();
+
+            // update the loan instance
+            $loan->total_loan = $total_loan;
+            $loan->safety_money = $safety_money;
+            $loan->share_money = $total_loan * 0.025;
+            $loan->total_payable_amount = $new_total_payable_amount;
+            $loan->remaining_payable_amount = $new_total_payable_amount;
+            $loan->daily_payable_amount = ceil($new_total_payable_amount / 115);
+
+            $loan->save();
+        });
+
+        return redirect()->route('admin.bank.member_details', [
+            'member' => $member->id,
+        ])->with('message', 'ঋণ সফলভাবে আপডেট করা হয়েছে।');
+
+
+
     }
 
     /**
