@@ -76,11 +76,21 @@ class BankReportGenerationController{
             ->where('is_deleted', false)
             ->orderBy('paying_date', 'desc')
             ->get();
+        
+        $total_collection = 0;
+        foreach ($loan_collections as $loan_collection) {
+            $total_collection += $loan_collection->paid_amount;
+            $loan = Loan::find($loan_collection->loan_id);
+            $member = Member::find($loan->member_id);
+            $loan_collection->member_name = $member->name;
+            $loan_collection->member_id = $member->id;
+        }
 
          $html = view('pdf.bank-loan-collection-report', [
             'loan_collections' => $loan_collections,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
+            'total_collection' => $total_collection,
         
         ])->render();
 
