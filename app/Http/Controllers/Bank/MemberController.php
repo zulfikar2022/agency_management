@@ -293,7 +293,7 @@ class MemberController extends Controller
 
     // REPORT GENERATION FUNCTIONS
 
-    function generateMemberDetailsReport(Member $member)
+    public function generateMemberDetailsReport(Member $member)
     {
 
         // find the loan and the deposit instance for the member
@@ -334,10 +334,76 @@ class MemberController extends Controller
                 ->format('A4')
                 ->pdf();
         $todayDate = date('d F Y');
-        $filename = $member->name . $todayDate.'-report' . '.pdf';
+        $filename = $member->id . '_' . $member->name . '_' . $todayDate.'_member_details_report' . '.pdf';
 
     return response($pdfData, 200)
     ->header('Content-Type', 'application/pdf')
     ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function generateMemberDepositReport(Member $member)
+    {
+        $deposit = Deposit::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                // ->where('last_depositing_predictable_date', '>=', now()->format('Y-m-d'))
+                ->first();
+            
+        $deposit_collections = DepositCollection::where('deposit_id', $deposit?->id)
+                ->where('is_deleted', false)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        $total_deposit_collection = 0;
+        foreach($deposit_collections as $collection){
+            $total_deposit_collection += $collection->deposit_amount;
+        }
+
+        $html = view('pdf.member-deposit-collection-report', [
+        'member' => $member,
+        'deposit' => $deposit,
+        'deposit_collections' => $deposit_collections,
+        'total_deposit_collection' => $total_deposit_collection,
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  $member->id . '_' . $member->name . '_' . $todayDate.'_deposit_collection_report' . '.pdf';
+
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function generateMemberLoanCollectionReport(Member $member)
+    {
+        $loan = Loan::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                // ->where('remaining_payable_amount', '>', 0)
+                ->first();
+        $loan_collections = LoanCollection::where('loan_id', $loan?->id)
+                ->where('is_deleted', false)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+        $html = view('pdf.member-loan-collection-report', [
+            'member' => $member,
+            'loan' => $loan,
+            'loan_collections' => $loan_collections,
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  $member->id . '_' . $member->name . '_' . $todayDate.'_loan_instalment_collection_report' . '.pdf';
+
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
 }

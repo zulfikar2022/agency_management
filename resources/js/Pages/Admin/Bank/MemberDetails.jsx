@@ -57,17 +57,13 @@ function MemberDetails({
                     <span className="font-bold text-2xl text-black">{id}</span>
                   </p>
                   <a
-                    // href={route('admin.bank.generate_member_details_report', {
-                    //   member: id,
-                    // })}
-                    // className="btn btn-xs btn-outline my-2"
                     href={route(
                       'admin.bank.generate_member_details_report',
                       member.id
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-xs btn-outline md:mb-0"
+                    className="btn btn-xs btn-neutral md:mb-0"
                   >
                     সদস্য রিপোর্ট তৈরি করুন
                   </a>

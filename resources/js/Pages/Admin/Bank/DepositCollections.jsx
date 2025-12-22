@@ -3,6 +3,7 @@ import LayoutForMoney from '../layouts/LayoutForMoney';
 import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
+// admin.bank.generate_member_deposit_report
 function DepositCollections({ deposit_collections, member }) {
   console.log(member);
   return (
@@ -32,6 +33,14 @@ function DepositCollections({ deposit_collections, member }) {
             সদস্য আইডিঃ{' '}
             <span className="font-normal text-lg">{member?.id}</span>{' '}
           </p>
+          <a
+            href={route('admin.bank.generate_member_deposit_report', member.id)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-xs btn-neutral md:mb-0"
+          >
+            সঞ্চয় কালেকশনের রিপোর্ট তৈরি করুন
+          </a>
         </div>
         {deposit_collections.length === 0 ? (
           <p className="text-center mt-4">কোনো সঞ্চয় পাওয়া যায়নি।</p>

@@ -32,6 +32,17 @@ function LoanCollections({ member, loan_collections }) {
             সদস্য আইডিঃ{' '}
             <span className="font-normal text-lg">{member?.id}</span>{' '}
           </p>
+          <a
+            href={route(
+              'admin.bank.generate_member_loan_collection_report',
+              member.id
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-xs btn-neutral md:mb-0"
+          >
+            সঞ্চয় কালেকশনের রিপোর্ট তৈরি করুন
+          </a>
         </div>
         {loan_collections.length === 0 ? (
           <p className="text-center mt-4">কোনো ঋণের সংগ্রহ পাওয়া যায়নি।</p>

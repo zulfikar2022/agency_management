@@ -40,12 +40,13 @@
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 10px;">
         <div>
+            <p style="font-weight: bold;">আইডিঃ <span style="font-weight: normal;">{{ $member->id }}</span></p>
             <p style="font-weight: bold;">নামঃ <span style="font-weight: normal;">{{ $member->name }}</span></p>
              <p style="font-weight: bold;"> পিতার নামঃ <span style="font-weight: normal;">{{ $member->fathers_name }}</span></p>
             <p style="font-weight: bold;">মাতার নামঃ <span style="font-weight: normal;">{{ $member->mothers_name }}</span></p>
             <p style="font-weight: bold;">ফোন নাম্বারঃ  <span style="font-weight: normal;">{{ $member->phone_number }}</span></p>
             <p style="font-weight: bold;">ঠিকানাঃ  <span style="font-weight: normal;">{{ $member->address }}</span></p>
-            <p style="font-weight: bold;">এনয়াইডি/জন্মনিবন্ধন নম্বরঃ <span style="font-weight: normal;">{{ $member->nid_number }}</span></p>
+            <p style="font-weight: bold;">এনআইডি/জন্মনিবন্ধন নম্বরঃ <span style="font-weight: normal;">{{ $member->nid_number }}</span></p>
 
 
         </div>
@@ -56,10 +57,11 @@
             <p style="font-weight: bold;">জামানতঃ  <span style="font-weight: normal;">{{ $loan->safety_money  / 100}} টাকা</span></p>
             <p style="font-weight: bold;">পরিশোধ হয়েছেঃ   <span style="font-weight: normal;">{{ ($loan->total_payable_amount - $loan->remaining_payable_amount)  / 100}} টাকা</span></p>
             <p style="font-weight: bold;">বাকি ঋণঃ   <span style="font-weight: normal;">{{ $loan->remaining_payable_amount  / 100}} টাকা</span></p>
-
+            
         @endif      
        
             <p style="font-weight: bold;">মোট জমা আছেঃ   <span style="font-weight: normal;">{{ $member->total_deposit / 100 }} টাকা</span></p>
+            <p style="font-weight: bold; border-top: 1px dashed black;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
         </div>
     </div>
 
