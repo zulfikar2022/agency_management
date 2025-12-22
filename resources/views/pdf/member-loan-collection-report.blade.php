@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>সঞ্চয়ের বিস্তারিত রিপোর্ট</title>
+    <title>ঋণের কিস্তির বিস্তারিত রিপোর্ট</title>
 
    
 
@@ -36,7 +36,7 @@
         <div>
             <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
         </div>
-        <h1 class="title"> সঞ্চয়ের বিস্তারিত রিপোর্ট</h1>
+        <h1 class="title"> ঋণের কিস্তির বিস্তারিত রিপোর্ট</h1>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 10px;">
             <div>
                 <p style="font-weight: bold;">আইডিঃ <span style="font-weight: normal;">{{ $member->id }}</span></p>
@@ -55,14 +55,20 @@
                 <p style="font-weight: bold;">মোট পরিশোধযোগ্যঃ    <span style="font-weight: normal;">{{ $loan->total_payable_amount  / 100}} টাকা</span></p>
                 <p style="font-weight: bold;">ঋণ গ্রহণের তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($loan->created_at)->format('d F Y') }}</span></p>
                 <p style="font-weight: bold;">পরিশোধের শেষ তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($loan->last_paying_date)->format('d F Y') }}</span></p>
-
-                  <p style="font-weight: bold; border-top: 1px dashed black;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
-
-                
-
+                <p style="font-weight: bold; border-top: 1px dashed black;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
             @endif      
             </div>
         </div>
+        @forelse ($loan_collections as $collection)
+            <div style="border-bottom: 1px solid #ccc; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <p style="font-weight: bold;">তারিখঃ <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($collection->created_at)->format('d F Y') }}</span></p>
+                <p style="font-weight: bold;">পরিমাণঃ <span style="font-weight: normal;">{{ $collection->paid_amount  / 100}} টাকা</span></p>
+               
+            </div>
+        @empty
+            <p style="text-align: center; font-weight: bold; margin-top: 20px;">কোনো লোন কিস্তি কালেকশন পাওয়া যায়নি।</p>
+        @endforelse
+
     </body>
 </html>
 

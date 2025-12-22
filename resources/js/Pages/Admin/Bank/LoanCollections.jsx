@@ -41,7 +41,7 @@ function LoanCollections({ member, loan_collections }) {
             rel="noopener noreferrer"
             className="btn btn-xs btn-neutral md:mb-0"
           >
-            সঞ্চয় কালেকশনের রিপোর্ট তৈরি করুন
+            ঋণের কিস্তি কালেকশনের রিপোর্ট তৈরি করুন
           </a>
         </div>
         {loan_collections.length === 0 ? (

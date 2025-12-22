@@ -4,9 +4,8 @@ import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 function WithdrawLists({ withdraws, member, deposits }) {
-  console.log(withdraws);
   const today = new Date().toISOString().split('T')[0];
-  // console.log(withdraws[1]?.created_at.split('T')[0]);F
+  // admin.bank.generate_member_withdraw_report
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
@@ -37,6 +36,17 @@ function WithdrawLists({ withdraws, member, deposits }) {
                       {member.id}
                     </span>
                   </p>
+                  <a
+                    href={route(
+                      'admin.bank.generate_member_withdraw_report',
+                      member.id
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-xs btn-neutral mb-2"
+                  >
+                    উত্তোলনের রিপোর্ট তৈরি করুন
+                  </a>
                 </div>
               </div>
 

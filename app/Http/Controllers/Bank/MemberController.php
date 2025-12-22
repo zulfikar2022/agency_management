@@ -406,4 +406,41 @@ class MemberController extends Controller
         ->header('Content-Type', 'application/pdf')
         ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
+
+    public function generateMemberWithdrawReport(Member $member)
+    {
+        $deposit = Deposit::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                ->first();
+            
+        $withdraws =  Withdraw::where('deposit_id', $deposit?->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        
+        $total_withdrawn_amount = 0;
+        foreach($withdraws as $withdraw){
+            $total_withdrawn_amount += $withdraw->withdraw_amount;
+        }
+        
+
+        $html = view('pdf.member-withdraw-report', [
+        'member' => $member,
+        'withdraws' => $withdraws,
+        'total_withdrawn_amount' => $total_withdrawn_amount,
+        
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  $member->id . '_' . $member->name . '_' . $todayDate.'_withdraw_report' . '.pdf';
+
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
 }

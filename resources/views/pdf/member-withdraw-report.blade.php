@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>সঞ্চয়ের বিস্তারিত রিপোর্ট</title>
-
-   
-
+    <title>উত্তোলনের বিস্তারিত রিপোর্ট</title>
 
     <link rel="stylesheet" href="{{ public_path('css/pdf-report.css') }}">
 
@@ -36,7 +33,7 @@
         <div>
             <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
         </div>
-        <h1 class="title"> সঞ্চয়ের বিস্তারিত রিপোর্ট</h1>
+        <h1 class="title"> উত্তোলনের বিস্তারিত রিপোর্ট</h1>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 10px;">
         <div>
             <p style="font-weight: bold;">আইডিঃ <span style="font-weight: normal;">{{ $member->id }}</span></p>
@@ -50,24 +47,22 @@
 
         </div>
         <div>
-            @if ($deposit)
-                <p style="font-weight: bold;">মোট সঞ্চয়ঃ <span style="font-weight: normal;">{{ $total_deposit_collection  / 100}} টাকা</span></p>
-                <p style="font-weight: bold;">মোট উত্তোলনঃ  <span style="font-weight: normal;">{{ ($total_deposit_collection - $member->total_deposit)  / 100}} টাকা</span></p>
-                <p style="font-weight: bold;">অবশিষ্ট সঞ্চয়ঃ   <span style="font-weight: normal;">{{ $member->total_deposit  / 100}} টাকা</span></p>
+            @if ($withdraws)
+                <p style="font-weight: bold;">মোট উত্তোলনঃ <span style="font-weight: normal;">{{ $total_withdrawn_amount  / 100}} টাকা</span></p>
+                 <p style="font-weight: bold;">অবশিষ্ট আছেঃ  <span style="font-weight: normal;">{{ $member->total_deposit  / 100}} টাকা</span></p>
             @endif      
-            <p style="font-weight: bold; border-top: 1px dashed black;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
+                <p style="font-weight: bold; border-top: 1px dashed black;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
         </div>
     </div>
 
-        @forelse ($deposit_collections as $collection)
-            <div style="border-bottom: 1px solid #ccc; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 0;">
-                <p style="margin: 0; font-weight: bold;">তারিখ: <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($collection->created_at)->format('d F Y') }}</span></p>
-                <p style="margin: 0; font-weight: bold;">জমা পরিমাণ: <span style="font-weight: normal;">{{ $collection->deposit_amount / 100 }} টাকা</span></p>
-                <!-- <p style="margin: 0; font-weight: bold;">বিবরণ: <span style="font-weight: normal;">{{ $collection->description }}</span></p> -->
-            </div>
-        @empty
-            <p style="text-align: center; font-weight: bold;">কোনো সঞ্চয় পাওয়া যায়নি।</p>
-        @endforelse
-
-    </body>
+    @forelse ($withdraws as $withdraw)
+        <div style="border-bottom: 1px solid #ccc; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <p style="font-weight: bold;">তারিখঃ <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($withdraw->created_at)->format('d F Y') }}</span></p>
+            <p style="font-weight: bold;">পরিমাণঃ <span style="font-weight: normal;">{{ $withdraw->withdraw_amount  / 100}} টাকা</span></p>
+           
+        </div>
+    @empty
+        <p style="text-align: center; font-weight: bold; margin-top: 20px;">কোনো উত্তোলন পাওয়া যায়নি।</p>
+    @endforelse
+</body>
 </html>
