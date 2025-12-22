@@ -10,6 +10,7 @@ import LoanCollectionUpdateModal from './LoanCollectionUpdateModal';
 
 function EmployeeMemberDetails({
   member,
+  loan,
   total_deposited_amount,
   deposit_collections,
   loan_collections,
@@ -37,8 +38,8 @@ function EmployeeMemberDetails({
 
   return (
     <EmployeeBankLayout>
-      <div className="mx-2 md:mx-0">
-        <div className="container mx-auto border p-4 mt-4 rounded-lg">
+      <div className=" border p-4 mt-4 container mx-auto rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="">
           <p className="font-bold">
             সদস্যের নামঃ <span className="font-normal">{member.name}</span>
           </p>
@@ -58,6 +59,32 @@ function EmployeeMemberDetails({
             একাউন্টে অবশিষ্ট আছে{' '}
             <span className="font-normal">
               {(total_deposited_amount - total_withdrawn_amount) / 100} টাকা
+            </span>
+          </p>
+        </div>
+        <div>
+          <p className="font-bold">
+            মোট লোনঃ{' '}
+            <span className="font-normal">{loan?.total_loan / 100} টাকা</span>
+          </p>
+          <p className="font-bold">
+            মোট পরিশোধযোগ্যঃ{' '}
+            <span className="font-normal">
+              {loan?.total_payable_amount / 100} টাকা
+            </span>
+          </p>
+          <p className="font-bold">
+            মোট পরিশোধিতঃ{' '}
+            <span className="font-normal">
+              {(loan?.total_payable_amount - loan?.remaining_payable_amount) /
+                100}{' '}
+              টাকা
+            </span>
+          </p>
+          <p className="font-bold">
+            মোট বাকিঃ{' '}
+            <span className="font-normal">
+              {loan?.remaining_payable_amount / 100} টাকা
             </span>
           </p>
         </div>

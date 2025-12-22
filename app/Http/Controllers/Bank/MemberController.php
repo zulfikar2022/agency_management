@@ -217,6 +217,7 @@ class MemberController extends Controller
         }        
         return Inertia::render('Employee/Bank/EmployeeMemberDetails', [
             'member' => $member,
+            'loan' => $loan,
             'total_deposited_amount' => $total_deposited_amount,
             'deposit_collections' => $deposit_collections,
             'loan_collections' => $loan_collections,
