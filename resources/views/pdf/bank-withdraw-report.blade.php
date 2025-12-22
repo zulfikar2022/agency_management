@@ -52,7 +52,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 2fr 2fr 1fr;">
                     <p><strong>সদস্যের আইডি:</strong> {{ $withdraw->member_id }}</p>
                     <p><strong>সদস্যের নাম:</strong> {{ $withdraw->member_name }} </p>
-                     <p><strong>সঞ্চয়ের তারিখ:</strong> {{ \Carbon\Carbon::parse($withdraw->created_at)->format('d F Y') }}</p>
+                     <p><strong>উত্তোলনের তারিখ:</strong> {{ \Carbon\Carbon::parse($withdraw->created_at)->format('d F Y') }}</p>
                     <p><strong>পরিমাণ:</strong> {{ number_format($withdraw->withdraw_amount / 100, 2) }} টাকা</p>
                 </div>
                 

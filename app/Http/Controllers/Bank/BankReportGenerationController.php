@@ -161,16 +161,21 @@ class BankReportGenerationController{
             ->orderBy('created_at', 'desc')
             ->get();
         // each loan has a member_id field and we need to get the member from that id and put it into the loan object as a member field
+        $total_provided_loan = 0;
+        
         foreach ($loans as $loan) {
+            $total_provided_loan += $loan->total_loan;
             $member = Member::find($loan->member_id);
-            $loan->member = $member;
+            $loan->member_name = $member->name;
+            $loan->member_id = $member->id;
         }
 
 
          $html = view('pdf.bank-loans-report', [
-            'withdraws' => $loans,
+            'loans' => $loans,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
+            'total_provided_loan' => $total_provided_loan,
         
         ])->render();
 
