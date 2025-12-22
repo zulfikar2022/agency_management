@@ -124,5 +124,10 @@ class AdminController extends Controller
         $user->save();  
         return redirect()->route('admin.showAllUsers');
     }
+
+    public function reportGenerate(){
+        return Inertia::render('Admin/Bank/GenerateReport', [
+        ]);
+    }
    
 }

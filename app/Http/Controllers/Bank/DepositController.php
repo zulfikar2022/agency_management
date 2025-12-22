@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Spatie\Browsershot\Browsershot;
 
 class DepositController extends Controller
 {
@@ -198,4 +199,6 @@ class DepositController extends Controller
     {
         //
     }
+
+   
 }

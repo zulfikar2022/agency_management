@@ -55,6 +55,13 @@ function MoneyOpenDrawer() {
           >
             আজ যারা ঋণের কিস্তি দেয়নি
           </Link>
+          <br />
+          <Link
+            href={route('admin.bank.report_generate')}
+            className="ml-3 btn btn-xs btn-neutral mb-4"
+          >
+            রিপোর্ট তৈরি করুন
+          </Link>
         </li>
       </ul>
     </div>

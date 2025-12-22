@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController\AdminController;
+use App\Http\Controllers\Bank\BankReportGenerationController;
 use App\Http\Controllers\Bank\DepositController;
 use App\Http\Controllers\Bank\LoanController;
 use App\Http\Controllers\Bank\MemberController;
@@ -64,6 +66,18 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
     Route::get('/admin/bank/generate-member-loan-collection-report/{member}', [MemberController::class, 'generateMemberLoanCollectionReport'])->name('admin.bank.generate_member_loan_collection_report');
 
     Route::get('/admin/bank/generate-member-withdraw-report/{member}', [MemberController::class, 'generateMemberWithdrawReport'])->name('admin.bank.generate_member_withdraw_report');
+
+    Route::get('/admin/bank/report-generate', [AdminController::class, 'reportGenerate'])->name('admin.bank.report_generate');
+
+    Route::get('/admin/bank/generate-deposit-collection-report', [BankReportGenerationController::class, 'generateDepositCollectionReport'])->name('admin.bank.generate_deposit_collection_report');
+
+    Route::get('/admin/bank/generate-loan-collection-report', [BankReportGenerationController::class, 'generateLoanCollectionReport'])->name('admin.bank.generate_loan_collection_report');
+
+    Route::get('/admin/bank/generate-withdraw-report', [BankReportGenerationController::class, 'generateWithdrawReport'])->name('admin.bank.generate_withdraw_report');
+
+    Route::get('/admin/bank/generate-loans-report', [BankReportGenerationController::class, 'generateLoansReport'])->name('admin.bank.generate_loans_report');
+
+    Route::get('/admin/bank/generate-deposits-report', [BankReportGenerationController::class, 'generateDepositReport'])->name('admin.bank.generate_deposits_report');
 
     
 });
