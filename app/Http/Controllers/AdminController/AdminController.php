@@ -166,19 +166,23 @@ class AdminController extends Controller
         $deposit_collections = DepositCollection::where('collecting_user_id', $employee->id)
             ->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $total_deposit_collection = 0;
+        
         foreach($deposit_collections as $collection){
             $total_deposit_collection += $collection->deposit_amount;
             $deposit = Deposit::find($collection->deposit_id);
             $member = Member::find($deposit->member_id);
-            $updates = DepositCollectionUpdateLog::where('deposit_collection_id', $collection->id)->get();
+            $updates = DepositCollectionUpdateLog::where('deposit_collection_id', $collection->id)->orderBy('created_at', 'desc')->get();
+            // dd($collection);
             $updates->map(function($update){
                 $updating_user = User::find($update->updating_user_id);
                 $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown User';
                 return $update;
             });
+            
             $collection->updates = $updates;
             $collection->member_name = $member->name;
             $collection->member_id = $member->id;
@@ -187,6 +191,7 @@ class AdminController extends Controller
         $loan_collections = LoanCollection::where('collecting_user_id', $employee->id)
             ->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
+            ->orderBy('created_at', 'desc')
             ->get();
         
         $total_loan_collection = 0;
@@ -194,7 +199,7 @@ class AdminController extends Controller
             $total_loan_collection += $collection->paid_amount;
             $loan = Loan::find($collection->loan_id);
             $member = Member::find($loan->member_id);
-            $updates = LoanCollectionUpdateLog::where('loan_collection_id', $collection->id)->get();
+            $updates = LoanCollectionUpdateLog::where('loan_collection_id', $collection->id)->orderBy('created_at', 'desc')->get();
             $updates->map(function($update){
                 $updating_user = User::find($update->updating_user_id);
                 $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown User';
