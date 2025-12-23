@@ -89,7 +89,29 @@ class MemberController extends Controller
     }
 
     public function depositedToday(){
-        return Inertia::render('Admin/Bank/DepositedTodayMembers');
+        $search = request()->query('search', '');
+        $today = now()->format('Y-m-d');
+        $deposit_collections = DepositCollection::where('is_deleted', false)
+            ->whereDate('created_at', $today)
+            ->pluck('deposit_id');
+        $deposits = Deposit::whereIn('id', $deposit_collections)
+            ->where('is_deleted', false)
+            ->pluck('member_id');
+        $members = Member::whereIn('id', $deposits)
+        ->where(function($query) use ($search) {
+            $query->where('name', 'like', '%'.$search.'%')
+                  ->orWhere('phone_number',$search)
+                  ->orWhere('nid_number',  $search)
+                  ->orWhere('id', $search)
+                  ->orWhere('address', 'like', '%'.$search.'%')
+                  ->orWhere('fathers_name', 'like', '%'.$search.'%')    
+                  ->orWhere('mothers_name', 'like', '%'.$search.'%');
+        })
+        ->where('is_deleted', false)
+        ->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        return Inertia::render('Admin/Bank/DepositedTodayMembers', [
+            'data' => $members,
+        ]);
     }
 
     public function providedInstallmentToday(){
