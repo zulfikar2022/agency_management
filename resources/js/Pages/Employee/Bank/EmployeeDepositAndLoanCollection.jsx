@@ -87,7 +87,7 @@ function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
                   </span>
                 </p>
                 <p className="font-bold">
-                  <span>মোট সংগ্রহঃ </span>
+                  <span>মোট দৈনিক সংগ্রহঃ </span>
                   <span className="font-normal">{total_collection} টাকা</span>
                 </p>
               </div>
