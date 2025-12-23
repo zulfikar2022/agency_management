@@ -45,26 +45,7 @@ function EmployeeMemberResponsiveTable({ members }) {
               >
                 বিস্তারিত দেখুন
               </Link>
-              {/* {member?.deposit_account && (
-                <Link
-                  href={route('employee.bank.collect_deposit', {
-                    member: member.id,
-                  })}
-                  className="btn btn-neutral btn-xs"
-                >
-                  সঞ্চয় জমা
-                </Link>
-              )}
-              {member?.total_loan > 0 && (
-                <Link
-                  href={route('employee.bank.collect_installment', {
-                    member: member.id,
-                  })}
-                  className="btn btn-outline btn-xs"
-                >
-                  কিস্তি উত্তোলন
-                </Link>
-              )} */}
+
               {(member?.deposit_account || member?.loan_account) && (
                 <Link
                   href={route('employee.bank.depositAndLoanCollection', {
