@@ -59,7 +59,7 @@
                 <hr>
             </div>
         @empty
-            <p style="text-align: center; font-weight: bold;">কোনো সঞ্চয় কালেকশন পাওয়া যায়নি।</p>
+            <p style="text-align: center; font-weight: bold;">কোনো উত্তোলন পাওয়া যায়নি।</p>
         @endforelse
 
     </body>

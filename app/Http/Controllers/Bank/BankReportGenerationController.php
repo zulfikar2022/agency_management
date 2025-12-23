@@ -203,9 +203,11 @@ class BankReportGenerationController{
             ->orderBy('created_at', 'desc')
             ->get();
         // each loan has a member_id field and we need to get the member from that id and put it into the loan object as a member field
-        foreach ($deposits as $loan) {
-            $member = Member::find($loan->member_id);
-            $loan->member = $member;
+        foreach ($deposits as $deposit) {
+            $member = Member::find($deposit->member_id);
+            $deposit->member_name = $member->name;
+            $deposit->member_id = $member->id;
+            $deposit->total_deposit = $member->total_deposit;
         }
 
 
