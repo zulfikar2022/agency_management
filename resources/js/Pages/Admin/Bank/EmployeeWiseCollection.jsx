@@ -1,5 +1,5 @@
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import { Search, User } from 'lucide-react';
 
 function EmployeeWiseCollection({ employees }) {
@@ -99,20 +99,26 @@ function EmployeeReportBox({ employee }) {
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={processing}
-            className="btn btn-neutral btn-sm w-full mt-2 gap-2"
-          >
-            {processing ? (
-              <span className="loading loading-spinner loading-xs"></span>
-            ) : (
-              <>
-                <Search size={14} /> রিপোর্ট দেখুন
-              </>
-            )}
-          </button>
+          <div className="grid grid-cols-1 gap-2">
+            <button
+              type="submit"
+              disabled={processing}
+              className="btn btn-neutral btn-sm w-full mt-2 gap-2"
+            >
+              {processing ? (
+                <span className="loading loading-spinner loading-xs"></span>
+              ) : (
+                <>রিপোর্ট তৈরি করুন</>
+              )}
+            </button>
+          </div>
         </form>
+        <a
+          href={`/admin/bank/employee-wise-collection-report?employee_id=${employee?.id}&start_date=${data.start_date}&end_date=${data.end_date}`}
+          className="btn btn-outline btn-sm w-full mt-2 gap-2"
+        >
+          রিপোর্ট দেখুন
+        </a>
       </div>
     </div>
   );

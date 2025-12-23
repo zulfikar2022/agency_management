@@ -3,6 +3,13 @@
 namespace App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank\Deposit;
+use App\Models\Bank\DepositCollection;
+use App\Models\Bank\DepositCollectionUpdateLog;
+use App\Models\Bank\Loan;
+use App\Models\Bank\LoanCollection;
+use App\Models\Bank\LoanCollectionUpdateLog;
+use App\Models\Bank\Member;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
@@ -137,6 +144,75 @@ class AdminController extends Controller
 
     public function reportGenerate(){
         return Inertia::render('Admin/Bank/GenerateReport', [
+        ]);
+    }
+
+    public function employeeWiseCollectionReport(){
+        
+        
+        $validated = request()->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'employee_id' => 'required|exists:users,id',
+        ]); 
+        
+
+        $employee = User::where('id', $validated['employee_id'])->where('is_deleted', false)->first();
+
+        if(!$employee){
+            return redirect()->back()->with('error', 'কর্মচারী পাওয়া যায়নি।');
+        }
+
+        $deposit_collections = DepositCollection::where('collecting_user_id', $employee->id)
+            ->whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->get();
+
+        $total_deposit_collection = 0;
+        foreach($deposit_collections as $collection){
+            $total_deposit_collection += $collection->deposit_amount;
+            $deposit = Deposit::find($collection->deposit_id);
+            $member = Member::find($deposit->member_id);
+            $updates = DepositCollectionUpdateLog::where('deposit_collection_id', $collection->id)->get();
+            $updates->map(function($update){
+                $updating_user = User::find($update->updating_user_id);
+                $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown User';
+                return $update;
+            });
+            $collection->updates = $updates;
+            $collection->member_name = $member->name;
+            $collection->member_id = $member->id;
+        }
+
+        $loan_collections = LoanCollection::where('collecting_user_id', $employee->id)
+            ->whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->get();
+        
+        $total_loan_collection = 0;
+        foreach($loan_collections as $collection){
+            $total_loan_collection += $collection->paid_amount;
+            $loan = Loan::find($collection->loan_id);
+            $member = Member::find($loan->member_id);
+            $updates = LoanCollectionUpdateLog::where('loan_collection_id', $collection->id)->get();
+            $updates->map(function($update){
+                $updating_user = User::find($update->updating_user_id);
+                $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown User';
+                return $update;
+            });
+            $collection->updates = $updates;
+            $collection->member_name = $member->name;
+            $collection->member_id = $member->id;
+        }
+
+        return Inertia::render('Admin/Bank/EmployeeWiseReport', [
+            'employee' => $employee,
+            'deposit_collections' => $deposit_collections,
+            'total_deposit_collection' => $total_deposit_collection,
+            'loan_collections' => $loan_collections,
+            'total_loan_collection' => $total_loan_collection,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
         ]);
     }
    
