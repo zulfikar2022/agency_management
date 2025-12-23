@@ -66,7 +66,26 @@ class MemberController extends Controller
         ]);
     }
     public function allLoanMembers(){
-        return Inertia::render('Admin/Bank/AllLoanerMembers');
+        $search = request()->query('search', '');
+        $loans = Loan::where('is_deleted', false)
+            ->where('remaining_payable_amount', '>', 0)
+            ->pluck('member_id');
+
+        $members = Member::whereIn('id', $loans)
+        ->where(function($query) use ($search) {
+            $query->where('name', 'like', '%'.$search.'%')
+                  ->orWhere('phone_number',$search)
+                  ->orWhere('nid_number',  $search)
+                  ->orWhere('id', $search)
+                  ->orWhere('address', 'like', '%'.$search.'%')
+                  ->orWhere('fathers_name', 'like', '%'.$search.'%')
+                  ->orWhere('mothers_name', 'like', '%'.$search.'%');
+        })
+        ->where('is_deleted', false)
+        ->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        return Inertia::render('Admin/Bank/AllLoanerMembers', [
+            'data' => $members,
+        ]);
     }
 
     public function depositedToday(){
