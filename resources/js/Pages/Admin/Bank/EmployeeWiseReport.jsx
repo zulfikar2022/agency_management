@@ -74,6 +74,12 @@ function EmployeeWiseReport({
                 {total_loan_collection / 100} টাকা
               </span>
             </p>
+            <p className=" font-bold">
+              মোট কালেকশনঃ{' '}
+              <span className="font-normal">
+                {(total_deposit_collection + total_loan_collection) / 100} টাকা
+              </span>
+            </p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">

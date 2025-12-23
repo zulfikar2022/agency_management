@@ -10,6 +10,7 @@ use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
 use App\Models\Bank\MemberUpdateLog;
 use App\Models\Withdraw;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -276,7 +277,7 @@ class MemberController extends Controller
        
         $loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->first();
         $has_loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->exists();
-        $deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->where('last_depositing_predictable_date' , '>', now())->first();
+        $deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->first();
 
         // dd($deposit_account);
 
@@ -284,6 +285,7 @@ class MemberController extends Controller
         $deposit_account_id = $deposit_account ? $deposit_account->id : null;
         $daily_deposit_collections = DepositCollection::where('deposit_id', $deposit_account_id)
             ->where('is_deleted', false)
+            ->where('deposit_amount', '>', 0)
             ->orderBy('created_at', 'desc')
             ->get();
             // dd($daily_deposit_collections);
@@ -309,6 +311,22 @@ class MemberController extends Controller
 
         // each instance of member_update_logs has a updating_user_id field. We need to get the name of the user who updated the member information from the users table. 
 
+
+        $today = Carbon::today();
+        $not_paid_days_count = 0;
+
+        if($deposit_account){
+          $last_deposit_date = new Carbon($deposit_account->last_depositing_predictable_date);
+          if( $last_deposit_date->lessThan($today) ){
+            $not_paid_days_count = $last_deposit_date->diffInDays($today) + 1 - $number_of_deposit_collections;
+          }else{
+                $start_date = Carbon::parse($deposit_account->created_at)->startOfDay();
+                $end_date = $today->startOfDay();
+                $not_paid_days_count = $start_date->diffInDays($end_date) + 1 - $number_of_deposit_collections;
+
+          }
+        }
+
         
         
 
@@ -324,6 +342,7 @@ class MemberController extends Controller
             'withdraws' => $withdraws,
             'loan' => $loan,
             'update_history' => $update_history,
+            'not_paid_days_count' => $not_paid_days_count,
         ]);
     }
 

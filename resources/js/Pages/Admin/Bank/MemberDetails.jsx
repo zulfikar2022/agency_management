@@ -17,10 +17,12 @@ function MemberDetails({
   withdraws,
   update_history,
   loan,
+  not_paid_days_count,
 }) {
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+  console.log({ not_paid_days_count });
   // today as the format 'YYYY-MM-DD'
 
   const today = dayjs().format('YYYY-MM-DD');
@@ -169,6 +171,13 @@ function MemberDetails({
                         {dayjs(
                           deposit_account?.last_depositing_predictable_date
                         ).format('D MMMM YYYY')}
+                      </span>
+                    </p>
+                    <p className="font-bold text-red-600 border-b border-dashed mb-2">
+                      সঞ্চয় জমা করেনিঃ
+                      <span className="text-slate-500">
+                        {' '}
+                        {not_paid_days_count} দিন
                       </span>
                     </p>
 

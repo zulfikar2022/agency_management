@@ -5,12 +5,12 @@ import Swal from 'sweetalert2';
 
 function AddNewMember() {
   const { data, setData, post, processing, errors } = useForm({
-    name: 'fake name',
-    address: 'fake address',
-    phone_number: '0123456789',
-    nid_number: '1234567',
-    fathers_name: 'fake fathers name',
-    mothers_name: 'fake mothers name',
+    name: '',
+    address: '',
+    phone_number: '',
+    nid_number: '',
+    fathers_name: '',
+    mothers_name: '',
     admission_fee: 20,
   });
   const handleSubmit = (e) => {

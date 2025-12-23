@@ -30,39 +30,41 @@ function PaidToday({ customers, totalCustomers }) {
 
   return (
     <EmployeeProductLayout>
-      <div className="text-lg font-semibold text-center my-5">
-        আজ যারা টাকা দিয়েছে
-      </div>
-      <p className="text-center">
-        মোট কাস্টমার: <span className="font-bold">{totalCustomers}</span> জন
-      </p>
-      <p className="text-center">
-        এই পৃষ্ঠায় আছেন: <span className="font-bold">{data?.length}</span> জন
-      </p>
-      <div className="ml-3 md:ml-5">
-        <div className="flex flex-col md:flex-row mb-4 mr-2">
-          <input
-            type="text"
-            placeholder="কাস্টমার অনুসন্ধান করুন..."
-            className="input input-bordered w-full max-w-xs mr-2 mb-2 md:mb-0"
-            value={searchTerm}
-            name="search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-
-          <Link
-            href={route('employee.customersPaidToday', {
-              search: searchTerm,
-              todate,
-            })}
-            className="btn btn-neutral w-[150px]"
-          >
-            অনুসন্ধান করুন
-          </Link>
+      <div className="container mx-auto">
+        <div className="text-lg font-semibold text-center my-5">
+          আজ যারা টাকা দিয়েছে
         </div>
+        <p className="text-center">
+          মোট কাস্টমার: <span className="font-bold">{totalCustomers}</span> জন
+        </p>
+        <p className="text-center">
+          এই পৃষ্ঠায় আছেন: <span className="font-bold">{data?.length}</span> জন
+        </p>
+        <div className="ml-3 md:ml-5">
+          <div className="flex flex-col md:flex-row mb-4 mr-2">
+            <input
+              type="text"
+              placeholder="কাস্টমার অনুসন্ধান করুন..."
+              className="input input-bordered w-full max-w-xs mr-2 mb-2 md:mb-0"
+              value={searchTerm}
+              name="search"
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+
+            <Link
+              href={route('employee.customersPaidToday', {
+                search: searchTerm,
+                todate,
+              })}
+              className="btn btn-neutral w-[150px]"
+            >
+              অনুসন্ধান করুন
+            </Link>
+          </div>
+        </div>
+        <ResponsiveTable actionData={actionData} data={tableData} />
+        {data?.length > 0 && <Pagination paginationData={pagination} />}
       </div>
-      <ResponsiveTable actionData={actionData} data={tableData} />
-      {data?.length > 0 && <Pagination paginationData={pagination} />}
     </EmployeeProductLayout>
   );
 }
