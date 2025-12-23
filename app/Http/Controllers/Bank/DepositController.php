@@ -127,7 +127,7 @@ class DepositController extends Controller
             ->where('is_deleted', false)
             ->where(function($query) use ($search){
                 $query->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('id', 'like', '%'.$search.'%')
+                    ->orWhere('id', $search)
                     ->orWhere('address', 'like', '%'.$search.'%')
                     ->orWhere('fathers_name', 'like', '%'.$search.'%');
             })

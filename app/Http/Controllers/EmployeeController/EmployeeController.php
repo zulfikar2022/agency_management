@@ -41,9 +41,9 @@ class EmployeeController extends Controller
         ->where('collection_day', $today)
         ->where(function ($query) use ($search) {
         $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('phone_number', 'like', '%' . $search . '%')
+                ->orWhere('phone_number',  $search )
                 ->orWhere('address', 'like', '%' . $search . '%')
-                ->orWhere('nid_number', 'like', '%' . $search . '%')
+                ->orWhere('nid_number', $search )
                 ->orWhere('fathers_name', 'like', '%' . $search . '%')
                 ->orWhere('mothers_name', 'like', '%' . $search . '%')
                 ->orWhere('id',$search);
@@ -80,9 +80,9 @@ class EmployeeController extends Controller
                 ->where('collection_day', $day)
                 ->where(function ($query) use ($search) {
                     $query->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('phone_number', 'like', '%' . $search . '%')
+                        ->orWhere('phone_number',  $search )
                         ->orWhere('address', 'like', '%' . $search . '%')
-                        ->orWhere('nid_number', 'like', '%' . $search . '%')
+                        ->orWhere('nid_number', $search )
                         ->orWhere('fathers_name', 'like', '%' . $search . '%')
                         ->orWhere('mothers_name', 'like', '%' . $search . '%')
                         // ->orWhere('collection_day', 'like', '%' . $search . '%')
@@ -110,9 +110,9 @@ class EmployeeController extends Controller
             $customers = Customer::where('is_deleted', false)
                 ->where(function ($query) use ($search) {
                     $query->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('phone_number', 'like', '%' . $search . '%')
+                        ->orWhere('phone_number',  $search )
                         ->orWhere('address', 'like', '%' . $search . '%')
-                        ->orWhere('nid_number', 'like', '%' . $search . '%')    
+                        ->orWhere('nid_number', $search )    
                         ->orWhere('id', $search)
                         ->orWhere('fathers_name', 'like', '%' . $search . '%')
                         ->orWhere('mothers_name', 'like', '%' . $search . '%');
@@ -154,9 +154,9 @@ class EmployeeController extends Controller
             ->where('is_deleted', false)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number',  $search )
                     ->orWhere('address', 'like', '%' . $search . '%')
-                    ->orWhere('nid_number', 'like', '%' . $search . '%')
+                    ->orWhere('nid_number', $search )
                     ->orWhere('fathers_name', 'like', '%' . $search . '%')
                     ->orWhere('id', $search)
                     ->orWhere('mothers_name', 'like', '%' . $search . '%');
@@ -195,9 +195,9 @@ class EmployeeController extends Controller
             ->where('collection_day', $today)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number',  $search )
                     ->orWhere('address', 'like', '%' . $search . '%')
-                    ->orWhere('nid_number', 'like', '%' . $search . '%')
+                    ->orWhere('nid_number', $search )
                     ->orWhere('fathers_name', 'like', '%' . $search . '%')
                     ->orWhere('id', $search)
                     ->orWhere('mothers_name', 'like', '%' . $search . '%');
@@ -320,7 +320,8 @@ class EmployeeController extends Controller
         $members = Member::where('is_deleted', false)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
-                    // ->orWhere('phone_number', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number',$search)
+                    ->orWhere('nid_number',$search)
                     ->orWhere('address', 'like', '%' . $search . '%')
                     ->orWhere('fathers_name', 'like', '%' . $search . '%')
                     ->orWhere('mothers_name', 'like', '%' . $search . '%')

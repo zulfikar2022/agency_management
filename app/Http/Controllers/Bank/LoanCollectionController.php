@@ -35,7 +35,11 @@ class LoanCollectionController extends Controller
         ->where('is_deleted', false)
         ->where(function ($query) use ($search) {
             $query->where('name', 'like', '%' . $search . '%')
-                // ->orWhere('phone_number', 'like', '%' . $search . '%')
+                ->orWhere('phone_number',  $search)
+                ->orWhere('address', 'like', '%' . $search . '%')
+                ->orWhere('nid_number', $search)
+                ->orWhere('fathers_name', 'like', '%' . $search . '%')
+                ->orWhere('mothers_name', 'like', '%' . $search . '%')
                 ->orWhere('id',  $search );
         })
         ->paginate(10);
