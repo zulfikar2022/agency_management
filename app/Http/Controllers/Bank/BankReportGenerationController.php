@@ -18,6 +18,14 @@ use Inertia\Inertia;
 use Spatie\Browsershot\Browsershot;
 
 class BankReportGenerationController{
+     public function employeeWiseCollectionReport(){
+
+        $employees = User::where('is_employee', true)->where('is_deleted', false)->get();
+
+        return Inertia::render('Admin/Bank/EmployeeWiseCollection', [
+            'employees' => $employees,
+        ]);
+    } 
 
      public function generateDepositCollectionReport(){
         // extract date from body 
@@ -229,5 +237,71 @@ class BankReportGenerationController{
         return response($pdfData, 200)
         ->header('Content-Type', 'application/pdf')
         ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function generateEmployeeWiseCollectionReport(){
+        $validated = request()->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'employee_id' => 'required|exists:users,id',
+        ]);
+        // dd($validated);
+        $employee = User::where('id', $validated['employee_id'])->where('is_employee', true)->where('is_deleted', false)->first();
+        // dd($employee);
+
+        $deposit_collections = DepositCollection::where('deposit_date', '>=', $validated['start_date'])
+            ->where('deposit_date', '<=', $validated['end_date'])
+            ->where('collecting_user_id', $employee->id)
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $total_deposit_collection = 0;
+        foreach ($deposit_collections as $deposit_collection) {
+            $total_deposit_collection += $deposit_collection->deposit_amount;
+            // find the member based on the deposit id
+            $deposit = Deposit::find($deposit_collection->deposit_id);
+            $member = Member::find($deposit->member_id);
+            $deposit_collection->member_name = $member->name;
+            $deposit_collection->member_id = $member->id;
+        }
+        // dd($deposit_collections);
+
+        $loan_collections = LoanCollection::where('paying_date', '>=', $validated['start_date'])
+            ->where('paying_date', '<=', $validated['end_date'])
+            ->where('collecting_user_id', $employee->id)
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $total_loan_collection = 0;
+        foreach ($loan_collections as $loan_collection) {
+            $total_loan_collection += $loan_collection->paid_amount;   
+            // find the member based on the loan id
+            $loan = Loan::find($loan_collection->loan_id);
+            $member = Member::find($loan->member_id);
+            $loan_collection->member_name = $member->name;
+            $loan_collection->member_id = $member->id; 
+        }
+
+            $html = view('pdf.bank-employee-wise-collection-report', [
+                'employee' => $employee,
+                'deposit_collections' => $deposit_collections,
+                'loan_collections' => $loan_collections,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'total_deposit_collection' => $total_deposit_collection,
+                'total_loan_collection' => $total_loan_collection,
+            
+            ])->render();
+
+            $pdfData = Browsershot::html($html)
+                    ->noSandbox()
+                    ->showBackground()
+                    ->format('A4')
+                    ->pdf();
+            $todayDate = date('d F Y');
+            $filename =  'employee_wise_collection_report_' . $employee->name . '_' . $todayDate . '.pdf';
+            return response($pdfData, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
 }

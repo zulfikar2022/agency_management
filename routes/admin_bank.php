@@ -79,5 +79,11 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::get('/admin/bank/generate-deposits-report', [BankReportGenerationController::class, 'generateDepositReport'])->name('admin.bank.generate_deposits_report');
 
+    Route::get('/admin/bank/employee-wise-collection', [BankReportGenerationController::class, 'employeeWiseCollectionReport'])->name('admin.bank.employee_wise_collection_report');
+
+    Route::get('/admin/bank/generate-employee-wise-collection-report', [BankReportGenerationController::class, 'generateEmployeeWiseCollectionReport'])->name('admin.bank.generate_employee_wise_collection_report');
+
+
+
     
 });

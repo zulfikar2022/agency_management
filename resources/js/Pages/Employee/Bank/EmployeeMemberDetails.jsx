@@ -65,18 +65,21 @@ function EmployeeMemberDetails({
         <div>
           <p className="font-bold">
             মোট লোনঃ{' '}
-            <span className="font-normal">{loan?.total_loan / 100} টাকা</span>
+            <span className="font-normal">
+              {(loan?.total_loan || 0) / 100} টাকা
+            </span>
           </p>
           <p className="font-bold">
             মোট পরিশোধযোগ্যঃ{' '}
             <span className="font-normal">
-              {loan?.total_payable_amount / 100} টাকা
+              {(loan?.total_payable_amount || 0) / 100} টাকা
             </span>
           </p>
           <p className="font-bold">
             মোট পরিশোধিতঃ{' '}
             <span className="font-normal">
-              {(loan?.total_payable_amount - loan?.remaining_payable_amount) /
+              {((loan?.total_payable_amount || 0) -
+                (loan?.remaining_payable_amount || 0)) /
                 100}{' '}
               টাকা
             </span>
@@ -84,7 +87,7 @@ function EmployeeMemberDetails({
           <p className="font-bold">
             মোট বাকিঃ{' '}
             <span className="font-normal">
-              {loan?.remaining_payable_amount / 100} টাকা
+              {(loan?.remaining_payable_amount || 0) / 100} টাকা
             </span>
           </p>
         </div>

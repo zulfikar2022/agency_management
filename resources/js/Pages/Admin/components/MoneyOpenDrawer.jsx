@@ -57,11 +57,18 @@ function MoneyOpenDrawer() {
           </Link>
           <br />
           <Link
+            href={route('admin.bank.employee_wise_collection_report')}
+            className="ml-3 underline text-blue-500 mb-4 block"
+          >
+            এমপ্লয়ী অনুযায়ী সংগ্রহ রিপোর্ট
+          </Link>
+          <Link
             href={route('admin.bank.report_generate')}
             className="ml-3 btn btn-xs btn-neutral mb-4"
           >
             রিপোর্ট তৈরি করুন
           </Link>
+          {/* admin.bank.employee_wise_collection_report */}
         </li>
       </ul>
     </div>

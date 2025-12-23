@@ -1,9 +1,11 @@
+import Checkbox from '@/Components/Checkbox';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useState } from 'react';
 
 export default function Register() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -12,6 +14,7 @@ export default function Register() {
     password: '',
     password_confirmation: '',
   });
+  const [seePassword, setSeePassword] = useState(false);
 
   const submit = (e) => {
     e.preventDefault();
@@ -68,7 +71,7 @@ export default function Register() {
 
           <TextInput
             id="password"
-            type="password"
+            type={seePassword ? 'text' : 'password'}
             name="password"
             value={data.password}
             className="mt-1 block w-full"
@@ -88,7 +91,7 @@ export default function Register() {
 
           <TextInput
             id="password_confirmation"
-            type="password"
+            type={seePassword ? 'text' : 'password'}
             name="password_confirmation"
             value={data.password_confirmation}
             className="mt-1 block w-full"
@@ -96,6 +99,16 @@ export default function Register() {
             onChange={(e) => setData('password_confirmation', e.target.value)}
             required
           />
+          <div className="mt-4">
+            <Checkbox
+              name="seePassword"
+              checked={seePassword}
+              onChange={(e) => setSeePassword(e.target.checked)}
+            />
+            <span className="ms-2 text-sm text-gray-600">
+              {seePassword ? 'Hide' : 'Show'} Password
+            </span>
+          </div>
 
           <InputError message={errors.password_confirmation} className="mt-2" />
         </div>
