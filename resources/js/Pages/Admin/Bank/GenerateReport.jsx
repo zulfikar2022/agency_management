@@ -146,7 +146,7 @@ function ReportBox({ title, form, onSubmit }) {
           </div>
 
           <button type="submit" className="btn btn-neutral btn-sm w-full mt-2">
-            রিপোর্ট দেখুন (PDF)
+            রিপোর্ট তৈরি করুন
           </button>
         </form>
       </div>

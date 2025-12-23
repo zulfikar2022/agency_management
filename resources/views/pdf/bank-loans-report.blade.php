@@ -50,14 +50,14 @@
         @forelse ($loans as $loan)
             <div class="deposit-collection-entry">
                 <div style="display: grid; grid-template-columns: 1fr 1fr;">
-                    <div style="">
+                    <div>
                         <p><strong>সদস্যের আইডি:</strong> {{ $loan->member_id }}</p>
                         <p><strong>সদস্যের নাম:</strong> {{ $loan->member_name }} </p>
                         <p><strong>ঋণ গ্রহণের তারিখ:</strong> {{ \Carbon\Carbon::parse($loan->created_at)->format('d F Y') }} </p>
                         <p><strong>ঋণ পরিশোধের শেষ তারিখ:</strong> {{ \Carbon\Carbon::parse($loan->last_paying_date)->format('d F Y') }} </p>
                         <p><strong>মোট ঋণ:</strong> {{ number_format($loan->total_loan / 100, 2) }} টাকা</p>
                     </div>
-                    <div style=""> 
+                    <div> 
                         <p><strong>জামানত:</strong> {{ number_format($loan->safety_money / 100, 2) }} টাকা</p>
                         <p><strong>মোট পরিশোধ যোগ্য:</strong> {{ number_format($loan->total_payable_amount / 100, 2) }} টাকা</p>
                         <p><strong>পরিশোধ হয়েছে:</strong> {{ number_format(($loan->total_payable_amount - $loan->remaining_payable_amount) / 100, 2) }} টাকা</p>
