@@ -108,6 +108,16 @@ class AdminController extends Controller
         ]);
     }
 
+    public function allUsersForBank(){
+        $leanUser = request()->get('user');
+
+        $users = User::where('is_deleted', false)->get();
+
+        return Inertia::render('Admin/Bank/BankAllUsers', [
+            'users' => $users,
+        ]);
+    }
+
     // employee power toggle controller
     public function toggleEmployeePower(Request $request){
         $validatedData = $request->validate([

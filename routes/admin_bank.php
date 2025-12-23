@@ -83,6 +83,9 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::get('/admin/bank/generate-employee-wise-collection-report', [BankReportGenerationController::class, 'generateEmployeeWiseCollectionReport'])->name('admin.bank.generate_employee_wise_collection_report');
 
+    // show all users route
+    Route::get('/admin/bank/all-users', [AdminController::class, 'allUsersForBank'])->name('admin.bank.all_users');
+
 
 
     
