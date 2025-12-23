@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bank\Deposit;
 use App\Models\Bank\DepositCollection;
 use App\Models\Bank\DepositCollectionUpdateLog;
+use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -139,7 +140,12 @@ class DepositController extends Controller
                 ->where('is_deleted', false)
                 ->where('last_depositing_predictable_date', '>=', now()->format('Y-m-d'))
                 ->first();
+            $loan = Loan::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                ->where('remaining_payable_amount', '>', 0)
+                ->first();
             $member->deposit_account = $deposit;
+            $member->loan_account = $loan;
             return $member;
         });
         

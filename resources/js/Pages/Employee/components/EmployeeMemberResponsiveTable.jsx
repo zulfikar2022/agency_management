@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 
 function EmployeeMemberResponsiveTable({ members }) {
-  console.log(members);
+  console.log(members[0]);
   return (
     <div>
       {members.length === 0 ? (

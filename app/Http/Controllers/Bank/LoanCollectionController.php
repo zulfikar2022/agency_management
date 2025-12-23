@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Bank;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank\Deposit;
 use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\LoanCollectionUpdateLog;
@@ -43,6 +44,16 @@ class LoanCollectionController extends Controller
                 ->orWhere('id',  $search );
         })
         ->paginate(10);
+        $members->transform(function ($member) use ($loans_not_paid_today) {
+            $deposit = Deposit::where('member_id', $member->id)
+                ->where('is_deleted', false)
+                ->where('last_depositing_predictable_date', '>=', now()->format('Y-m-d'))
+                ->first();
+            $loan = $loans_not_paid_today->firstWhere('member_id', $member->id);
+            $member->deposit_account = $deposit;
+            $member->loan_account = $loan;
+            return $member;
+        });
         // dd($members);
 
         return Inertia::render('Employee/Bank/EmployeeNotInstallmantedToday', [

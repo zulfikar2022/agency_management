@@ -1,7 +1,6 @@
 import { Link } from '@inertiajs/react';
 
 function Pagination({ paginationData, queryParams = {} }) {
-  console.log(paginationData);
   let links = paginationData?.links || [];
   // remove the first and the last entry of the links array and put them into the links itself
   links = links?.slice(1, -1);
