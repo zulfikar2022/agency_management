@@ -72,6 +72,9 @@ Route::get('/admin/product-generate-sales-report', [ProductRerportGenerationCont
 //admin.product.generate_collection_report
 Route::get('/admin/product-generate-collection-report', [ProductRerportGenerationController::class, 'generateProductCollectionReport'])->name('admin.product.generate_collection_report');
 
+// product employee wise collection
+Route::get('/admin/product/employee-wise-collection', [AdminController::class, 'productEmployeeWiseCollectionPage'])->name('admin.product.employeeWiseCollectionPage');
+
 
 
  

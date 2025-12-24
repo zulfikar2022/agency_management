@@ -14,6 +14,7 @@ use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
+use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use App\Models\ProductUpdateLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -232,6 +233,43 @@ class AdminController extends Controller
         
         return Inertia::render('Admin/Products/ProductReport', [
             
+        ]);
+    }
+
+    public function productEmployeeWiseCollectionPage(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'employee_id' => 'nullable|exists:users,id',
+        ]);
+        $employee = User::where('id', $validated['employee_id'])->where('is_deleted', false)->first();
+
+        $collections = ProductCustomerMoneyCollection::where('collecting_user_id', $employee->id)
+            ->whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $total_collection = 0;
+        $total_collectable = 0;
+        foreach($collections as $collection){
+            $total_collection += $collection->collected_amount;
+            $total_collectable += $collection->collectable_amount;
+            $customer = Customer::find($collection->customer_id);
+            $collection->customer_name = $customer ? $customer->name : 'Unknown Customer';
+
+            $updates = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $collection->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $collection->updates = $updates;
+        }
+
+        return Inertia::render('Admin/Products/ProductEmployeeWiseCollection', [
+            'employee' => $employee,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'collections' => $collections,
+            'total_collection' => $total_collection,
+            'total_collectable' => $total_collectable,
         ]);
     }
    

@@ -117,7 +117,15 @@ function EmployeeReportBox({ employee }) {
                 </>
               )}
             </button>
-            <Link className="btn btn-outline btn-neutral w-full">
+            <Link
+              href={route('admin.product.employeeWiseCollectionPage', {
+                employee_id: employee.id,
+                start_date: data.start_date,
+                end_date: data.end_date,
+              })}
+              target="_blank"
+              className="btn btn-outline btn-neutral w-full"
+            >
               রিপোর্ট দেখুন
             </Link>
           </div>
