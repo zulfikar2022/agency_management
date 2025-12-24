@@ -1,7 +1,8 @@
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
+import { ArrowLeft } from 'lucide-react';
 
 function CreateDepositAccount({ member }) {
   console.log(member);
@@ -55,6 +56,19 @@ function CreateDepositAccount({ member }) {
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
+        <div className="pl-10 mt-4">
+          <Link
+            href={route('admin.bank.member_details', {
+              member: member?.id,
+            })}
+            className="text-blue-700 underline "
+          >
+            {' '}
+            <span className="flex">
+              <ArrowLeft /> <span>ফিরে যান</span>
+            </span>{' '}
+          </Link>
+        </div>{' '}
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
