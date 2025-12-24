@@ -23,12 +23,11 @@ class CustomerController extends Controller
     {
         $user =  request()->get('user');
         $searchTerm = request()->query('search', '');
-        // dd($user);
-        // dd($searchTerm);
+        
         $customers = Customer::where('is_deleted', false)
             ->where(function ($query) use ($searchTerm) {
                 $query->where('name', 'like', '%' . $searchTerm . '%')
-                      ->where('id', $searchTerm)
+                      ->orWhere('id', $searchTerm)
                       ->orWhere('phone_number',  $searchTerm)
                       ->orWhere('address', 'like', '%' . $searchTerm . '%')
                       ->orWhere('nid_number', $searchTerm )

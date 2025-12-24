@@ -228,6 +228,12 @@ class ProductCustomerMoneyCollectionController extends Controller
         $collections = ProductCustomerMoneyCollection::whereIn('id', $collection_ids)
             ->get();
         
+        if($user->id !== $collections[0]->collecting_user_id){
+            // send an error response with message
+
+            return redirect()->back()->withErrors(['error' => 'আপনার এই সংগ্রহ আপডেট করার অনুমতি নেই। কারণ আপনি এই সংগ্রহ তৈরি করেননি।']);
+        }
+        
         $today = date('Y-m-d');
         if($today != $collections[0]->collecting_date){
             return abort(404);
@@ -266,9 +272,6 @@ class ProductCustomerMoneyCollectionController extends Controller
             'collections' => $collections, 
             'customer_products' => $customer_products,
         ]);
-
-    
-
     
     }
 
@@ -332,6 +335,13 @@ class ProductCustomerMoneyCollectionController extends Controller
 
         $updatable_customer_products = CustomerProduct::whereIn('id', $validated_data['purchase_ids'])->get();
         $updatable_collection_instances = ProductCustomerMoneyCollection::whereIn('id', $validated_data['collection_ids'])->get();
+
+        $collecting_user_id = $updatable_collection_instances[0]->collecting_user_id;
+        $collecting_user = User::find($collecting_user_id);
+        // check if the collecting user is same as the current logged in user
+        if($collecting_user_id !== Auth::id()){
+            return redirect()->back()->withErrors(['error' => 'আপনার এই সংগ্রহ আপডেট করার অনুমতি নেই। কারণ আপনি এই সংগ্রহ তৈরি করেননি।']);
+        }
         
         // loop through updatable_collection_instances
         foreach ($updatable_collection_instances as $index => $collection_instance) {
@@ -339,9 +349,9 @@ class ProductCustomerMoneyCollectionController extends Controller
                 return redirect()->back()->withErrors(['error' => 'আপডেটকৃত সংগ্রহের পরিমাণ মোট বকেয়া পরিমাণের চেয়ে বেশি হতে পারে না।']);
             }
         }
-        // dd(Auth::id());
+        
 
-        // dd("just before the transaction start");
+
         // create an instance of product_customer_money_collection_update_logs
         DB::transaction(function () use ($validated_data, $updatable_customer_products, $updatable_collection_instances) {
             foreach ($validated_data['collection_ids'] as $index => $collection_id) {
