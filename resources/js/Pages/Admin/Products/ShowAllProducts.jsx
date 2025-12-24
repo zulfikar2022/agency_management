@@ -7,14 +7,6 @@ import GoBack from '../components/GoBack';
 import ResponsiveTable from '@/Pages/Employee/components/ResponsiveTable';
 import ResponsiveProductTable from '../components/ResponsiveProductTable';
 
-// আইডি
-// পণ্যের নাম
-// সরবরাহকারী প্রতিষ্ঠানের নাম
-// ক্রয় কৃত পরিমাণ
-// বর্তমান পরিমাণ
-
-// বাটন সমূহ - বিস্তারিত, আপডেট করুন, এভেইলেবল করুন
-
 function ShowAllProducts({ user, products, search, numberOfProducts }) {
   let paginationData = { ...products, data: [] };
   const [searchTerm, setSearchTerm] = useState(search || '');

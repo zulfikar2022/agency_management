@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::get('/admin/bank/deposit-dismissal/{deposit}', [DepositDismissalController::class, 'depositDismissalForm'])->name('admin.bank.deposit_dismissal_form');
 
+    Route::post('/admin/bank/deposit-dismissal-store', [DepositDismissalController::class, 'store'])->name('admin.bank.deposit_dismissal.store');
 
 
     
