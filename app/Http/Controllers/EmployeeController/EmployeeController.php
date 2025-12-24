@@ -49,7 +49,7 @@ class EmployeeController extends Controller
                 ->orWhere('id',$search);
         })
         ->orderBy('created_at', 'desc')
-        ->paginate(10);
+        ->paginate(50);
          $customers->getCollection()->transform(function ($customer) {
                     $purchases = CustomerProduct::where('customer_id', $customer->id)
                         ->where('is_deleted', false)
@@ -89,7 +89,7 @@ class EmployeeController extends Controller
                         ->orWhere('id',$search);
                 })
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->paginate(50);
 
                 
                 $customers->getCollection()->transform(function ($customer) {
@@ -118,7 +118,7 @@ class EmployeeController extends Controller
                         ->orWhere('mothers_name', 'like', '%' . $search . '%');
                 })
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->paginate(50);
 
                 $customers->getCollection()->transform(function ($customer) {
                     $purchases = CustomerProduct::where('customer_id', $customer->id)
@@ -162,7 +162,7 @@ class EmployeeController extends Controller
                     ->orWhere('mothers_name', 'like', '%' . $search . '%');
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(50);
 
              $customers->getCollection()->transform(function ($customer) {
                     $purchases = CustomerProduct::where('customer_id', $customer->id)
@@ -203,7 +203,7 @@ class EmployeeController extends Controller
                     ->orWhere('mothers_name', 'like', '%' . $search . '%');
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(50);
 
              $customers->getCollection()->transform(function ($customer) {
                     $purchases = CustomerProduct::where('customer_id', $customer->id)
@@ -328,7 +328,7 @@ class EmployeeController extends Controller
                     ->orWhere('id', $search);
             })
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->paginate(50);
 
         // from all the members search into the deposits table to see if the member has a deposit account, if yes then attach the deposit account to the member instance as deposit_account property
         $members->getCollection()->transform(function ($member) {

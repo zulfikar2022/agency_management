@@ -31,10 +31,10 @@ function ProductReport() {
   const handleCollectionReport = (e) => {
     e.preventDefault();
     console.log('Collection Report Form Data:', collectionReportForm.data);
-    // openPdfReport(
-    //   'admin.product.generate_collection_report',
-    //   collectionReportForm.data
-    // );
+    openPdfReport(
+      'admin.product.generate_collection_report',
+      collectionReportForm.data
+    );
   };
 
   return (

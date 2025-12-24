@@ -43,7 +43,7 @@ class LoanCollectionController extends Controller
                 ->orWhere('mothers_name', 'like', '%' . $search . '%')
                 ->orWhere('id',  $search );
         })
-        ->paginate(10);
+        ->paginate(50);
         $members->transform(function ($member) use ($loans_not_paid_today) {
             $deposit = Deposit::where('member_id', $member->id)
                 ->where('is_deleted', false)

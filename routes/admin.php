@@ -69,6 +69,9 @@ Route::get('/admin/report-generation-page', [AdminController::class, 'reportGene
 // admin.product.generate_sales_report
 Route::get('/admin/product-generate-sales-report', [ProductRerportGenerationController::class, 'generateProductSalesReport'])->name('admin.product.generate_sales_report');
 
+//admin.product.generate_collection_report
+Route::get('/admin/product-generate-collection-report', [ProductRerportGenerationController::class, 'generateProductCollectionReport'])->name('admin.product.generate_collection_report');
+
 
 
  

@@ -34,7 +34,7 @@ function WithdrawMoney({ member, deposit_id }) {
             toast.success('টাকা উত্তোলন সফল হয়েছে!', {
               position: 'top-center',
               theme: 'dark',
-              position: 'top-center',
+
               transition: Bounce,
             });
           },

@@ -1,5 +1,5 @@
 import LayoutForProduct from '../layouts/LayoutForProduct';
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import { ClipboardList, Search, UserCheck } from 'lucide-react';
 
 function ProductEmployeeWiseReport({ employees }) {
@@ -7,7 +7,7 @@ function ProductEmployeeWiseReport({ employees }) {
     <LayoutForProduct>
       <div className="container mx-auto px-4 py-8">
         <h2 className="font-bold text-3xl text-center mb-10 text-neutral">
-          এমপ্লয়ী ভিত্তিক কালেকশন রিপোর্ট
+          এমপ্লয়ী ভিত্তিক কালেকশন রিপোর্ট (পণ্যের কালেকশন)
         </h2>
 
         {employees && employees.length > 0 ? (
@@ -117,6 +117,9 @@ function EmployeeReportBox({ employee }) {
                 </>
               )}
             </button>
+            <Link className="btn btn-outline btn-neutral w-full">
+              রিপোর্ট দেখুন
+            </Link>
           </div>
         </form>
       </div>

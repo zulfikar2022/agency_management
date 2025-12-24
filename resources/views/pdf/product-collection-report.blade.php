@@ -36,7 +36,7 @@
     <div>
         <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
     </div>
-    <h1 class="title">পণ্য বিক্রির রিপোর্ট </h1>
+    <h1 class="title">পণ্যের কালেকশনের রিপোর্ট</h1>
         @if ($start_date == $end_date)
             <!-- use Carbon and make the date as 22 December 2025 -->
             <p style="text-align: center; font-weight: bold;">রিপোর্টের সময়কাল: {{ \Carbon\Carbon::parse($start_date)->format('d F Y') }} </p>
@@ -46,33 +46,35 @@
         <p style="text-align: center; font-weight: bold;">রিপোর্ট তৈরির তারিখঃ <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span> </p>
         <div style="display: grid; grid-template-columns: 1fr 1fr; justify-items: center;">
             <div>
-                <p style="font-weight: bold;">মোট বিক্রয়মূল্যঃ <span style="font-weight: normal;">{{ $total_sales_amount }} টাকা</span></p>
+                <p style="font-weight: bold;">মোট সংগ্রহযোগ্য <span style="font-weight: normal;">{{ $total_collectable }} টাকা</span></p>
             </div>
             <div>
-                <p style="font-weight: bold;">মোট ডাউনপেমেন্টঃ <span style="font-weight: normal;">{{ $total_down_payment }} টাকা</span></p>
+                <p style="font-weight: bold;">মোট সংগ্রহঃ <span style="font-weight: normal;">{{ $total_collection }} টাকা</span></p>
             </div>
         </div>
 
-        @forelse ($sales as $sale)
-            <div style="display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #ccc; padding: 4px 0; margin-bottom: 4px;">
+        @forelse ($collections as $collection)
+            <div style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr; border-bottom: 1px solid #ccc; padding: 4px 0; margin-bottom: 4px;">
                 <div>
-                    <p style="font-weight: bold;">কাস্টমার আইডিঃ <span style="font-weight: normal;">{{ $sale->customer_id }}</span></p>
-                    <p style="font-weight: bold;">কাস্টমারের নামঃ <span style="font-weight: normal;">{{ $sale->customer_name }}</span></p>
-                    <p style="font-weight: bold;">পণ্যের আইডিঃ  <span style="font-weight: normal;">{{ $sale->product_id }}</span></p>
-                    <p style="font-weight: bold;">পণ্যের নামঃ <span style="font-weight: normal;">{{ $sale->product_name }}</span></p>
-                    <p style="font-weight: bold;">পরিমাণঃ  <span style="font-weight: normal;">{{ $sale->quantity }} টি</span></p>
-                    <p style="font-weight: bold;">মূল্যঃ  <span style="font-weight: normal;">{{ $sale->total_payable_price }} টাকা</span></p>
+                    <p style="font-weight: bold;">আইডিঃ <span style="font-weight: normal;">{{ $collection->customer_id }}</span></p>
+                   
                 </div>
                 <div>
-                    <p style="font-weight: bold;">ডাউন পেমেন্টঃ  <span style="font-weight: normal;">{{ $sale->downpayment }} টাকা</span></p>
-                    <p style="font-weight: bold;">সাপ্তাহিক পরিশোধযোগ্যঃ  <span style="font-weight: normal;">{{ $sale->weekly_payable_price }} টাকা</span></p>
-                    <p style="font-weight: bold;">বিক্রির তারিখঃ   <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($sale->created_at)->format('d F Y') }}</span></p>
-                    <p style="font-weight: bold;">বিক্রেতার নামঃ   <span style="font-weight: normal;">{{ $sale->seller_name }}</span></p>
+                     <p style="font-weight: bold;">কাস্টমারের নামঃ <span style="font-weight: normal;">{{ $collection->customer_name }}</span></p>
                 </div>
-
+                <div>
+                    <p style="font-weight: bold;">সংগ্রহযোগ্য পরিমাণঃ <span style="font-weight: normal;">{{ $collection->collectable_amount }} টাকা</span></p>
+                </div>
+                <div>
+                    <p style="font-weight: bold;">সংগ্রহকৃত পরিমাণঃ <span style="font-weight: normal;">{{ $collection->collected_amount }} টাকা</span></p>
+                </div>
+                 <div>
+                    <p style="font-weight: bold;">তারিখঃ <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($collection->created_at)->format('d F Y') }}</span></p>
+                </div>
             </div>
         @empty
-            <p style="text-align: center;">কোনো বিক্রির তথ্য পাওয়া যায়নি।</p>
+            <p style="text-align: center; font-weight: bold; margin-top: 20px;">কোনো সংগ্রহের তথ্য পাওয়া যায়নি।</p>
         @endforelse
+
 </body>
 </html>

@@ -69,7 +69,7 @@ class ProductRerportGenerationController extends Controller {
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
-        // dd($validated);
+    // dd($validated);
         $sales = CustomerProduct::whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->where('is_deleted', false)
@@ -90,6 +90,8 @@ class ProductRerportGenerationController extends Controller {
             $sale->product_name = $product ? $product->name : 'Unknown Product';
             $sale->customer_name = $customer ? $customer->name : 'Unknown Customer';
         }
+
+        // dd($sales);
         
         
          $html = view('pdf.product-sales-report', [
@@ -107,6 +109,51 @@ class ProductRerportGenerationController extends Controller {
                 ->pdf();
         $todayDate = date('d F Y');
         $filename =  'product_sales_report_' . $todayDate . '.pdf';
+
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function generateProductCollectionReport(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+
+        $collections = ProductCustomerMoneyCollection::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $total_collection = 0;
+        $total_collectable = 0;
+        foreach($collections as $collection){
+            $total_collection += $collection->collected_amount;
+            $total_collectable += $collection->collectable_amount;
+
+            $customer = Customer::find($collection->customer_id);
+            $collection->customer_name = $customer ? $customer->name : 'Unknown Customer';
+        }
+
+        // dd($collections);
+        
+        
+         $html = view('pdf.product-collection-report', [
+            'collections' => $collections,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'total_collection' => $total_collection,
+            'total_collectable' => $total_collectable,
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  'product_collection_report_' . $todayDate . '.pdf';
 
         return response($pdfData, 200)
         ->header('Content-Type', 'application/pdf')

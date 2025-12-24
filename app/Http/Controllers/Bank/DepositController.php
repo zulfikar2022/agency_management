@@ -132,7 +132,7 @@ class DepositController extends Controller
                     ->orWhere('address', 'like', '%'.$search.'%')
                     ->orWhere('fathers_name', 'like', '%'.$search.'%');
             })
-            ->paginate(10);
+            ->paginate(50);
 
         // find the deposit of each member and attach it to the member using transform method
         $members_not_deposited_today->transform(function($member){

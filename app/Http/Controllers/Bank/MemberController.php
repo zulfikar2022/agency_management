@@ -38,7 +38,7 @@ class MemberController extends Controller
                   ->orWhere('fathers_name', 'like', '%'.$search.'%')
                   ->orWhere('mothers_name', 'like', '%'.$search.'%');
         })
-        ->orderBy('id', 'desc')->paginate(10)->withQueryString();
+        ->orderBy('id', 'desc')->paginate(50)->withQueryString();
         return Inertia::render('Admin/Bank/BankAllMembers', [
             'data' => $members,
         ]);
@@ -60,7 +60,7 @@ class MemberController extends Controller
                   ->orWhere('mothers_name', 'like', '%'.$search.'%');
         })
         ->where('is_deleted', false)
-        ->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        ->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
 
         return Inertia::render('Admin/Bank/AllDepositingMembers', [
             'data' => $members,
@@ -83,7 +83,7 @@ class MemberController extends Controller
                   ->orWhere('mothers_name', 'like', '%'.$search.'%');
         })
         ->where('is_deleted', false)
-        ->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        ->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
         return Inertia::render('Admin/Bank/AllLoanerMembers', [
             'data' => $members,
         ]);
@@ -109,7 +109,7 @@ class MemberController extends Controller
                   ->orWhere('mothers_name', 'like', '%'.$search.'%');
         })
         ->where('is_deleted', false)
-        ->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        ->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
         return Inertia::render('Admin/Bank/DepositedTodayMembers', [
             'data' => $members,
         ]);
@@ -135,7 +135,7 @@ class MemberController extends Controller
                   ->orWhere('mothers_name', 'like', '%'.$search.'%');
         })
         ->where('is_deleted', false)
-        ->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        ->orderBy('created_at', 'desc')->paginate(50)->withQueryString();
         return Inertia::render('Admin/Bank/InstallmentedTodayMembers', [
             'data' => $members,
         ]);
@@ -158,7 +158,7 @@ class MemberController extends Controller
         $not_deposited_members = Member::whereIn('id', $not_deposited_member_ids)
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
-            ->paginate(10)
+            ->paginate(50)
             ->withQueryString();
         
         return Inertia::render('Admin/Bank/NotDepositedTodayMembers', [
@@ -195,7 +195,7 @@ class MemberController extends Controller
             })
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
-            ->paginate(10)
+            ->paginate(50)
             ->withQueryString();
 
         return Inertia::render('Admin/Bank/NotInstallmentedTodayMembers', [

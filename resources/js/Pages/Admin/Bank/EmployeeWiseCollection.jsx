@@ -1,13 +1,13 @@
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import { Link, useForm } from '@inertiajs/react';
-import { Search, User } from 'lucide-react';
+import { ClipboardList, Search, User } from 'lucide-react';
 
 function EmployeeWiseCollection({ employees }) {
   return (
     <LayoutForMoney>
       <div className="container mx-auto px-4 py-8">
         <h2 className="font-bold text-3xl text-center mb-10 text-neutral">
-          এমপ্লয়ী ভিত্তিক রিপোর্ট
+          এমপ্লয়ী ভিত্তিক রিপোর্ট (ঋণ ও সঞ্চয়)
         </h2>
 
         {employees.length === 0 ? (
@@ -108,7 +108,13 @@ function EmployeeReportBox({ employee }) {
               {processing ? (
                 <span className="loading loading-spinner loading-xs"></span>
               ) : (
-                <>রিপোর্ট তৈরি করুন</>
+                <>
+                  <ClipboardList
+                    size={18}
+                    className="group-hover:scale-110 transition-transform"
+                  />
+                  রিপোর্ট তৈরি করুন
+                </>
               )}
             </button>
           </div>
