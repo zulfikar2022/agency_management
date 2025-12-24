@@ -101,7 +101,8 @@ function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
                         <br />
                         <span className="text-xs">
                           দৈনিক কিস্তির পরিমাণঃ{' '}
-                          {loan?.daily_payable_amount / 100} টাকা{' '}
+                          {(loan?.daily_payable_amount / 100).toFixed(2)}{' '}
+                          টাকা{' '}
                         </span>
                       </span>
                     </label>
@@ -138,7 +139,8 @@ function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
                         <br />
                         <span className="text-xs">
                           দৈনিক সঞ্চয়ের পরিমাণঃ{' '}
-                          {deposit?.daily_deposit_amount / 100} টাকা{' '}
+                          {(deposit?.daily_deposit_amount / 100).toFixed(2)}{' '}
+                          টাকা{' '}
                         </span>
                       </span>
                     </label>

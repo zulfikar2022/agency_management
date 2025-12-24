@@ -69,7 +69,7 @@ function LoanCollections({ member, loan_collections }) {
                   <p className="font-bold">
                     পরিমাণঃ <br />
                     <span className="font-normal">
-                      {collection.paid_amount / 100} টাকা
+                      {(collection.paid_amount / 100).toFixed(2)} টাকা
                     </span>
                   </p>
                 </div>
@@ -86,13 +86,19 @@ function LoanCollections({ member, loan_collections }) {
                         <div className="font-bold">
                           <p>আপডেটের আগের পরিমাণঃ </p>{' '}
                           <span className="font-normal">
-                            {update?.paid_amount_before_update / 100} টাকা
+                            {(update?.paid_amount_before_update / 100).toFixed(
+                              2
+                            )}{' '}
+                            টাকা
                           </span>
                         </div>
                         <div className="font-bold">
                           <p>আপডেটের পরের পরিমাণঃ </p>{' '}
                           <span className="font-normal">
-                            {update?.paid_amount_after_update / 100} টাকা
+                            {(update?.paid_amount_after_update / 100).toFixed(
+                              2
+                            )}{' '}
+                            টাকা
                           </span>
                         </div>
                         <div className="font-bold">

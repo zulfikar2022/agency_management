@@ -164,7 +164,10 @@ function MemberDetails({
                     <p className="font-bold">
                       দৈনিক সঞ্চয়ী পরিমাণঃ{' '}
                       <span className="text-slate-500">
-                        {deposit_account?.daily_deposit_amount / 100} টাকা
+                        {(deposit_account?.daily_deposit_amount / 100).toFixed(
+                          2
+                        )}{' '}
+                        টাকা
                       </span>
                     </p>
                     <p className="font-bold border-b border-dashed mb-2">
@@ -187,21 +190,24 @@ function MemberDetails({
                     <p className="font-bold">
                       মোট সঞ্চয়ঃ{' '}
                       <span className="text-slate-500">
-                        {total_deposited_amount / 100}
+                        {(total_deposited_amount / 100).toFixed(2)}
                         &nbsp;টাকা
                       </span>{' '}
                     </p>
                     <p className="font-bold border-b border-dashed mb-2">
                       মোট উত্তোলনঃ{' '}
                       <span className="text-slate-500">
-                        {(total_deposited_amount - total_deposit) / 100}
+                        {(
+                          (total_deposited_amount - total_deposit) /
+                          100
+                        ).toFixed(2)}
                         &nbsp;টাকা
                       </span>{' '}
                     </p>
                     <p className="font-bold ">
                       সঞ্চিত আছেঃ{' '}
                       <span className="text-slate-500">
-                        {total_deposit / 100}
+                        {(total_deposit / 100).toFixed(2)}
                         &nbsp;টাকা
                       </span>{' '}
                     </p>
@@ -246,25 +252,25 @@ function MemberDetails({
                     <p className="font-bold">
                       ঋণের পরিমাণঃ{' '}
                       <span className="text-slate-500">
-                        {loan.total_loan / 100} টাকা
+                        {(loan.total_loan / 100).toFixed(2)} টাকা
                       </span>
                     </p>
                     <p className="font-bold">
                       মোট পরিশোধযোগ্যঃ{' '}
                       <span className="text-slate-500">
-                        {loan.total_payable_amount / 100} টাকা
+                        {(loan.total_payable_amount / 100).toFixed(2)} টাকা
                       </span>
                     </p>
                     <p className="font-bold">
                       জামানতঃ{' '}
                       <span className="text-slate-500">
-                        {loan.safety_money / 100} টাকা
+                        {(loan.safety_money / 100).toFixed(2)} টাকা
                       </span>
                     </p>
                     <p className="font-bold">
                       দৈনিক পরিশোধযোগ্যঃ{' '}
                       <span className="text-slate-500">
-                        {loan.daily_payable_amount / 100} টাকা
+                        {(loan.daily_payable_amount / 100).toFixed(2)} টাকা
                       </span>
                     </p>
                     <p className="font-bold border-b border-dashed mb-2">
@@ -285,7 +291,7 @@ function MemberDetails({
                     <p className="font-bold border-b border-dashed mb-2">
                       বাকি আছেঃ{' '}
                       <span className="text-slate-500">
-                        {loan.remaining_payable_amount / 100} টাকা
+                        {(loan.remaining_payable_amount / 100).toFixed(2)} টাকা
                       </span>
                     </p>
                   </div>

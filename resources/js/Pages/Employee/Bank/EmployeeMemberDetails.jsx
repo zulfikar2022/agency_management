@@ -46,19 +46,23 @@ function EmployeeMemberDetails({
           <p className="font-bold">
             মোট সঞ্চয়ঃ{' '}
             <span className="font-normal">
-              {total_deposited_amount / 100} টাকা{' '}
+              {(total_deposited_amount / 100).toFixed(2)} টাকা{' '}
             </span>
           </p>
           <p className="font-bold">
             মোট উত্তোলনঃ{' '}
             <span className="font-normal">
-              {total_withdrawn_amount / 100} টাকা
+              {(total_withdrawn_amount / 100).toFixed(2)} টাকা
             </span>
           </p>
           <p className="font-bold">
             একাউন্টে অবশিষ্ট আছে{' '}
             <span className="font-normal">
-              {(total_deposited_amount - total_withdrawn_amount) / 100} টাকা
+              {(
+                (total_deposited_amount - total_withdrawn_amount) /
+                100
+              ).toFixed(2)}{' '}
+              টাকা
             </span>
           </p>
         </div>
@@ -66,13 +70,13 @@ function EmployeeMemberDetails({
           <p className="font-bold">
             মোট লোনঃ{' '}
             <span className="font-normal">
-              {(loan?.total_loan || 0) / 100} টাকা
+              {((loan?.total_loan || 0) / 100).toFixed(2)} টাকা
             </span>
           </p>
           <p className="font-bold">
             মোট পরিশোধযোগ্যঃ{' '}
             <span className="font-normal">
-              {(loan?.total_payable_amount || 0) / 100} টাকা
+              {((loan?.total_payable_amount || 0) / 100).toFixed(2)} টাকা
             </span>
           </p>
           <p className="font-bold">
@@ -87,7 +91,7 @@ function EmployeeMemberDetails({
           <p className="font-bold">
             মোট বাকিঃ{' '}
             <span className="font-normal">
-              {(loan?.remaining_payable_amount || 0) / 100} টাকা
+              {((loan?.remaining_payable_amount || 0) / 100).toFixed(2)} টাকা
             </span>
           </p>
         </div>
@@ -114,7 +118,7 @@ function EmployeeMemberDetails({
                     <p className="font-bold">
                       পরিমাণঃ <br />
                       <span className="font-normal">
-                        {collection?.deposit_amount / 100} টাকা
+                        {(collection?.deposit_amount / 100).toFixed(2)} টাকা
                       </span>
                     </p>
                     {new Date().toISOString().split('T')[0] ===
@@ -153,7 +157,7 @@ function EmployeeMemberDetails({
                     <p className="font-bold">
                       পরিমাণঃ <br />
                       <span className="font-normal">
-                        {collection?.paid_amount / 100} টাকা
+                        {(collection?.paid_amount / 100).toFixed(2)} টাকা
                       </span>
                     </p>
                     {new Date().toISOString().split('T')[0] ===
@@ -195,7 +199,7 @@ function EmployeeMemberDetails({
                     <p className="font-bold">
                       পরিমাণঃ <br />
                       <span className="font-normal">
-                        {withdraw?.withdraw_amount / 100} টাকা
+                        {(withdraw?.withdraw_amount / 100).toFixed(2)} টাকা
                       </span>
                     </p>
                   </div>

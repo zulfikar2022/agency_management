@@ -41,10 +41,17 @@ class DepositDismissalController extends Controller
             ->where('is_deleted', false)
             ->get();
         $total_collected_amount_withing_range = 0;
+        $lower_amount_days_count_than_promised = 0;
+        $higher_amount_days_count_than_promised = 0;
         
         foreach($all_deposit_collections as $collection){
+            if($collection->deposit_amount > $daily_deposit_amount){
+                $higher_amount_days_count_than_promised += 1;
+            } else if($collection->deposit_amount < $daily_deposit_amount){
+                $lower_amount_days_count_than_promised += 1;
+            }
             if($collection->deposit_amount <= $daily_deposit_amount){
-                $total_collected_amount_withing_range += $collection->amount;
+                $total_collected_amount_withing_range += $collection->deposit_amount;
             } else{
                 $total_collected_amount_withing_range += $daily_deposit_amount;
             }
@@ -56,7 +63,9 @@ class DepositDismissalController extends Controller
             'total_day_missed' => $total_day_missed,
             'total_withdraw_amount' => $total_withdraw_amount,
             'total_withdraw_times' => $total_withdraw_times,
-            'total_collected_amount_withing_range' => $total_collected_amount_withing_range
+            'total_collected_amount_withing_range' => $total_collected_amount_withing_range, 
+            'lower_amount_days_count_than_promised' => $lower_amount_days_count_than_promised,
+            'higher_amount_days_count_than_promised' => $higher_amount_days_count_than_promised
         ]);
     }
 }

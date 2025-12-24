@@ -336,8 +336,6 @@ class MemberController extends Controller
         }
 
         
-        
-
         return Inertia::render('Admin/Bank/MemberDetails', [
             'member' => $member,
             'has_deposit_account' => $deposit_account ? true : false,

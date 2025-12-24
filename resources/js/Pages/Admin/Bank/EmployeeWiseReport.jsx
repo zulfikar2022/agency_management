@@ -64,19 +64,23 @@ function EmployeeWiseReport({
             <p className=" font-bold">
               মোট সঞ্চয়ের কালেকশনঃ{' '}
               <span className="font-normal">
-                {total_deposit_collection / 100} টাকা
+                {(total_deposit_collection / 100).toFixed(2)} টাকা
               </span>
             </p>
             <p className=" font-bold">
               মোট ঋণের কিস্তি কালেকশনঃ{' '}
               <span className="font-normal">
-                {total_loan_collection / 100} টাকা
+                {(total_loan_collection / 100).toFixed(2)} টাকা
               </span>
             </p>
             <p className=" font-bold">
               মোট কালেকশনঃ{' '}
               <span className="font-normal">
-                {(total_deposit_collection + total_loan_collection) / 100} টাকা
+                {(
+                  (total_deposit_collection + total_loan_collection) /
+                  100
+                ).toFixed(2)}{' '}
+                টাকা
               </span>
             </p>
           </div>
@@ -117,7 +121,7 @@ function EmployeeWiseReport({
                   <p className="font-semibold">
                     কালেকশন পরিমাণ:{' '}
                     <span className="font-normal">
-                      {collection.deposit_amount / 100} টাকা
+                      {(collection.deposit_amount / 100).toFixed(2)} টাকা
                     </span>
                   </p>
                 </div>
@@ -134,13 +138,19 @@ function EmployeeWiseReport({
                         <p className="font-semibold">
                           আপডেট আগের পরিমাণ:{' '}
                           <span className="font-normal">
-                            {update?.deposit_amount_before_update / 100} টাকা
+                            {(
+                              update?.deposit_amount_before_update / 100
+                            ).toFixed(2)}{' '}
+                            টাকা
                           </span>
                         </p>
                         <p className="font-semibold">
                           আপডেট পরের পরিমাণ:{' '}
                           <span className="font-normal">
-                            {update?.deposit_amount_after_update / 100} টাকা
+                            {(
+                              update?.deposit_amount_after_update / 100
+                            ).toFixed(2)}{' '}
+                            টাকা
                           </span>
                         </p>
                         {/* <p className="font-semibold">
@@ -195,7 +205,7 @@ function EmployeeWiseReport({
                   <p className="font-semibold">
                     কিস্তির পরিমাণ:{' '}
                     <span className="font-normal">
-                      {collection.paid_amount / 100} টাকা
+                      {(collection.paid_amount / 100).toFixed(2)} টাকা
                     </span>
                   </p>
                 </div>
@@ -212,13 +222,19 @@ function EmployeeWiseReport({
                         <p className="font-semibold">
                           আপডেট আগের পরিমাণ:{' '}
                           <span className="font-normal">
-                            {update?.paid_amount_before_update / 100} টাকা
+                            {(update?.paid_amount_before_update / 100).toFixed(
+                              2
+                            )}{' '}
+                            টাকা
                           </span>
                         </p>
                         <p className="font-semibold">
                           আপডেট পরের পরিমাণ:{' '}
                           <span className="font-normal">
-                            {update?.paid_amount_after_update / 100} টাকা
+                            {(update?.paid_amount_after_update / 100).toFixed(
+                              2
+                            )}{' '}
+                            টাকা
                           </span>
                         </p>
                         {/* <p className="font-semibold">

@@ -74,7 +74,8 @@ function WithdrawLists({ withdraws, member, deposits }) {
                             <p className="font-bold">
                               পরিমাণঃ <br />
                               <span className="font-normal">
-                                {withdraw?.withdraw_amount / 100} টাকা
+                                {(withdraw?.withdraw_amount / 100).toFixed(2)}{' '}
+                                টাকা
                               </span>
                             </p>
                             {isTodaysWithdraw && (

@@ -64,7 +64,7 @@ function DepositCollections({ deposit_collections, member }) {
                   <p className="font-bold">
                     পরিমাণঃ <br />
                     <span className="font-normal">
-                      {collection.deposit_amount / 100} টাকা
+                      {(collection.deposit_amount / 100).toFixed(2)} টাকা
                     </span>
                   </p>
                 </div>
@@ -82,13 +82,19 @@ function DepositCollections({ deposit_collections, member }) {
                           <p className="font-bold">
                             আপডেটের আগের পরিমাণঃ <br />
                             <span className="font-normal">
-                              {update.deposit_amount_before_update / 100} টাকা
+                              {(
+                                update.deposit_amount_before_update / 100
+                              ).toFixed(2)}{' '}
+                              টাকা
                             </span>
                           </p>
                           <p className="font-bold">
                             আপডেটের পরের পরিমাণঃ <br />
                             <span className="font-normal">
-                              {update.deposit_amount_after_update / 100} টাকা
+                              {(
+                                update.deposit_amount_after_update / 100
+                              ).toFixed(2)}{' '}
+                              টাকা
                             </span>
                           </p>
                           <p className="font-bold">
