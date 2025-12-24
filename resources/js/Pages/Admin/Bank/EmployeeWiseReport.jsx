@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
+import { dateFormatter } from '@/utilityFuntion';
 
 function EmployeeWiseReport({
   employee,
@@ -50,15 +51,13 @@ function EmployeeWiseReport({
               <span className="font-normal">
                 {' '}
                 {start_date === end_date
-                  ? dayjs(start_date).format('DD MMMM YYYY')
-                  : `${dayjs(start_date).format('DD MMMM YYYY')} থেকে ${dayjs(end_date).format('DD MMMM YYYY')}`}
+                  ? dateFormatter(start_date)
+                  : `${dateFormatter(start_date)} থেকে ${dateFormatter(end_date)}`}
               </span>
             </p>
             <p className="font-bold">
               রিপোর্ট তৈরির তারিখঃ{' '}
-              <span className="font-normal">
-                {dayjs().format('DD MMMM YYYY')}
-              </span>
+              <span className="font-normal">{dateFormatter(dayjs())}</span>
             </p>
           </div>
           <div>
@@ -130,7 +129,7 @@ function EmployeeWiseReport({
                     {collection.updates.map((update, index) => (
                       <div
                         key={index}
-                        className="ml-4 grid grid-cols-1 md:grid-cols-3 gap-2 mb-2"
+                        className="ml-4 grid grid-cols-1 md:grid-cols-2 gap-2 mb-2"
                       >
                         <p className="font-semibold">
                           আপডেট আগের পরিমাণ:{' '}
@@ -144,7 +143,7 @@ function EmployeeWiseReport({
                             {update?.deposit_amount_after_update / 100} টাকা
                           </span>
                         </p>
-                        <p className="font-semibold">
+                        {/* <p className="font-semibold">
                           আপডেট করেছেন:{' '}
                           <span className="font-normal">
                             {update?.updating_user_name}(
@@ -153,7 +152,7 @@ function EmployeeWiseReport({
                             </span>
                             )
                           </span>
-                        </p>
+                        </p> */}
                       </div>
                     ))}
                   </div>
@@ -208,7 +207,7 @@ function EmployeeWiseReport({
                     {collection.updates.map((update, index) => (
                       <div
                         key={index}
-                        className="ml-4 grid grid-cols-1 md:grid-cols-3 gap-2 mb-2"
+                        className="ml-4 grid grid-cols-1 md:grid-cols-2 justify-items-center gap-2 mb-2"
                       >
                         <p className="font-semibold">
                           আপডেট আগের পরিমাণ:{' '}
@@ -222,7 +221,7 @@ function EmployeeWiseReport({
                             {update?.paid_amount_after_update / 100} টাকা
                           </span>
                         </p>
-                        <p className="font-semibold">
+                        {/* <p className="font-semibold">
                           আপডেট করেছেন:{' '}
                           <span className="font-normal">
                             {update?.updating_user_name}(
@@ -231,7 +230,7 @@ function EmployeeWiseReport({
                             </span>
                             )
                           </span>
-                        </p>
+                        </p> */}
                       </div>
                     ))}
                   </div>
