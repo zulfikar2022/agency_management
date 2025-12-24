@@ -94,6 +94,41 @@ class AdminController extends Controller
 
         $total_downpayment_amount = CustomerProduct::where('remaining_payable_price', '>', 0)->get()->sum('downpayment');
 
+        // BANK sections
+        $total_members = Member::where('is_deleted', false)->count();
+
+        $deposit_account_count = Deposit::where('is_deleted', false)->count();
+        $loan_account_count = Loan::where('is_deleted', false)->count();
+
+        
+        $total_deposit_amount = Member::where('is_deleted', false)->sum('total_deposit');
+        $total_loaned_amount = Member::where('is_deleted', false)->sum('total_loan');
+
+        $total_collectable_with_interest = Loan::where('is_deleted', false)->sum('total_payable_amount');
+
+        $active_loan_ids = Loan::where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->pluck('id')->toArray();
+
+        $total_collection_for_loan = LoanCollection::whereIn('loan_id', $active_loan_ids)->sum('paid_amount');
+        
+        // generate me a list of last seven days as a datetime object keeping only the date part
+        $lastSevenDays = collect();
+        for ($i = 6; $i >= 0; $i--) {
+            $lastSevenDays->push(\Carbon\Carbon::now()->subDays($i)->startOfDay());
+        }
+        // dd($lastSevenDays);
+        $date_wise_loan_and_deposit_collections = [];
+        foreach ($lastSevenDays as $key => $date) {
+            $deposit_collections_sum = DepositCollection::whereDate('created_at', $date)->where('is_deleted', false)->sum('deposit_amount');
+            $loan_collections_sum = LoanCollection::whereDate('created_at', $date)->where('is_deleted', false)->sum('paid_amount');
+            $date_wise_loan_and_deposit_collections[$key] = [
+                'date' => $date->format('Y-m-d'),
+                'deposit_collections' => $deposit_collections_sum,
+                'loan_collections' => $loan_collections_sum,
+            ];
+        }
+
+        // dd($date_wise_loan_and_deposit_collections);
+
         return Inertia::render('Admin/Dashboard', [
             'user' => $leanUser,
             'totalCustomers' => $totalCustomers, 
@@ -102,6 +137,15 @@ class AdminController extends Controller
             'stockProductsTotalPrice' => $stock_products_total_price,
             'soldProductsTotalPrice' => $sold_products_total_price,
             'totalCollectedAmount' => $total_collected_amount + $total_downpayment_amount,
+            // BANK section data
+            'totalMembers' => $total_members,
+            'depositAccountCount' => $deposit_account_count,
+            'loanAccountCount' => $loan_account_count,
+            'totalDepositAmount' => $total_deposit_amount,
+            'totalLoanedAmount' => $total_loaned_amount,
+            'totalCollectableWithInterest' => $total_collectable_with_interest,
+            'totalCollectionForLoan' => $total_collection_for_loan,
+            'dateWiseLoanAndDepositCollections' => $date_wise_loan_and_deposit_collections,
         ]);
     }
 

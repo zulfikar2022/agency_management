@@ -123,6 +123,9 @@ function CustomerProductAdminDashboard({
 
   return (
     <div>
+      <p className="font-bold text-center text-lg mb-6 underline">
+        পণ্য ও কাস্টমার সংক্রান্ত
+      </p>
       <div className="grid items-center grid-cols-1 md:grid-cols-16 gap-2">
         <div className="grid-cols-1 md:col-span-3">
           <div className="border-b pb-2 mb-1">

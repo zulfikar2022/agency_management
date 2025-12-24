@@ -1,4 +1,5 @@
 import AdminDashboardLayout from './AdminDashboardLayout';
+import BankLoanDepositAdminDashboard from './Bank/BankLoanDepositAdminDashboard';
 import CustomerProductAdminDashboard from './Customers/CustomerProductAdminDashboard';
 
 function Dashboard({
@@ -9,6 +10,15 @@ function Dashboard({
   stockProductsTotalPrice,
   soldProductsTotalPrice,
   totalCollectedAmount,
+  // BANK section data
+  totalMembers,
+  depositAccountCount,
+  loanAccountCount,
+  totalDepositAmount,
+  totalLoanedAmount,
+  totalCollectableWithInterest,
+  totalCollectionForLoan,
+  dateWiseLoanAndDepositCollections,
 }) {
   return (
     <AdminDashboardLayout>
@@ -20,6 +30,16 @@ function Dashboard({
           stockProductsTotalPrice={stockProductsTotalPrice}
           soldProductsTotalPrice={soldProductsTotalPrice}
           totalCollectedAmount={totalCollectedAmount}
+        />
+        <BankLoanDepositAdminDashboard
+          totalMembers={totalMembers}
+          depositAccountCount={depositAccountCount}
+          loanAccountCount={loanAccountCount}
+          totalDepositAmount={totalDepositAmount}
+          totalLoanedAmount={totalLoanedAmount}
+          totalCollectableWithInterest={totalCollectableWithInterest}
+          totalCollectionForLoan={totalCollectionForLoan}
+          dateWiseLoanAndDepositCollections={dateWiseLoanAndDepositCollections}
         />
       </div>
     </AdminDashboardLayout>
