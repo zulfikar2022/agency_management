@@ -22,10 +22,11 @@ function MemberDetails({
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
-  console.log({ not_paid_days_count });
+
   // today as the format 'YYYY-MM-DD'
 
   const today = dayjs().format('YYYY-MM-DD');
+
   const deposit_account_created_date = dayjs(
     deposit_account?.created_at
   ).format('YYYY-MM-DD');
@@ -202,6 +203,17 @@ function MemberDetails({
                         &nbsp;টাকা
                       </span>{' '}
                     </p>
+                    {deposit_account.last_depositing_predictable_date <
+                      today && (
+                      <Link
+                        href={route('admin.bank.deposit_dismissal_form', {
+                          deposit: deposit_account.id,
+                        })}
+                        className="my-5 btn btn-xs btn-neutral"
+                      >
+                        সঞ্চয় একাউন্ট ডিসমিস করুন
+                      </Link>
+                    )}
                   </div>
                 )}
                 {has_loan && (

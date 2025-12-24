@@ -5,6 +5,7 @@ use App\Http\Controllers\Bank\BankReportGenerationController;
 use App\Http\Controllers\Bank\DepositController;
 use App\Http\Controllers\Bank\LoanController;
 use App\Http\Controllers\Bank\MemberController;
+use App\Http\Controllers\DepositDismissalController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
@@ -87,6 +88,8 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
     Route::get('/admin/bank/all-users', [AdminController::class, 'allUsersForBank'])->name('admin.bank.all_users');
 
     Route::get('/admin/bank/employee-wise-collection-report', [AdminController::class, 'employeeWiseCollectionReport'])->name('admin.bank.employee_wise_collection_report_web');
+
+    Route::get('/admin/bank/deposit-dismissal/{deposit}', [DepositDismissalController::class, 'depositDismissalForm'])->name('admin.bank.deposit_dismissal_form');
 
 
 
