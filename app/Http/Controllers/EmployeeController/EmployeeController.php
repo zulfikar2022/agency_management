@@ -23,10 +23,25 @@ use Inertia\Inertia;
 class EmployeeController extends Controller
 {
     public function dashboard(){
-        
+        $today = now()->format('Y-m-d');
+        $user_id = Auth::id();
+        $loan_collections = LoanCollection::whereDate('created_at', $today)
+            ->where('is_deleted', false)
+            ->where('collecting_user_id', $user_id)
+            ->get();
+        $deposit_collections = DepositCollection::whereDate('created_at', $today)
+            ->where('is_deleted', false)
+            ->where('collecting_user_id', $user_id)
+            ->get();
+        $product_collections = ProductCustomerMoneyCollection::whereDate('created_at', $today)
+            ->where('collecting_user_id', $user_id)
+            ->get();
         $user = request()->get('user');
         return Inertia::render('Employee/Dashboard', [
-            'user' => $user
+            'user' => $user,
+            'loan_collections' => $loan_collections,
+            'deposit_collections' => $deposit_collections,
+            'product_collections' => $product_collections,
         ]);
     }
 
