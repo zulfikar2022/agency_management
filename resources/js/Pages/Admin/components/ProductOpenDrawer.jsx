@@ -108,6 +108,14 @@ function ProductOpenDrawer() {
           </Link>
         </li>
         <li>
+          <Link
+            href={route('admin.employeeWiseProductReportsPage')}
+            className="ml-3 underline text-blue-500 mb-2 block"
+          >
+            এমপ্লয়ী অনুযায়ী সংগ্রহ রিপোর্ট
+          </Link>
+        </li>
+        <li>
           <p className="hover:bg-white hover:cursor-auto font-bold underline">
             {' '}
             ইউজার নিয়ন্ত্রণ

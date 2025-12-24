@@ -220,5 +220,12 @@ class AdminController extends Controller
             'end_date' => $validated['end_date'],
         ]);
     }
+
+    public function employeeWiseProductReportsPage(){
+        $employees = User::where('is_employee', true)->where('is_deleted', false)->get();
+        return Inertia::render('Admin/Products/ProductEmployeeWiseReport', [
+            'employees' => $employees,
+        ]);
+    }
    
 }

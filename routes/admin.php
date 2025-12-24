@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EmployeeController\EmployeeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductCustomerMoneyCollectionController;
+use App\Http\Controllers\ProductRerportGenerationController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -56,6 +57,12 @@ Route::get('/admin/download-customer-report/{id}', [CustomerController::class, '
 // route for downloading today's collection report
 Route::get('/admin/download-todays-collection-report', [ProductCustomerMoneyCollectionController::class, 'downloadTodaysCollectionReport'])->name('admin.downloadTodaysCollectionReport');
 
+// employee wise reports front end
+Route::get('/admin/employee-wise-product-reports', [AdminController::class, 'employeeWiseProductReportsPage'])->name('admin.employeeWiseProductReportsPage');
+
+
+// admin.product.employee_wise_collection_report
+Route::get('/admin/product-employee-wise-collection-report', [ProductRerportGenerationController::class, 'generateEmployeeWiseProductCollectionReport'])->name('admin.product.employee_wise_collection_report');
 
 
 
