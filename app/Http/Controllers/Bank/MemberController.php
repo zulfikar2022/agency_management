@@ -215,8 +215,13 @@ class MemberController extends Controller
         ]);
         
         $today_date = now()->toDate();
-        // dd($today_date->modify('+115 days'));
-        // 
+        // chekc if there any existing deposit account for the member
+        $existing_deposit = Deposit::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->first();
+        if($existing_deposit){
+            return redirect()->back()->withErrors(['error' => 'ডিপোজিট একাউন্ট ইতিমধ্যে বিদ্যমান।']);
+        }
 
         // create deposit account for the member
         $deposit = new Deposit();
