@@ -172,7 +172,11 @@ class LoanCollectionController extends Controller
         $today = now()->format('Y-m-d');
         if ($loan_collection->paying_date != $today) {
             return redirect()->back()->withErrors(['paid_amount' => 'শুধুমাত্র আজকের তারিখের কিস্তি আপডেট করা যেতে পারে।'])->withInput();
-        }   
+        } 
+        
+        if($loan_collection->collecting_user_id !== Auth::id()){
+            return redirect()->back()->withErrors(['paid_amount' => 'আপনার এই কিস্তি আপডেট করার অনুমতি নেই কারণ আপনি এটি সংগ্রহ করেননি।'])->withInput();
+        }
         
         // create an instance of loan_collection_update_log
         $loan_collection_update_log = new LoanCollectionUpdateLog();

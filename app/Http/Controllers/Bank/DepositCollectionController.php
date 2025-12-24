@@ -70,6 +70,10 @@ class DepositCollectionController extends Controller
             ->where('remaining_payable_amount', '>', 0)
             ->first();
 
+        if(Auth::id() !== $depositCollection->collecting_user_id){
+            return back()->withErrors(['deposit_amount' => 'আপনার এই সঞ্চয় আপডেট করার অনুমতি নেই কারণ আপনি এটি সংগ্রহ করেননি। ']);
+        }
+
         // day filter
         $today = now()->format('Y-m-d');
         if($depositCollection->deposit_date != $today){
@@ -85,6 +89,8 @@ class DepositCollectionController extends Controller
             }
             
         }
+
+
 
 
         DB::transaction(function () use ($validated, $depositCollection, $member){
