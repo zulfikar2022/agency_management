@@ -126,6 +126,14 @@ function ProductOpenDrawer() {
             সকল ইউজার দেখুন
           </Link>
         </li>
+        <li>
+          <Link
+            href={route('admin.reportGenerationPage')}
+            className="btn btn-xs btn-neutral mt-3"
+          >
+            রিপোর্ট তৈরি করুন
+          </Link>
+        </li>
       </ul>
     </div>
   );

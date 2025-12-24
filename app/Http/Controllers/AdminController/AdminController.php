@@ -227,5 +227,12 @@ class AdminController extends Controller
             'employees' => $employees,
         ]);
     }
+
+    public function reportGenerationPage(){
+        
+        return Inertia::render('Admin/Products/ProductReport', [
+            
+        ]);
+    }
    
 }
