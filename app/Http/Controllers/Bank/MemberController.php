@@ -322,9 +322,11 @@ class MemberController extends Controller
         $not_paid_days_count = 0;
 
         if($deposit_account){
-          $last_deposit_date = new Carbon($deposit_account->last_depositing_predictable_date);
+            // new Carbon($deposit_account->last_depositing_predictable_date);
+          $last_deposit_date = Carbon::parse($deposit_account->last_depositing_predictable_date)->startOfDay();
+          
           if( $last_deposit_date->lessThan($today) ){
-            $not_paid_days_count = $last_deposit_date->diffInDays($today) + 1 - $number_of_deposit_collections;
+            $not_paid_days_count = Carbon::parse( $deposit_account->created_at)->startOfDay()->diffInDays($last_deposit_date) + 1 - $number_of_deposit_collections;
           }else{
                 $start_date = Carbon::parse($deposit_account->created_at)->startOfDay();
                 $end_date = $today->startOfDay();

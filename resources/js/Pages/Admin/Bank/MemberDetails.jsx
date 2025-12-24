@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { PencilIcon } from 'lucide-react';
 import { useState } from 'react';
 import DepositUpdateModal from './DepositUpdateModal';
+import { dateFormatter } from '@/utilityFuntion';
 
 // admin.bank.generate_member_details_report
 function MemberDetails({
@@ -142,9 +143,10 @@ function MemberDetails({
                       <p className="font-bold">
                         একাউন্ট তৈরির তারিখঃ{' '}
                         <span className="text-slate-500">
-                          {dayjs(deposit_account?.created_at).format(
+                          {/* {dayjs(deposit_account?.created_at).format(
                             'D MMMM YYYY'
-                          )}
+                          )} */}
+                          {dateFormatter(deposit_account?.created_at)}
                         </span>{' '}
                       </p>{' '}
                       {today === deposit_account_created_date && (
