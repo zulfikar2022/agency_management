@@ -8,6 +8,7 @@ use App\Models\Bank\DepositCollection;
 use App\Models\Bank\DepositCollectionUpdateLog;
 use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
+use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +60,7 @@ class DepositCollectionController extends Controller
      */
     public function update(Request $request, DepositCollection $depositCollection)
     {
+        
         $validated = $request->validate([
             'deposit_amount' => 'required|numeric|min:0',
         ]); 
@@ -69,6 +71,14 @@ class DepositCollectionController extends Controller
             ->where('is_deleted', false)
             ->where('remaining_payable_amount', '>', 0)
             ->first();
+
+        $withdraws = Withdraw::where('deposit_id', $deposit->id)
+            ->where('is_deleted', false)
+            ->whereDate('created_at', '=', now()->format('Y-m-d'))
+            ->get();
+        if(count($withdraws) > 0){
+            return back()->withErrors(['deposit_amount' => 'আজকের তারিখে সদস্যের সঞ্চয় থেকে উত্তোলন করা হয়েছে, তাই আজকের সঞ্চয় আপডেট করা যাবে না।']);
+        }
 
         if(Auth::id() !== $depositCollection->collecting_user_id){
             return back()->withErrors(['deposit_amount' => 'আপনার এই সঞ্চয় আপডেট করার অনুমতি নেই কারণ আপনি এটি সংগ্রহ করেননি। ']);
@@ -109,13 +119,8 @@ class DepositCollectionController extends Controller
             // update the deposit collection
             $depositCollection->deposit_amount = $validated['deposit_amount'] * 100; // store in cents
             $depositCollection->save();
-
-          
-            
-        });
-
-
-        
+ 
+        });        
     }
 
     /**
