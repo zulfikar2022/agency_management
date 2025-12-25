@@ -250,7 +250,7 @@ class MemberController extends Controller
             'name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:255',
             'address' => 'required|string|max:500',
-            'nid_number' => 'required|string|max:255|unique:members,nid_number',
+            'nid_number' => 'required|string|max:255',
             'fathers_name' => 'required|string|max:255',
             'mothers_name' => 'required|string|max:255',
             'admission_fee' => 'required|numeric|min:0',
@@ -409,7 +409,7 @@ class MemberController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:500',
-            'nid_number' => 'required|string|max:255|unique:members,nid_number,'.$member->id,
+            'nid_number' => 'required|string|max:255'.$member->id,
             'fathers_name' => 'required|string|max:255',
             'mothers_name' => 'required|string|max:255',
             'admission_fee' => 'required|numeric|min:0',

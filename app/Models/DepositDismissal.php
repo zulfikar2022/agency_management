@@ -11,5 +11,6 @@ class DepositDismissal extends Model
         'total_remaining_deposit',
         'total_paid',
         'creating_user_id',
+        'total_collected_deposit',
     ];
 }

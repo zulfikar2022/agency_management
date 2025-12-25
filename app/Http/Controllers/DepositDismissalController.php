@@ -100,19 +100,24 @@ class DepositDismissalController extends Controller
             if($loan){
             return back()->withErrors(['message' => 'সদস্যের উপর বকেয়া ঋণ থাকায় সঞ্চয় একাউন্ট বন্ধ করা যাবে না।']);
         }
+
+        $total_deposit_collection = DepositCollection::where('deposit_id', $deposit->id)
+            ->where('is_deleted', false)
+            ->sum('deposit_amount');
        
-       DB::transaction(function () use ($deposit, $validated, $member) {
+       DB::transaction(function () use ($deposit, $validated, $member, $total_deposit_collection) {
            $deposit->is_deleted = true;
            $deposit->save();
 
            $member->total_deposit = 0;
            $member->save();
 
-              DepositDismissal::create([
+                DepositDismissal::create([
                 'deposit_id' => $deposit->id,
                 'total_remaining_deposit' => $validated['total_remaining_deposit'] * 100,
                 'total_paid' => $validated['total_paid'] * 100,
-                'creating_user_id' => Auth::id()
+                'creating_user_id' => Auth::id(),
+                'total_collected_deposit' => $total_deposit_collection,
               ]);
         });
 
