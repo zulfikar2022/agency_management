@@ -188,6 +188,7 @@ class DepositController extends Controller
 
         $today = now()->format('Y-m-d');
         $deposit_date = $deposit->created_at->format('Y-m-d');
+        
         if($today != $deposit_date){
             return back()->withErrors(['daily_deposit_amount' => 'শুধুমাত্র আজকের তারিখে তৈরি করা সঞ্চয় একাউন্টের দৈনিক সঞ্চয় পরিমাণ আপডেট করা যাবে।']);
         }

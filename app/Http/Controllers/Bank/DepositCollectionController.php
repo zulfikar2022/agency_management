@@ -9,6 +9,7 @@ use App\Models\Bank\DepositCollectionUpdateLog;
 use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
 use App\Models\Withdraw;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -76,7 +77,8 @@ class DepositCollectionController extends Controller
             ->where('is_deleted', false)
             ->whereDate('created_at', '=', now()->format('Y-m-d'))
             ->get();
-        if(count($withdraws) > 0){
+        // যদি আগে উত্তোলন করা হয় এবং পরে সঞ্চয় জমা করা হয় তাহলে আপডেট করা যাবে। আর যদি আগে সঞ্চয় জমা করা হয় এবং পরে উত্তোলন করা হয় তাহলে আপডেট করা যাবে না। Compare times using Carbon instances
+        if(count($withdraws) > 0 && Carbon::parse($withdraws->first()->created_at)->greaterThan(Carbon::parse($depositCollection->created_at))){
             return back()->withErrors(['deposit_amount' => 'আজকের তারিখে সদস্যের সঞ্চয় থেকে উত্তোলন করা হয়েছে, তাই আজকের সঞ্চয় আপডেট করা যাবে না।']);
         }
 
