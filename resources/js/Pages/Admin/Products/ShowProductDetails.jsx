@@ -26,15 +26,19 @@ function ShowProductDetails({ product, update_logs }) {
             </p>
             <p>
               <span className="font-bold">ক্রয়কৃত পরিমাণঃ </span>{' '}
-              {product.initial_quantity}
+              {product.initial_quantity} টি
             </p>
             <p>
               <span className="font-bold">বর্তমান পরিমাণঃ </span>{' '}
-              {product.current_quantity}
+              {product.current_quantity} টি
             </p>
             <p>
               <span className="font-bold">একটি পণ্যের ক্রয়মূল্যঃ </span>{' '}
-              {product.buying_price_per_product}
+              {product.buying_price_per_product} টাকা
+            </p>
+            <p>
+              <span className="font-bold">স্টকের পণ্যের মোট ক্রয়মূল্যঃ </span>{' '}
+              {product.current_quantity * product.buying_price_per_product} টাকা
             </p>
             <p>
               <span className="font-bold">অবস্থাঃ</span>{' '}

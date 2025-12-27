@@ -41,6 +41,9 @@ function EmployeeMemberDetails({
       <div className=" border p-4 mt-4 container mx-auto rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="">
           <p className="font-bold">
+            সদস্যের আইডিঃ <span className="font-normal">{member.id}</span>
+          </p>
+          <p className="font-bold">
             সদস্যের নামঃ <span className="font-normal">{member.name}</span>
           </p>
           <p className="font-bold">

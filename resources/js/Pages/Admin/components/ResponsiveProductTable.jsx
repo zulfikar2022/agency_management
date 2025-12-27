@@ -21,18 +21,23 @@ function ResponsiveProductTable({ data }) {
               <p className="font-bold">সরবরাহকারী প্রতিষ্ঠানের নামঃ</p>
               <p>{product.supplier_name}</p>
             </div>
-            <div className="flex flex-col col-span-2">
+            {/* <div className="flex flex-col col-span-2">
               <p className="font-bold">ক্রয়কৃত পরিমাণঃ </p>
               <p>{product?.initial_quantity}</p>
-            </div>
+            </div> */}
             <div className="flex flex-col col-span-2">
               <p className="font-bold">বর্তমান পরিমাণঃ </p>
-              <p>{product?.current_quantity}</p>
+              <p>{product?.current_quantity} টি </p>
+            </div>
+            <div className="flex flex-col col-span-2">
+              <p className="font-bold">একটি পণ্যের মূল্যঃ </p>
+              <p>{product?.buying_price_per_product} টাকা</p>
             </div>
             <div className="flex flex-col col-span-2">
               <p className="font-bold">স্টকের পণ্যের মোট মূল্যঃ </p>
               <p>
-                {product?.current_quantity * product?.buying_price_per_product}
+                {product?.current_quantity * product?.buying_price_per_product}{' '}
+                টাকা
               </p>
             </div>
             <div className="flex flex-row gap-2 col-span-3">
