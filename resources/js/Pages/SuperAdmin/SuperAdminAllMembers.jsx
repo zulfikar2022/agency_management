@@ -201,90 +201,105 @@ function SuperAdminAllMembers({ users }) {
         {users?.length === 0 && (
           <p className="text-center">No members found.</p>
         )}
-        {users.map((user) => (
-          <div
-            key={user.id}
-            className={`p-4 mb-4 border rounded shadow mx-5 md:mx-0 ${user.is_activated ? '' : 'bg-red-100'} ${user.is_super_admin ? 'bg-green-300' : ''}`}
-          >
-            <h2 className="text-xl font-bold">{user.name}</h2>
-            <p className="font-bold">
-              Email: <span className="font-normal">{user.email}</span>
-            </p>
-            <p className="font-bold">
-              User id : <span className="font-normal">{user.id}</span>
-            </p>
-            {user.is_super_admin ? (
+        {users.map((user) => {
+          let role = null;
+          if (user.is_super_admin) {
+            role = 'Super Admin';
+          } else if (user.is_admin) {
+            role = 'Admin';
+          } else if (user.is_employee) {
+            role = 'Employee';
+          } else {
+            role = 'No Role';
+          }
+          return (
+            <div
+              key={user.id}
+              className={`p-4 mb-4 border rounded shadow mx-5 md:mx-0 ${user.is_activated ? '' : 'bg-red-100'} ${user.is_super_admin ? 'bg-green-300' : ''}`}
+            >
+              <div className="flex items-center gap-4 mb-2">
+                <h2 className="text-xl font-bold">{user.name}</h2>
+                <span>({role})</span>
+              </div>
+              <p className="font-bold">
+                Email: <span className="font-normal">{user.email}</span>
+              </p>
+              <p className="font-bold">
+                User id : <span className="font-normal">{user.id}</span>
+              </p>
+              {user.is_super_admin ? (
+                <div className="flex gap-2">
+                  <p className="font-bold">
+                    is_super_admin:{' '}
+                    <span className="font-normal">
+                      {user.is_super_admin ? 'Yes' : 'No'}
+                    </span>
+                  </p>
+                </div>
+              ) : null}
               <div className="flex gap-2">
                 <p className="font-bold">
-                  is_super_admin:{' '}
+                  is_admin:{' '}
                   <span className="font-normal">
-                    {user.is_super_admin ? 'Yes' : 'No'}
+                    {user.is_admin ? 'Yes' : 'No'}
                   </span>
                 </p>
+                {!user.is_super_admin && (
+                  <p
+                    onClick={() => toggleAdminStatus(user)}
+                    className=" rounded-lg cursor-pointer"
+                  >
+                    <ToggleLeft />
+                  </p>
+                )}
               </div>
-            ) : null}
-            <div className="flex gap-2">
-              <p className="font-bold">
-                is_admin:{' '}
-                <span className="font-normal">
-                  {user.is_admin ? 'Yes' : 'No'}
-                </span>
-              </p>
-              {!user.is_super_admin && (
-                <p
-                  onClick={() => toggleAdminStatus(user)}
-                  className=" rounded-lg cursor-pointer"
-                >
-                  <ToggleLeft />
+              <div className="flex gap-2">
+                <p className="font-bold">
+                  is_employee:{' '}
+                  <span className="font-normal">
+                    {' '}
+                    {user.is_employee ? 'Yes' : 'No'}
+                  </span>
                 </p>
-              )}
-            </div>
-            <div className="flex gap-2">
-              <p className="font-bold">
-                is_employee:{' '}
-                <span className="font-normal">
-                  {' '}
-                  {user.is_employee ? 'Yes' : 'No'}
-                </span>
-              </p>
-              {!user.is_super_admin && (
-                <p
-                  onClick={() => toggleEmployeeStatus(user)}
-                  className=" rounded-lg cursor-pointer"
-                >
-                  <ToggleLeft />
-                </p>
-              )}
-            </div>
-            <div className="flex gap-2">
-              <p className="font-bold">
-                is_activated:{' '}
-                <span className="font-normal">
-                  {' '}
-                  {user.is_activated ? 'Yes' : 'No'}
-                </span>
-              </p>
-              {!user.is_super_admin && (
-                <p
-                  onClick={() => activationToggler(user)}
-                  className=" rounded-lg cursor-pointer"
-                >
-                  <ToggleLeft />
-                </p>
-              )}
-            </div>
-            {!user.is_super_admin && (
-              <div>
-                <p
-                  onClick={() => deleteUser(user)}
-                  className="btn btn-error btn-xs mt-5"
-                >
-                  Soft Delete
-                </p>
+                {!user.is_super_admin && (
+                  <p
+                    onClick={() => toggleEmployeeStatus(user)}
+                    className=" rounded-lg cursor-pointer"
+                  >
+                    <ToggleLeft />
+                  </p>
+                )}
               </div>
-            )}
-          </div>
-        ))}
+              <div className="flex gap-2">
+                <p className="font-bold">
+                  is_activated:{' '}
+                  <span className="font-normal">
+                    {' '}
+                    {user.is_activated ? 'Yes' : 'No'}
+                  </span>
+                </p>
+                {!user.is_super_admin && (
+                  <p
+                    onClick={() => activationToggler(user)}
+                    className=" rounded-lg cursor-pointer"
+                  >
+                    <ToggleLeft />
+                  </p>
+                )}
+              </div>
+              {!user.is_super_admin && (
+                <div>
+                  <p
+                    onClick={() => deleteUser(user)}
+                    className="btn btn-error btn-xs mt-5"
+                  >
+                    Soft Delete
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </SuperAdminDashboard>
   );
