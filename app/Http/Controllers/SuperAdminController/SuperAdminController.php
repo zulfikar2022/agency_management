@@ -17,6 +17,13 @@ class SuperAdminController
 
     // see all deleted users
 
+    public function allDeletedUsers()
+    {
+        // dd("Inside all deleted users");
+        $deletedUsers = User::where('is_deleted', true)->get();
+        return Inertia::render('SuperAdmin/SuperAdminDeletedMembers', ['users' => $deletedUsers]);
+    }
+
 
     // delete a user (soft delete);
 

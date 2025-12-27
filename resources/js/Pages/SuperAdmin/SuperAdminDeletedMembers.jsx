@@ -1,13 +1,13 @@
 import SuperAdminDashboard from './SuperAdminDashboard';
 
-function SuperAdminAllMembers({ users }) {
+function SuperAdminDeletedMembers({ users }) {
   console.log(users);
   return (
     <SuperAdminDashboard>
-      <h1 className="text-black">All Members</h1>
+      <h1 className="text-black">All Deleted Members</h1>
       <div></div>
     </SuperAdminDashboard>
   );
 }
 
-export default SuperAdminAllMembers;
+export default SuperAdminDeletedMembers;
