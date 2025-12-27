@@ -26,6 +26,22 @@ class SuperAdminController
 
 
     // delete a user (soft delete);
+    public function toggleDeleteStatus(User $user)
+    {
+        if($user->is_super_admin){
+            return redirect()->back()->with('error', 'Cannot delete a Super Admin user.');
+        }
+
+        if($user->is_deleted){
+            $user->is_deleted = false;
+        } else {
+            $user->is_deleted = true;
+        }
+
+        $user->save();
+        return redirect()->back()->with('success', 'User delete status toggled successfully.');
+        
+    }
 
     // restore a deleted user;
 
