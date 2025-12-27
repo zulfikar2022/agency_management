@@ -33,7 +33,7 @@ const Dashboard = ({
           আজকের তারিখঃ{' '}
           <span className="font-normal">{dateFormatter(dayjs())} </span>
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5">
           <div className="my-5">
             <p className="font-bold">
               এমপ্লয়ীর আইডিঃ <span className="font-normal">{user?.id}</span>

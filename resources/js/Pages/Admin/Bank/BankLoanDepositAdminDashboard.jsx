@@ -96,11 +96,11 @@ export function CollectionChart({ collectionData }) {
 
   // Ensure values are numbers (in case backend sends them as strings)
   const depositCollections = collectionData.map((item) =>
-    parseFloat(item.deposit_collections || 0)
+    parseFloat(item.deposit_collections / 100 || 0)
   );
 
   const loanCollections = collectionData.map((item) =>
-    parseFloat(item.loan_collections || 0)
+    parseFloat(item.loan_collections / 100 || 0)
   );
 
   // 2. Define Series

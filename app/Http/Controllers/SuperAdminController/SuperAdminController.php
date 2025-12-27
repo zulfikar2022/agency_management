@@ -43,6 +43,62 @@ class SuperAdminController
         
     }
 
+    // toggle activation status of a user 
+    public function toggleActivationStatus(User $user){
+           
+        if($user->is_super_admin){
+            return redirect()->back()->with('error', 'Cannot change activation status of a Super Admin user.');
+        }
+
+        if($user->is_activated){
+            $user->is_activated = false;
+        } else {
+            $user->is_activated = true;
+        }
+
+        $user->save();
+        return redirect()->back()->with('success', 'User activation status toggled successfully.');
+    }
+
+    // toggle admin status of a user
+    public function toggleAdminStatus(User $user){
+        if($user->is_super_admin){
+            return redirect()->back()->with('error', 'Cannot change admin status of a Super Admin user.');
+        }
+
+        if($user->is_employee){
+            return redirect()->back()->with('error', 'Cannot change admin status of an Employee user.');
+        }
+
+        if($user->is_admin){
+            $user->is_admin = false;
+        } else {
+            $user->is_admin = true;
+        }
+
+        $user->save();
+        return redirect()->back()->with('success', 'User admin status toggled successfully.');
+    }
+
+    // toggle employee status of a user
+    public function toggleEmployeeStatus(User $user){
+        if($user->is_super_admin){
+            return redirect()->back()->with('error', 'Cannot change employee status of a Super Admin user.');
+        }
+
+        if($user->is_admin){
+            return redirect()->back()->with('error', 'Cannot change employee status of an Admin user.');
+        }
+
+        if($user->is_employee){
+            $user->is_employee = false;
+        } else {
+            $user->is_employee = true;
+        }
+
+        $user->save();
+        return redirect()->back()->with('success', 'User employee status toggled successfully.');
+    }
     // restore a deleted user;
 
     // make a user as admin

@@ -4,9 +4,9 @@ import { ToggleLeft, X } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
 
-// superadmin.toggleDeleteStatus
+//superadmin.toggleEmployeeStatus
+
 function SuperAdminAllMembers({ users }) {
-  console.log(users[0]);
   const deleteUser = (user) => {
     Swal.fire({
       text:
@@ -34,7 +34,161 @@ function SuperAdminAllMembers({ users }) {
               transition: Bounce,
             });
           },
+          onError: (error) => {
+            toast.error(error?.error || 'An error occurred.', {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'dark',
+              transition: Bounce,
+            });
+          },
         });
+      }
+    });
+  };
+
+  const activationToggler = (user) => {
+    Swal.fire({
+      text:
+        'Are you sure you want to toggle the activation status of this user with name ' +
+        user.name +
+        '?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, do it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.post(
+          route('superadmin.toggleActivationStatus', { user: user.id }),
+          {
+            onSuccess: () => {
+              toast.success('User activation status toggled successfully!', {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+                transition: Bounce,
+              });
+            },
+            onError: (error) => {
+              toast.error(error?.error || 'An error occurred.', {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+                transition: Bounce,
+              });
+            },
+          }
+        );
+      }
+    });
+  };
+
+  const toggleAdminStatus = (user) => {
+    Swal.fire({
+      text:
+        'Are you sure you want to toggle the admin status of this user with name ' +
+        user.name +
+        '?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, do it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.post(route('superadmin.toggleAdminStatus', { user: user.id }), {
+          onSuccess: () => {
+            toast.success('User admin status toggled successfully!', {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'dark',
+              transition: Bounce,
+            });
+          },
+          onError: (error) => {
+            toast.error(error?.error || 'An error occurred.', {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'dark',
+              transition: Bounce,
+            });
+          },
+        });
+      }
+    });
+  };
+
+  const toggleEmployeeStatus = (user) => {
+    Swal.fire({
+      text:
+        'Are you sure you want to toggle the employee status of this user with name ' +
+        user.name +
+        '?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, do it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.post(
+          route('superadmin.toggleEmployeeStatus', { user: user.id }),
+          {
+            onSuccess: () => {
+              toast.success('User employee status toggled successfully!', {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+                transition: Bounce,
+              });
+            },
+            onError: (error) => {
+              toast.error(error?.error || 'An error occurred.', {
+                position: 'top-center',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+                transition: Bounce,
+              });
+            },
+          }
+        );
       }
     });
   };
@@ -77,7 +231,10 @@ function SuperAdminAllMembers({ users }) {
                 </span>
               </p>
               {!user.is_super_admin && (
-                <p className=" rounded-lg cursor-pointer">
+                <p
+                  onClick={() => toggleAdminStatus(user)}
+                  className=" rounded-lg cursor-pointer"
+                >
                   <ToggleLeft />
                 </p>
               )}
@@ -91,7 +248,10 @@ function SuperAdminAllMembers({ users }) {
                 </span>
               </p>
               {!user.is_super_admin && (
-                <p className=" rounded-lg cursor-pointer">
+                <p
+                  onClick={() => toggleEmployeeStatus(user)}
+                  className=" rounded-lg cursor-pointer"
+                >
                   <ToggleLeft />
                 </p>
               )}
@@ -105,7 +265,10 @@ function SuperAdminAllMembers({ users }) {
                 </span>
               </p>
               {!user.is_super_admin && (
-                <p className=" rounded-lg cursor-pointer">
+                <p
+                  onClick={() => activationToggler(user)}
+                  className=" rounded-lg cursor-pointer"
+                >
                   <ToggleLeft />
                 </p>
               )}

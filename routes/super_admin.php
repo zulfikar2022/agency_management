@@ -9,5 +9,11 @@ Route::group(['middleware' => ['auth','superadminonly']], function () {
     Route::get('/super-admin/all-deleted-users', [SuperAdminController::class, 'allDeletedUsers'])->name('superadmin.allDeletedUsers');
 
     Route::post('/super-admin/toggle-delete-status/{user}', [SuperAdminController::class, 'toggleDeleteStatus'])->name('superadmin.toggleDeleteStatus');
+
+    Route::post('/super-admin/toggle-activation-status/{user}', [SuperAdminController::class, 'toggleActivationStatus'])->name('superadmin.toggleActivationStatus');
+
+    Route::post('/super-admin/toggle-admin-status/{user}', [SuperAdminController::class, 'toggleAdminStatus'])->name('superadmin.toggleAdminStatus');
+
+    Route::post('/super-admin/toggle-employee-status/{user}', [SuperAdminController::class, 'toggleEmployeeStatus'])->name('superadmin.toggleEmployeeStatus');
     // Route::get('/super-admin/register-user', [])->name('superadmin.registerUser');
 });
