@@ -45,6 +45,10 @@ class AuthenticatedSessionController extends Controller
         return redirect()->intended(route('admin.dashboard', absolute: false));
     }
 
+    if( $user?->is_super_admin && $user->is_activated && !$user->is_deleted) {   
+        return redirect()->intended(route('superadmin.home', absolute: false));
+    }
+
     // Invalid role or inactive/deleted → log out + error
     Auth::logout();
     $request->session()->invalidate();

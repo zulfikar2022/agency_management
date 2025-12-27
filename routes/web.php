@@ -18,6 +18,11 @@ Route::get('/', function () {
         if ($user?->is_admin && $user->is_activated && !$user->is_deleted) {
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
+
+        if( $user?->is_super_admin && $user->is_activated && !$user->is_deleted) {
+            
+            return redirect()->intended(route('superadmin.home', absolute: false));
+        }
     }
 
     // make the user log out if logged in
@@ -26,6 +31,7 @@ Route::get('/', function () {
         request()->session()->invalidate();
         request()->session()->regenerateToken();
     }
+
 
     return redirect()->route('login')->withErrors([
         'email' => 'Your account does not have access or is inactive/deleted.',
@@ -51,3 +57,4 @@ require __DIR__.'/employee.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/admin_bank.php';
 require __DIR__.'/employee_bank.php';
+require __DIR__.'/super_admin.php';

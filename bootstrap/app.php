@@ -20,7 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     
 
-    $middleware->alias(['adminonly' => \App\Http\Middleware\AdminOnlyMiddleware::class,'employeeonly' => \App\Http\Middleware\EmployeeOnlyMiddleware::class]);
+    $middleware->alias([
+        'adminonly' => \App\Http\Middleware\AdminOnlyMiddleware::class,
+        'employeeonly' => \App\Http\Middleware\EmployeeOnlyMiddleware::class,
+         'superadminonly' => \App\Http\Middleware\SuperAdminOnly::class
+        ]);
     
 })
     ->withExceptions(function (Exceptions $exceptions): void {
