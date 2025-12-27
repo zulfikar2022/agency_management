@@ -54,7 +54,9 @@ function SuperAdminDashboard({ children }) {
                 </Link>
               </li>
               <li>
-                <Link>Register A Member</Link>
+                <Link href={route('superadmin.showRegisterForm')}>
+                  Register A Member
+                </Link>
               </li>
             </ul>
           </div>
@@ -71,7 +73,9 @@ function SuperAdminDashboard({ children }) {
             </li>
 
             <li>
-              <Link>Register A Member</Link>
+              <Link href={route('superadmin.showRegisterForm')}>
+                Register A Member
+              </Link>
             </li>
           </ul>
         </div>

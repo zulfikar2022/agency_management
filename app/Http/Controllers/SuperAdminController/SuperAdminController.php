@@ -99,6 +99,10 @@ class SuperAdminController
         $user->save();
         return redirect()->back()->with('success', 'User employee status toggled successfully.');
     }
+
+    public function showRegisterForm(){
+        return Inertia::render('SuperAdmin/SuperAdminRegisterUser');
+    }
     // restore a deleted user;
 
     // make a user as admin

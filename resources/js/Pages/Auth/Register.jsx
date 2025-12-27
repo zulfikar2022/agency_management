@@ -19,7 +19,7 @@ export default function Register() {
   const submit = (e) => {
     e.preventDefault();
 
-    post(route('register'), {
+    post(route('register.store'), {
       onFinish: () => reset('password', 'password_confirmation'),
     });
   };
@@ -121,9 +121,16 @@ export default function Register() {
             Already registered?
           </Link> */}
 
-          <PrimaryButton className="ms-4" disabled={processing}>
+          {/* <PrimaryButton className="ms-4" disabled={processing}>
             Register
-          </PrimaryButton>
+          </PrimaryButton> */}
+          <button
+            type="submit"
+            className="ms-4 btn btn-primary"
+            disabled={processing}
+          >
+            Register
+          </button>
         </div>
       </form>
       <Link className="text-blue-600 underline" href={route('login')}>
