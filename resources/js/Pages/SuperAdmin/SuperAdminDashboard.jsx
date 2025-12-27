@@ -1,7 +1,22 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import { ToastContainer } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 function SuperAdminDashboard({ children }) {
+  const handleLogout = () => {
+    Swal.fire({
+      text: 'Are you sure you want to logout?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, logout!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.post(route('logout'));
+      }
+    });
+  };
   return (
     <div>
       <ToastContainer />
@@ -60,7 +75,14 @@ function SuperAdminDashboard({ children }) {
             </li>
           </ul>
         </div>
-        <div className="navbar-end">{/* <a className="btn">Button</a> */}</div>
+        <div className="navbar-end">
+          {/* <Link href={route('logout')} method="post" className="btn">
+            Logout
+          </Link> */}
+          <p className="btn btn-xs btn-neutral" onClick={() => handleLogout()}>
+            Logout
+          </p>
+        </div>
       </div>
       <div className="container mx-auto my-5">{children}</div>
     </div>
