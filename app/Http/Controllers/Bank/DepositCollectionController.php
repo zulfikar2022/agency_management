@@ -70,7 +70,10 @@ class DepositCollectionController extends Controller
         $member = Member::find($deposit->member_id);
         $loan = Loan::where('member_id', $member->id)
             ->where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->first();
 
         $withdraws = Withdraw::where('deposit_id', $deposit->id)

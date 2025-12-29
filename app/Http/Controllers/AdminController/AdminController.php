@@ -104,9 +104,12 @@ class AdminController extends Controller
         $total_deposit_amount = Member::where('is_deleted', false)->sum('total_deposit');
         $total_loaned_amount = Member::where('is_deleted', false)->sum('total_loan');
 
-        $total_collectable_with_interest = Loan::where('is_deleted', false)->sum('total_payable_amount');
+        // $total_collectable_with_interest = Loan::where('is_deleted', false)->sum('total_payable_amount');
 
-        $active_loan_ids = Loan::where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->pluck('id')->toArray();
+        $active_loan_ids = Loan::where('is_deleted', false)->where(function ($query) {
+            $query->where('remaining_payable_main', '>', 0)
+                  ->orWhere('remaining_payable_interest', '>', 0);
+        })->pluck('id')->toArray();
 
         $total_collection_for_loan = LoanCollection::whereIn('loan_id', $active_loan_ids)->sum('paid_amount');
         
@@ -143,7 +146,7 @@ class AdminController extends Controller
             'loanAccountCount' => $loan_account_count,
             'totalDepositAmount' => $total_deposit_amount,
             'totalLoanedAmount' => $total_loaned_amount,
-            'totalCollectableWithInterest' => $total_collectable_with_interest,
+            // 'totalCollectableWithInterest' => $total_collectable_with_interest,
             'totalCollectionForLoan' => $total_collection_for_loan,
             'dateWiseLoanAndDepositCollections' => $date_wise_loan_and_deposit_collections,
         ]);

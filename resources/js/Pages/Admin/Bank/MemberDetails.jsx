@@ -20,6 +20,8 @@ function MemberDetails({
   loan,
   not_paid_days_count,
 }) {
+  const total_payable =
+    ((loan.daily_payable_main + loan.daily_payable_interest) / 100) * 115;
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
@@ -258,7 +260,7 @@ function MemberDetails({
                     <p className="font-bold">
                       মোট পরিশোধযোগ্যঃ{' '}
                       <span className="text-slate-500">
-                        {(loan.total_payable_amount / 100).toFixed(2)} টাকা
+                        {total_payable.toFixed(2)} টাকা
                       </span>
                     </p>
                     <p className="font-bold">
@@ -270,7 +272,12 @@ function MemberDetails({
                     <p className="font-bold">
                       দৈনিক পরিশোধযোগ্যঃ{' '}
                       <span className="text-slate-500">
-                        {(loan.daily_payable_amount / 100).toFixed(2)} টাকা
+                        {(
+                          (loan.daily_payable_main +
+                            loan.daily_payable_interest) /
+                          100
+                        ).toFixed(2)}{' '}
+                        টাকা
                       </span>
                     </p>
                     <p className="font-bold border-b border-dashed mb-2">
@@ -282,16 +289,21 @@ function MemberDetails({
                     <p className="font-bold  mb-2">
                       পরিশোধ হয়েছেঃ{' '}
                       <span className="text-slate-500">
-                        {(loan.total_payable_amount -
-                          loan.remaining_payable_amount) /
-                          100}{' '}
+                        {loan.total_paid}
                         টাকা
                       </span>
                     </p>
                     <p className="font-bold border-b border-dashed mb-2">
-                      বাকি আছেঃ{' '}
+                      আসল বাকিঃ{' '}
                       <span className="text-slate-500">
-                        {(loan.remaining_payable_amount / 100).toFixed(2)} টাকা
+                        {(loan.remaining_payable_main / 100).toFixed(2)} টাকা
+                      </span>
+                    </p>
+                    <p className="font-bold border-b border-dashed mb-2">
+                      সুদ বাকিঃ{' '}
+                      <span className="text-slate-500">
+                        {(loan.remaining_payable_interest / 100).toFixed(2)}{' '}
+                        টাকা
                       </span>
                     </p>
                   </div>

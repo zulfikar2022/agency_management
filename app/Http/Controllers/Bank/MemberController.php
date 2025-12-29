@@ -69,7 +69,11 @@ class MemberController extends Controller
     public function allLoanMembers(){
         $search = request()->query('search', '');
         $loans = Loan::where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->pluck('member_id');
 
         $members = Member::whereIn('id', $loans)
@@ -170,7 +174,10 @@ class MemberController extends Controller
         $today = now()->format('Y-m-d');
 
         $loans_id = Loan::where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->where('last_paying_date', '>=', $today)
             ->pluck('id');
         $loan_collection_todays_loan_ids = LoanCollection::where('is_deleted', false)
@@ -280,8 +287,21 @@ class MemberController extends Controller
     {
         
        
-        $loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->first();
-        $has_loan = Loan::where('member_id', $member->id)->where('is_deleted', false)->where('remaining_payable_amount', '>', 0)->exists();
+        $loan = Loan::where('member_id', $member->id)
+        ->where('is_deleted', false)
+        ->where(function ($query) {
+            $query->where('remaining_payable_main', '>', 0)
+                  ->orWhere('remaining_payable_interest', '>', 0);
+        })
+        ->first();
+
+        $has_loan = Loan::where('member_id', $member->id)
+        ->where('is_deleted', false)
+        ->where(function ($query) {
+            $query->where('remaining_payable_main', '>', 0)
+                  ->orWhere('remaining_payable_interest', '>', 0);
+        })
+        ->exists();
         
         $deposit_account = Deposit::where('member_id', $member->id)->where('is_deleted', false)->first();
 
@@ -360,7 +380,10 @@ class MemberController extends Controller
             ->first();
         $loan = Loan::where('member_id', $member->id)
             ->where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->first();
         $loan_collections = LoanCollection::where('loan_id', $loan?->id)
             ->where('is_deleted', false)
@@ -464,7 +487,11 @@ class MemberController extends Controller
         // find the loan and the deposit instance for the member
         $loan = Loan::where('member_id', $member->id)
                 ->where('is_deleted', false)
-                ->where('remaining_payable_amount', '>', 0)
+                
+                ->where(function ($query) {
+                    $query->where('remaining_payable_main', '>', 0)
+                          ->orWhere('remaining_payable_interest', '>', 0);
+                })
                 ->first();
         $loan_collections = LoanCollection::where('loan_id', $loan?->id)
                 ->where('is_deleted', false)
@@ -546,7 +573,7 @@ class MemberController extends Controller
     {
         $loan = Loan::where('member_id', $member->id)
                 ->where('is_deleted', false)
-                // ->where('remaining_payable_amount', '>', 0)
+                
                 ->first();
         $loan_collections = LoanCollection::where('loan_id', $loan?->id)
                 ->where('is_deleted', false)

@@ -30,7 +30,11 @@ class LoanCollectionController extends Controller
             // find loans which are not in todays_collections and have remaining_payable_amount > 0
         $loans_not_paid_today = Loan::whereNotIn('id', $todays_collections)
             ->where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            // ->where('remaining_payable_amount', '>', 0)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->get();
         $members = Member::whereIn('id', $loans_not_paid_today->pluck('member_id'))
         ->where('is_deleted', false)
@@ -77,7 +81,10 @@ class LoanCollectionController extends Controller
         // find the loan instance of the member
         $loan = Loan::where('member_id', $member->id)
             ->where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->first();         
         return Inertia::render('Employee/Bank/EmployeeCollectInstallment', [
             'member' => $member,

@@ -142,7 +142,10 @@ class DepositController extends Controller
                 ->first();
             $loan = Loan::where('member_id', $member->id)
                 ->where('is_deleted', false)
-                ->where('remaining_payable_amount', '>', 0)
+                ->where(function ($query) {
+                    $query->where('remaining_payable_main', '>', 0)
+                          ->orWhere('remaining_payable_interest', '>', 0);
+                })
                 ->first();
             $member->deposit_account = $deposit;
             $member->loan_account = $loan;

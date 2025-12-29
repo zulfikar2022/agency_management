@@ -89,7 +89,10 @@ class WithdrawController extends Controller
         // find the members loan
         $loan = Loan::where('member_id', $member->id)
             ->where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->first();
         $total_deposit_cents = $member->total_deposit;
 
@@ -164,7 +167,10 @@ class WithdrawController extends Controller
 
         $loan = Loan::where('member_id', $member->id)
             ->where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->first();
 
         if ($loan) {

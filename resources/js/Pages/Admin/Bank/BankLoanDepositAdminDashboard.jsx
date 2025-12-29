@@ -8,7 +8,7 @@ function BankLoanDepositAdminDashboard({
   loanAccountCount,
   totalDepositAmount,
   totalLoanedAmount,
-  totalCollectableWithInterest,
+  // totalCollectableWithInterest,
   totalCollectionForLoan,
   dateWiseLoanAndDepositCollections,
 }) {
@@ -59,7 +59,7 @@ function BankLoanDepositAdminDashboard({
               &nbsp; টাকা
             </p>
           </div>
-          <div className="border-b mt-2">
+          {/* <div className="border-b mt-2">
             <p className="font-bold text-green-700">
               সুদসহ মোট সংগ্রহ করা হবেঃ{' '}
             </p>
@@ -69,7 +69,7 @@ function BankLoanDepositAdminDashboard({
               </span>{' '}
               &nbsp; টাকা
             </p>
-          </div>
+          </div> */}
           <div className="border-b mt-2">
             <p className="font-bold text-green-700">
               ঋণের কিস্তি বাবদ মোট সংগ্রহঃ{' '}

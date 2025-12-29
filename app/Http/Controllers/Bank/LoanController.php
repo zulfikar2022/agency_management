@@ -9,6 +9,7 @@ use App\Models\Bank\LoanCollectionUpdateLog;
 use App\Models\Bank\LoanUpdateLog;
 use App\Models\Bank\Member;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -79,7 +80,10 @@ class LoanController extends Controller
 
         $loan = Loan::where('member_id', $validated['member_id'])
             ->where('is_deleted', false)
-            ->where('remaining_payable_amount', '>', 0)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
             ->first();
 
         if ($loan) {
@@ -87,49 +91,50 @@ class LoanController extends Controller
         }
 
         $member = Member::findOrFail($validated['member_id']);
-        $total_deposit = $member->total_deposit;
+
         if($member->total_deposit < $validated['safety_money'] * 100 ){
             return redirect()->back()->withErrors(['message' => 'সদস্যের মোট জমার পরিণাম জামানতের চেয়ে কম হতে পারবে না।'])->withInput();
         }
-        
+        // dd("before transaction", $validated);
         DB::transaction(function () use ($validated) {
             $member_id = $validated['member_id'];
             $total_loan = $validated['total_loan'] * 100; 
             $safety_money = $validated['safety_money'] * 100; 
 
-            $total_payable = $total_loan + ($total_loan * 0.15);
-            $remaining_payable = $total_payable;
-            $share_money = $total_loan * 0.025; 
-            $loan_fee = 3000;
-            $daily_payable_amount = ceil($total_payable / 115);
+            $share_money = $total_loan * 0.025;
+            $loan_fee = 3000; // fixed loan fee ৩০০০ টাকা
 
-            // find the member from the member id
-            $member = Member::find($member_id);
-            $member->total_loan = $total_loan;
-            $member->save();
+            $daily_payable_main = ceil($total_loan / 115); // 115 দিনের মধ্যে মূল টাকা পরিশোধ করতে হবে
+            $daily_payable_interest = ceil(($total_loan * 0.15) / 115); // মোট ১৫% সুদ দিতে হবে, যা 115 দিনের মধ্যে পরিশোধ করতে হবে
+            $remaining_payable_interest = 0;
+            $remaining_payable_main = $total_loan;
+            $last_paying_date = Carbon::now()->addDays(115)->format('Y-m-d');
 
-            Loan::create([
-                'member_id' => $member_id,
-                'creating_user_id' => Auth::id(),
-                'total_loan' => $total_loan,
-                'safety_money' => $safety_money,
-                'total_payable_amount' => $total_payable,
-                'last_paying_date' => now()->modify('+115 days')->format('Y-m-d'),
-                'remaining_payable_amount' => $remaining_payable,
-                'share_money' => $share_money,
-                'loan_fee' => $loan_fee,
-                'is_deleted' => false,
-                'daily_payable_amount' => $daily_payable_amount,
-            ]); 
+            // create a new loan instance
+            $loan = new Loan();
+            $loan->member_id = $member_id;
+            $loan->creating_user_id = Auth::id();
+            $loan->total_loan = $total_loan;
+            $loan->daily_payable_main = $daily_payable_main;
+            $loan->daily_payable_interest = $daily_payable_interest;
+            $loan->remaining_payable_interest = $remaining_payable_interest;
+            $loan->last_paying_date = $last_paying_date;
+            $loan->remaining_payable_main = $remaining_payable_main;
+            $loan->total_paid = 0;
+            $loan->safety_money = $safety_money;
+            $loan->share_money = $share_money;
+            $loan->loan_fee = $loan_fee;
+            $loan->is_deleted = false;
+            $loan->save();
         });
 
         return redirect()->route('admin.bank.member_details', [
             'member' => $validated['member_id'],
         ])->with('message', 'ঋণ সফলভাবে প্রদান করা হয়েছে।');
-        
 
-       
     }
+
+
 
     /**
      * Display the specified resource.
@@ -180,6 +185,10 @@ class LoanController extends Controller
             return redirect()->back()->withErrors(['message' => 'সদস্যের মোট জমার পরিণাম জামানতের চেয়ে কম হতে পারবে না।'])->withInput();
         }
 
+        if($loan->creating_user_id !== Auth::id()){
+            return redirect()->back()->withErrors(['message' => 'আপনার এই ঋণ আপডেট করার অনুমতি নেই কারণ আপনি এটি প্রদান করেননি।'])->withInput();
+        }
+
         DB::transaction(function() use($total_loan, $validated, $loan, $member, $safety_money){
             
             // create an instance of loan_update_logs
@@ -190,9 +199,9 @@ class LoanController extends Controller
             $loan_update_log->total_loan_after_update = $total_loan;
             $loan_update_log->safety_money_before_update = $loan->safety_money;
             $loan_update_log->safety_money_after_update = $safety_money;
-            $loan_update_log->total_payable_amount_before_update = $loan->total_payable_amount;
-            $new_total_payable_amount = $total_loan + ($total_loan * 0.15);
-            $loan_update_log->total_payable_amount_after_update = $new_total_payable_amount;
+            // $loan_update_log->total_payable_amount_before_update = $loan->total_payable_amount;
+            // $new_total_payable_amount = $total_loan + ($total_loan * 0.15);
+            // $loan_update_log->total_payable_amount_after_update = $new_total_payable_amount;
             $loan_update_log->save();
 
             // update member 
@@ -203,9 +212,10 @@ class LoanController extends Controller
             $loan->total_loan = $total_loan;
             $loan->safety_money = $safety_money;
             $loan->share_money = $total_loan * 0.025;
-            $loan->total_payable_amount = $new_total_payable_amount;
-            $loan->remaining_payable_amount = $new_total_payable_amount;
-            $loan->daily_payable_amount = ceil($new_total_payable_amount / 115);
+            $loan->daily_payable_main = ceil($total_loan / 115);
+            $loan->daily_payable_interest = ceil(($total_loan * 0.15) / 115);
+            $loan->remaining_payable_main = $total_loan;
+
 
             $loan->save();
         });

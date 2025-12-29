@@ -16,7 +16,7 @@ function Dashboard({
   loanAccountCount,
   totalDepositAmount,
   totalLoanedAmount,
-  totalCollectableWithInterest,
+  // totalCollectableWithInterest,
   totalCollectionForLoan,
   dateWiseLoanAndDepositCollections,
 }) {
@@ -37,7 +37,7 @@ function Dashboard({
           loanAccountCount={loanAccountCount}
           totalDepositAmount={totalDepositAmount}
           totalLoanedAmount={totalLoanedAmount}
-          totalCollectableWithInterest={totalCollectableWithInterest}
+          // totalCollectableWithInterest={totalCollectableWithInterest}
           totalCollectionForLoan={totalCollectionForLoan}
           dateWiseLoanAndDepositCollections={dateWiseLoanAndDepositCollections}
         />

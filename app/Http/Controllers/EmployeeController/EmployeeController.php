@@ -370,7 +370,15 @@ class EmployeeController extends Controller
     public function depositAndLoanCollection( $deposit,  $loan){
         
         $sendable_deposit = Deposit::find($deposit);
-        $sendable_loan = Loan::find($loan);
+        $sendable_loan = Loan::where('id', $loan)
+            ->where('is_deleted', false)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
+            // that loan which is created before today
+            ->where('created_at', '<=', now()->format('Y-m-d'))
+            ->first();
         $member = null;
         if($sendable_deposit){
             $member = Member::find($sendable_deposit->member_id);
