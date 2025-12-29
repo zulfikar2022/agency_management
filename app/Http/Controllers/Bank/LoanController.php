@@ -211,7 +211,7 @@ class LoanController extends Controller
             // update the loan instance
             $loan->total_loan = $total_loan;
             $loan->safety_money = $safety_money;
-            $loan->share_money = $total_loan * 0.025;
+            $loan->share_money = round($total_loan * 0.025);
             $loan->daily_payable_main = round($total_loan / 115);
             $loan->daily_payable_interest = round(($total_loan * 0.15) / 115);
             $loan->remaining_payable_main = $total_loan;

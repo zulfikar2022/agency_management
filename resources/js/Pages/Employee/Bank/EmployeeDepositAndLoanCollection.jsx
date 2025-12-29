@@ -67,7 +67,9 @@ function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
     <EmployeeBankLayout>
       <div>
         <p className="text-center font-bold text-xl">
-          দৈনিক সঞ্চয় {loan && <span>ও ঋণ কিস্তি</span>} সংগ্রহ
+          দৈনিক {deposit && <span>সঞ্চয় </span>}{' '}
+          {deposit && loan ? <span>এবং </span> : ''}
+          {loan && <span> ঋণ কিস্তি</span>} সংগ্রহ
         </p>
         <div className="min-h-screen bg-base-200 py-8">
           <div className="max-w-xl mx-auto px-4">
