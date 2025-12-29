@@ -110,9 +110,9 @@ export default function Login({ status, canResetPassword }) {
       </form>
 
       <div>
-        <Link className="text-blue-600 underline" href={route('register')}>
+        {/* <Link className="text-blue-600 underline" href={route('register')}>
           রেজিস্ট্রেশন করুন
-        </Link>
+        </Link> */}
       </div>
     </GuestLayout>
   );
