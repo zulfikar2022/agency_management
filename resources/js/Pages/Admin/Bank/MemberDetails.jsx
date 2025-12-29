@@ -21,7 +21,7 @@ function MemberDetails({
   not_paid_days_count,
 }) {
   const total_payable =
-    ((loan.daily_payable_main + loan.daily_payable_interest) / 100) * 115;
+    ((loan?.daily_payable_main + loan?.daily_payable_interest) / 100) * 115;
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);

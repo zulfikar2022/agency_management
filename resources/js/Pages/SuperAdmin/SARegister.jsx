@@ -133,9 +133,6 @@ export default function SARegister() {
             </PrimaryButton>
           </div>
         </form>
-        <Link className="text-blue-600 underline" href={route('login')}>
-          লগইন করুন
-        </Link>
       </div>
     </div>
   );

@@ -104,8 +104,8 @@ class LoanController extends Controller
             $share_money = $total_loan * 0.025;
             $loan_fee = 3000; // fixed loan fee ৩০০০ টাকা
 
-            $daily_payable_main = ceil($total_loan / 115); // 115 দিনের মধ্যে মূল টাকা পরিশোধ করতে হবে
-            $daily_payable_interest = ceil(($total_loan * 0.15) / 115); // মোট ১৫% সুদ দিতে হবে, যা 115 দিনের মধ্যে পরিশোধ করতে হবে
+            $daily_payable_main = round($total_loan / 115); // 115 দিনের মধ্যে মূল টাকা পরিশোধ করতে হবে
+            $daily_payable_interest = round(($total_loan * 0.15) / 115); // মোট ১৫% সুদ দিতে হবে, যা 115 দিনের মধ্যে পরিশোধ করতে হবে
             $remaining_payable_interest = 0;
             $remaining_payable_main = $total_loan;
             $last_paying_date = Carbon::now()->addDays(115)->format('Y-m-d');
@@ -212,8 +212,8 @@ class LoanController extends Controller
             $loan->total_loan = $total_loan;
             $loan->safety_money = $safety_money;
             $loan->share_money = $total_loan * 0.025;
-            $loan->daily_payable_main = ceil($total_loan / 115);
-            $loan->daily_payable_interest = ceil(($total_loan * 0.15) / 115);
+            $loan->daily_payable_main = round($total_loan / 115);
+            $loan->daily_payable_interest = round(($total_loan * 0.15) / 115);
             $loan->remaining_payable_main = $total_loan;
 
 
