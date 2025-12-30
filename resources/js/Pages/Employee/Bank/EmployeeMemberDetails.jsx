@@ -76,27 +76,24 @@ function EmployeeMemberDetails({
               {((loan?.total_loan || 0) / 100).toFixed(2)} টাকা
             </span>
           </p>
-          <p className="font-bold">
+          {/* <p className="font-bold">
             মোট পরিশোধযোগ্যঃ{' '}
             <span className="font-normal">
               {((loan?.total_payable_amount || 0) / 100).toFixed(2)} টাকা
             </span>
-          </p>
+          </p> */}
           <p className="font-bold">
             মোট পরিশোধিতঃ{' '}
             <span className="font-normal">
-              {((loan?.total_payable_amount || 0) -
-                (loan?.remaining_payable_amount || 0)) /
-                100}{' '}
-              টাকা
+              {(loan?.total_paid / 100).toFixed(2)} টাকা
             </span>
           </p>
-          <p className="font-bold">
+          {/* <p className="font-bold">
             মোট বাকিঃ{' '}
             <span className="font-normal">
               {((loan?.remaining_payable_amount || 0) / 100).toFixed(2)} টাকা
             </span>
-          </p>
+          </p> */}
         </div>
       </div>
       <div className="mx-2 md:mx-0">

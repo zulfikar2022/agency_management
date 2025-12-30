@@ -1,6 +1,13 @@
 import { Link, router } from '@inertiajs/react';
 import { NavigationBar } from './components/NavigationBar';
 import Swal from 'sweetalert2';
+import AdminDashboardSidebar from './AdminDashboardSidebar';
+import MoneyOpenDrawer from './components/MoneyOpenDrawer';
+
+/* <button onClick={handleLogout} className="btn btn-sm btn-neutral">
+লগআউট করুন
+</button>
+*/
 
 function AdminDashboardLayout({ children }) {
   const handleLogout = () => {
@@ -70,11 +77,26 @@ function AdminDashboardLayout({ children }) {
               </li>
             </ul>
           </div>
-          <div className="navbar-end">
-            <button onClick={handleLogout} className="btn btn-sm btn-neutral">
-              লগআউট করুন
-            </button>
+          {/* <div className="navbar-end"> */}
+          <div className="drawer drawer-end navbar-end">
+            <input
+              id="admin-dashboard-sidebar"
+              type="checkbox"
+              className="drawer-toggle"
+            />
+            <div className="drawer-content">
+              {/* Page content here */}
+              <label
+                htmlFor="admin-dashboard-sidebar"
+                className="drawer-button btn btn-outline"
+              >
+                অ্যাডমিন প্যানেল মেনু
+              </label>
+            </div>
+            {/* <MoneyOpenDrawer /> */}
+            <AdminDashboardSidebar />
           </div>
+          {/* </div> */}
         </div>
       </header>
       <main className="admin-dashboard-content h-full">{children}</main>
