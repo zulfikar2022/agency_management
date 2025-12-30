@@ -483,6 +483,7 @@ class EmployeeController extends Controller
                 $loan_collection->interest_paid_amount = $interest_paid_amount;
                 $loan_collection->paying_date = now()->format('Y-m-d');
                 $loan_collection->is_deleted = false;
+                $loan_collection->paid_amount = $main_paid_amount + $interest_paid_amount;
                 $loan_collection->save();
 
                 // update the loan's remaining_payable_amount
