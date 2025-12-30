@@ -10,22 +10,6 @@ import MoneyOpenDrawer from './components/MoneyOpenDrawer';
 */
 
 function AdminDashboardLayout({ children }) {
-  const handleLogout = () => {
-    Swal.fire({
-      title: 'আপনি কি আসলেই লগআউট করতে চান?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#09090b',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'হ্যাঁ, লগআউট করুন!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.post(route('logout'), {
-          replace: true,
-        });
-      }
-    });
-  };
   return (
     <div className="admin-dashboard-layout h-full min-h-screen">
       <header className="admin-dashboard-header">

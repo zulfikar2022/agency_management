@@ -1,6 +1,8 @@
 import { Link, router } from '@inertiajs/react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import Swal from 'sweetalert2';
+import AdminDashboardLayout from '../AdminDashboardLayout';
+import { ArrowLeft } from 'lucide-react';
 
 function AllUsers({ users }) {
   console.log(users);
@@ -33,9 +35,17 @@ function AllUsers({ users }) {
     });
   };
   return (
-    <LayoutForProduct>
+    <AdminDashboardLayout>
       <div>
-        <h1 className="text-2xl font-bold mb-4 text-center md:container mx-2 md:mx-auto pb-2">
+        <div className="pl-10 mt-4">
+          <Link href={route('home')} className="text-blue-700 underline ">
+            {' '}
+            <span className="flex">
+              <ArrowLeft /> <span>ফিরে যান</span>
+            </span>{' '}
+          </Link>
+        </div>{' '}
+        <h1 className="text-2xl font-bold mb-4 text-center md:container mx-2 md:mx-auto pb-2 my-5">
           সকল ইউজারের তালিকা
         </h1>
         <div className="md:container mx-2 md:mx-auto">
@@ -86,7 +96,7 @@ function AllUsers({ users }) {
           </ul>
         </div>
       </div>
-    </LayoutForProduct>
+    </AdminDashboardLayout>
   );
 }
 

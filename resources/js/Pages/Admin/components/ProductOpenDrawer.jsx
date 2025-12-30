@@ -115,17 +115,17 @@ function ProductOpenDrawer() {
             এমপ্লয়ী অনুযায়ী সংগ্রহ রিপোর্ট
           </Link>
         </li>
-        <li>
+        {/* <li>
           <p className="hover:bg-white hover:cursor-auto font-bold underline">
             {' '}
             ইউজার নিয়ন্ত্রণ
           </p>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <Link href={route('admin.showAllUsers')} className="ml-3">
             সকল ইউজার দেখুন
           </Link>
-        </li>
+        </li> */}
         <li>
           <Link
             href={route('admin.reportGenerationPage')}

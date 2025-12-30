@@ -62,14 +62,14 @@ function MoneyOpenDrawer() {
           >
             এমপ্লয়ী অনুযায়ী সংগ্রহ রিপোর্ট
           </Link>
-          <p className="hover:bg-white hover:cursor-auto font-bold underline">
+          {/* <p className="hover:bg-white hover:cursor-auto font-bold underline">
             {' '}
             ইউজার নিয়ন্ত্রণ
-          </p>
+          </p> */}
 
-          <Link href={route('admin.bank.all_users')} className="ml-3">
+          {/* <Link href={route('admin.bank.all_users')} className="ml-3">
             সকল ইউজার দেখুন
-          </Link>
+          </Link> */}
           <Link
             href={route('admin.bank.report_generate')}
             className="ml-3 btn btn-xs btn-neutral mb-4 mt-3"
