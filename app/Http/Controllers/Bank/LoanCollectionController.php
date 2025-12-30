@@ -216,7 +216,7 @@ class LoanCollectionController extends Controller
 
             $loan->remaining_payable_interest = $loan->remaining_payable_interest - $interest_paid_amount;
             $loan->remaining_payable_main = $loan->remaining_payable_main - $main_paid_amount;
-            $loan->total_paid = 0;
+            $loan->total_paid += $paid_amount;
             $loan->save();
         });
         
