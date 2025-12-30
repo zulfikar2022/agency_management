@@ -171,7 +171,7 @@ class LoanCollectionController extends Controller
         $paid_amount = $validated['paid_amount'] * 100;
         $loan_collection = LoanCollection::find($validated['id']);
         $loan = Loan::find($loan_collection->loan_id);
-        $remaining_payable_amount = $loan->remaining_payable_amount + $loan_collection->paid_amount;
+        $remaining_payable_amount = $loan->remaining_payable_interest + $loan->remaining_payable_main + $loan_collection->paid_amount;
 
         if($remaining_payable_amount - $paid_amount < 0){
             return redirect()->back()->withErrors(['paid_amount' => 'আপডেটকৃত কিস্তির পরিমাণ বাকি পরিশোধযোগ্য পরিমাণের চেয়ে বেশি হতে পারে না।'])->withInput();
@@ -184,27 +184,44 @@ class LoanCollectionController extends Controller
         if($loan_collection->collecting_user_id !== Auth::id()){
             return redirect()->back()->withErrors(['paid_amount' => 'আপনার এই কিস্তি আপডেট করার অনুমতি নেই কারণ আপনি এটি সংগ্রহ করেননি।'])->withInput();
         }
+
+        DB::transaction(function() use ($validated, $loan_collection, $paid_amount, $loan, ) {
+             $loan_collection_update_log = new LoanCollectionUpdateLog();
+
+            $loan_collection_update_log->loan_collection_id = $loan_collection->id;
+            $loan_collection_update_log->updating_user_id = Auth::id();
+            $loan_collection_update_log->paid_amount_before_update = $loan_collection->paid_amount;
+            $loan_collection_update_log->paid_amount_after_update = $paid_amount;
+            $loan_collection_update_log->save();
+
+
+            $loan->total_paid -= $loan_collection->paid_amount;
+            $loan->remaining_payable_main += $loan_collection->main_paid_amount;
+            $loan->remaining_payable_interest += $loan_collection->interest_paid_amount;
+
+            $interest_paid_amount = 0;
+            $main_paid_amount = 0;
+            if($paid_amount <= $loan->remaining_payable_interest){
+                $interest_paid_amount = $paid_amount;
+            } else {
+                $interest_paid_amount = $loan->remaining_payable_interest;
+                $main_paid_amount = $paid_amount - $loan->remaining_payable_interest;
+            }
+
+            // update the loan collection instance 
+            $loan_collection->paid_amount = $paid_amount;
+            $loan_collection->interest_paid_amount = $interest_paid_amount;
+            $loan_collection->main_paid_amount = $main_paid_amount;
+            $loan_collection->save();
+
+            $loan->remaining_payable_interest = $loan->remaining_payable_interest - $interest_paid_amount;
+            $loan->remaining_payable_main = $loan->remaining_payable_main - $main_paid_amount;
+            $loan->total_paid = 0;
+            $loan->save();
+        });
         
         // create an instance of loan_collection_update_log
-        $loan_collection_update_log = new LoanCollectionUpdateLog();
-
-        $loan_collection_update_log->loan_collection_id = $loan_collection->id;
-        $loan_collection_update_log->updating_user_id = Auth::id();
-        $loan_collection_update_log->paid_amount_before_update = $loan_collection->paid_amount;
-        $loan_collection_update_log->paid_amount_after_update = $paid_amount;
-        $loan_collection_update_log->save();
-
        
-
-
-        // update the loan collection instance 
-        $loan_collection->paid_amount = $paid_amount;
-        $loan_collection->save();
-
-
-        // update the loans instance
-        $loan->remaining_payable_amount = $remaining_payable_amount - $paid_amount;
-        $loan->save();
 
         return redirect()->route('employee.bank.member_details', [
             'member' => $loan->member_id
