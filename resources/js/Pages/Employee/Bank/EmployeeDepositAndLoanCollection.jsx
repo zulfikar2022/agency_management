@@ -5,7 +5,8 @@ import { Bounce, toast } from 'react-toastify';
 
 function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
   //   console.log(deposit, loan);
-  // employee.bank.processDepositAndLoanCollection
+
+  console.log(loan);
   const { data, setData, errors, post, processing, reset } = useForm({
     has_deposit: deposit ? true : false,
     has_loan: loan ? true : false,
@@ -113,6 +114,16 @@ function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
                               100
                             ).toFixed(2)}{' '}
                             টাকা{' '}
+                          </span>
+                          <br />
+                          <span className="text-xs">
+                            আজ সম্পূর্ণ টাকা পরিশোধ করতে চাইলে দিতে হবেঃ{' '}
+                            {(
+                              (loan?.remaining_payable_interest +
+                                loan?.remaining_payable_main) /
+                              100
+                            ).toFixed(2)}{' '}
+                            টাকা (সুদ ও আসল সহ)
                           </span>
                         </span>
                       </label>

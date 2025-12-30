@@ -418,7 +418,7 @@ class EmployeeController extends Controller
 
         if($validated['loan_id'] != null){
             $loan = Loan::findOrFail($validated['loan_id']);
-            if ($validated['paid_amount'] * 100 > $loan->remaining_payable_amount) {
+            if ($validated['paid_amount'] * 100 > ($loan->remaining_payable_main + $loan->remaining_payable_interest)) {
                 return redirect()->back()->withErrors(['paid_amount' => 'যত টাকা বাকি আছে তার থেকে বেশি পরিশোধ করতে পারবেন না। '])->withInput();
             }
 
@@ -465,18 +465,32 @@ class EmployeeController extends Controller
 
             if($validated['loan_id'] != null){
                 $loan = Loan::find($validated['loan_id']);
+
+                $interest_paid_amount = 0;
+                $main_paid_amount = 0;
+                if($validated['paid_amount'] * 100 <= $loan->remaining_payable_interest){
+                    $interest_paid_amount = $validated['paid_amount'] * 100;
+                } else{
+                    $interest_paid_amount = $loan->remaining_payable_interest;
+                    $main_paid_amount = ($validated['paid_amount'] * 100) - $loan->remaining_payable_interest;
+                }
                  // create a loan_collections record
                 $loan_collection = new LoanCollection();
                 $loan_collection->loan_id = $validated['loan_id'];
                 $loan_collection->collecting_user_id = Auth::id();
-                $loan_collection->paid_amount = $validated['paid_amount'] * 100; // store in cents
+                // $loan_collection->paid_amount = $validated['paid_amount'] * 100; // store in cents
+                $loan_collection->main_paid_amount = $main_paid_amount;
+                $loan_collection->interest_paid_amount = $interest_paid_amount;
                 $loan_collection->paying_date = now()->format('Y-m-d');
                 $loan_collection->is_deleted = false;
                 $loan_collection->save();
 
                 // update the loan's remaining_payable_amount
                 // $loan = Loan::find($validated['loan_id']);
-                $loan->remaining_payable_amount -= $validated['paid_amount'] * 100;
+                // $loan->remaining_payable_amount -= $validated['paid_amount'] * 100;
+                $loan->remaining_payable_main -= $main_paid_amount;
+                $loan->remaining_payable_interest -= $interest_paid_amount;
+                $loan->total_paid += ($main_paid_amount + $interest_paid_amount);
                 $loan->save();
             }
             
