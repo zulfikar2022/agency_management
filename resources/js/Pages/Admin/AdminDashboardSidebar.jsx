@@ -31,7 +31,10 @@ function AdminDashboardSidebar() {
           <Link href={route('admin.showAllUsers')}> এমপ্লয়ী ম্যানেজমেন্ট </Link>
         </li>
         <li>
-          <Link> পাসওয়ার্ড আপডেট করুন </Link>
+          <Link href={route('password.update.form')}>
+            {' '}
+            পাসওয়ার্ড আপডেট করুন{' '}
+          </Link>
         </li>
         <li>
           <button onClick={handleLogout} className="btn btn-xs btn-neutral">

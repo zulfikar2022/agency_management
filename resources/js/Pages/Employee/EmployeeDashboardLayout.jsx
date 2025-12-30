@@ -86,6 +86,12 @@ function EmployeeDashboardLayout({ children }) {
           </ul>
         </div>
         <div className="navbar-end">
+          <Link
+            className="pr-3 underline text-blue-600"
+            href={route('password.update.form')}
+          >
+            পাসওয়ার্ড পরিবর্তন
+          </Link>
           <button onClick={handleLogout} className="btn btn-xs btn-neutral">
             লগআউট করুন
           </button>
