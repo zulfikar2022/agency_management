@@ -27,12 +27,13 @@ class CostController extends Controller
             ->get();
         foreach ($costs as $cost) {
             $cost->creating_user_name = $cost->creator ? $cost->creator->name : 'Unknown';
+            $cost->creating_user_id = $cost->creator ? $cost->creator->id : null;
             // I want to not to send the creator relation to the frontend
             unset($cost->creator);
         }
 
         
-        return Inertia::render('Admin/ShowCosts', ['costs' => $costs, 'start_date' => $start_date, 'end_date' => $end_date]);
+        return Inertia::render('Admin/ShowCosts', ['costs' => $costs, 'start_date' => $start_date, 'end_date' => $end_date, 'user_id' => Auth::id()]);
     }
 
     /**
