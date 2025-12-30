@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController\AdminController;
+use App\Http\Controllers\CostController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EmployeeController\EmployeeController;
@@ -143,6 +144,15 @@ Route::get('/admin/users', [AdminController::class, 'showAllUsers'])->name('admi
 
 // employee power toggle route
 Route::post('/admin/toggle-employee-power', [AdminController::class, 'toggleEmployeePower'])->name('admin.toggleEmployeePower');
+
+Route::get('/admin/create-cost', [CostController::class, 'create'])->name('admin.createCost');
+Route::post('/admin/store-cost', [CostController::class, 'store'])->name('admin.storeCost');
+
+Route::get('/admin/costs', [CostController::class, 'index'])->name('admin.showCosts');
+
+Route::get('/admin/edit-cost/{cost}', [CostController::class, 'edit'])->name('admin.editCost');
+
+Route::put('/admin/update-cost', [CostController::class, 'update'])->name('admin.updateCost');
 
 
 });

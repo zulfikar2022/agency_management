@@ -27,8 +27,15 @@ function AdminDashboardSidebar() {
       ></label>
       <ul className="menu bg-base-200 min-h-full w-80 p-4 flex flex-col gap-4">
         {/* Sidebar content here */}
+        {/* admin.createCost */}
         <li>
           <Link href={route('admin.showAllUsers')}> এমপ্লয়ী ম্যানেজমেন্ট </Link>
+        </li>
+        <li>
+          <Link href={route('admin.createCost')}> খরচ যুক্ত করুন </Link>
+        </li>
+        <li>
+          <Link href={route('admin.showCosts')}> খরচ দেখুন </Link>
         </li>
         <li>
           <Link href={route('password.update.form')}>

@@ -3,6 +3,7 @@ import { NavigationBar } from './components/NavigationBar';
 import Swal from 'sweetalert2';
 import AdminDashboardSidebar from './AdminDashboardSidebar';
 import MoneyOpenDrawer from './components/MoneyOpenDrawer';
+import { ToastContainer } from 'react-toastify';
 
 /* <button onClick={handleLogout} className="btn btn-sm btn-neutral">
 লগআউট করুন
@@ -12,6 +13,7 @@ import MoneyOpenDrawer from './components/MoneyOpenDrawer';
 function AdminDashboardLayout({ children }) {
   return (
     <div className="admin-dashboard-layout h-full min-h-screen">
+      <ToastContainer />
       <header className="admin-dashboard-header">
         <div className="navbar bg-slate-100 shadow-sm">
           <div className="navbar-start">
