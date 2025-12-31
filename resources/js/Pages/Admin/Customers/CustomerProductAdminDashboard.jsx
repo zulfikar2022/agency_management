@@ -147,7 +147,7 @@ function CustomerProductAdminDashboard({
           </div>
           <div className="border-b pb-2 mb-1">
             <p className="font-bold text-green-700">
-              বিক্রিত পণ্যের মোট মূল্যঃ{' '}
+              বিক্রিত (সম্পূর্ন পরিশোধ হয়নি এমন) পণ্যের মোট মূল্যঃ{' '}
             </p>
             <p>
               <span className="text-3xl font-bold">
@@ -156,25 +156,28 @@ function CustomerProductAdminDashboard({
               <span>&nbsp;{'টাকা'}</span>
             </p>
           </div>
-          <div className="border-b pb-2 mb-1">
-            <p className="font-bold text-green-700">মোট সংগৃহীত পরিমাণঃ </p>
-            <p>
-              <span className="text-3xl font-bold">
-                {totalCollectedAmount.toLocaleString()}
-              </span>
-              <span>&nbsp;{'টাকা'}</span>
-            </p>
-          </div>
-          <div className="border-b pb-2 mb-1">
-            <p className="font-bold text-green-700">মোট বাকিঃ </p>
-            <p>
-              <span className="text-3xl font-bold">
-                {(
-                  soldProductsTotalPrice - totalCollectedAmount
-                ).toLocaleString()}
-              </span>
-              <span>&nbsp;{'টাকা'}</span>
-            </p>
+
+          <div className="pl-4">
+            <div className="border-b pb-2 mb-1">
+              <p className="font-bold text-green-500">মোট সংগৃহীত পরিমাণঃ </p>
+              <p>
+                <span className="text-3xl font-bold">
+                  {totalCollectedAmount.toLocaleString()}
+                </span>
+                <span>&nbsp;{'টাকা'}</span>
+              </p>
+            </div>
+            <div className="border-b pb-2 mb-1">
+              <p className="font-bold text-green-500">মোট বাকিঃ </p>
+              <p>
+                <span className="text-3xl font-bold">
+                  {(
+                    soldProductsTotalPrice - totalCollectedAmount
+                  ).toLocaleString()}
+                </span>
+                <span>&nbsp;{'টাকা'}</span>
+              </p>
+            </div>
           </div>
           <div className="border-b pb-2 mb-1">
             <p className="font-bold text-green-700">মোট খরচঃ </p>
