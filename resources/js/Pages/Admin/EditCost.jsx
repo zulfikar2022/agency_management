@@ -1,8 +1,9 @@
 import React from 'react';
-import { useForm, Head } from '@inertiajs/react';
+import { useForm, Head, Link } from '@inertiajs/react';
 import AdminDashboardLayout from './AdminDashboardLayout';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
+import { ArrowLeft } from 'lucide-react';
 
 export default function EditCost({ cost }) {
   // 1. Initialize the form with existing cost data
@@ -47,7 +48,17 @@ export default function EditCost({ cost }) {
   return (
     <AdminDashboardLayout>
       <Head title="খরচ এডিট করুন" />
-
+      <div className="pl-10 mt-4">
+        <Link
+          href={route('admin.showCosts')}
+          className="text-blue-700 underline "
+        >
+          {' '}
+          <span className="flex">
+            <ArrowLeft /> <span>ফিরে যান</span>
+          </span>{' '}
+        </Link>
+      </div>{' '}
       <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">

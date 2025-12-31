@@ -1,7 +1,7 @@
-import { router, useForm } from '@inertiajs/react';
+import { Link, router, useForm } from '@inertiajs/react';
 import AdminDashboardLayout from './AdminDashboardLayout';
 import { dateFormatter } from '@/utilityFuntion';
-import { PencilIcon } from 'lucide-react';
+import { ArrowLeft, PencilIcon } from 'lucide-react';
 
 function ShowCosts({ costs, start_date, end_date, user_id }) {
   const { data, setData, get, processing } = useForm({
@@ -34,6 +34,14 @@ function ShowCosts({ costs, start_date, end_date, user_id }) {
   return (
     <AdminDashboardLayout>
       <div className="container mx-auto my-5 ">
+        <div className="pl-10 mt-4">
+          <Link href={route('home')} className="text-blue-700 underline ">
+            {' '}
+            <span className="flex">
+              <ArrowLeft /> <span>ফিরে যান</span>
+            </span>{' '}
+          </Link>
+        </div>{' '}
         <h1 className="text-2xl font-bold mb-4 text-center">খরচ সমূহ</h1>
         <p className="text-center font-bold">মোট খরচ: {totalCost} টাকা</p>
         <div className="mb-6">
@@ -85,36 +93,65 @@ function ShowCosts({ costs, start_date, end_date, user_id }) {
             costs.map((cost) => {
               console.log(cost);
               return (
-                <div
-                  className="grid grid-cols-1 md:grid-cols-10 justify-items-start md:justify-items-center gap-4 bg-gray-100 p-2 mb-4 border-b pb-2"
-                  key={cost.id}
-                >
-                  <div className="col-span-3">
-                    <p className="font-bold">বিবরণঃ </p>
-                    <span>{cost.description}</span>
+                <div key={cost.id} className="mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-10 justify-items-start md:justify-items-center gap-4 bg-gray-100 p-2 mb-4 border-b pb-2">
+                    <div className="col-span-3">
+                      <p className="font-bold">বিবরণঃ </p>
+                      <span>{cost.description}</span>
+                    </div>
+                    <div className="col-span-2">
+                      <p className="font-bold">পরিমাণঃ </p>
+                      <span>{cost.amount} টাকা</span>
+                    </div>
+                    <div className="col-span-2">
+                      <p className="font-bold">যিনি খরচ যুক্ত করেছেনঃ </p>
+                      <span>{cost.creating_user_name}</span>
+                    </div>
+                    <div className="col-span-2">
+                      <p className="font-bold">খরচের তারিখঃ </p>
+                      <span>{dateFormatter(cost.created_at)}</span>
+                    </div>
+                    <div className="col-span-1">
+                      {user_id === cost.creating_user_id &&
+                        cost.created_at.split('T')[0] ===
+                          new Date().toISOString().split('T')[0] && (
+                          <PencilIcon
+                            onClick={() => handleEdit(cost.id)}
+                            className="w-6 h-6 text-blue-600 hover:text-blue-800 cursor-pointer"
+                          />
+                        )}
+                    </div>
                   </div>
-                  <div className="col-span-2">
-                    <p className="font-bold">পরিমাণঃ </p>
-                    <span>{cost.amount} টাকা</span>
-                  </div>
-                  <div className="col-span-2">
-                    <p className="font-bold">যিনি খরচ যুক্ত করেছেনঃ </p>
-                    <span>{cost.creating_user_name}</span>
-                  </div>
-                  <div className="col-span-2">
-                    <p className="font-bold">খরচের তারিখঃ </p>
-                    <span>{dateFormatter(cost.created_at)}</span>
-                  </div>
-                  <div className="col-span-1">
-                    {user_id === cost.creating_user_id &&
-                      cost.created_at.split('T')[0] ===
-                        new Date().toISOString().split('T')[0] && (
-                        <PencilIcon
-                          onClick={() => handleEdit(cost.id)}
-                          className="w-6 h-6 text-blue-600 hover:text-blue-800 cursor-pointer"
-                        />
-                      )}
-                  </div>
+                  {cost?.updates && cost.updates.length > 0 && (
+                    <div className="ml-4 mb-4">
+                      <h3 className="italic text-center underline mt-2">
+                        আপডেট লগসমূহ:
+                      </h3>
+                      {cost.updates.map((update) => (
+                        <div
+                          key={update.id}
+                          className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-gray-50 p-2 mb-2 border-b border-dashed"
+                        >
+                          <div>
+                            <p className="font-bold"> আপডেটের আগের পরিমাণঃ </p>
+                            <span>{update.amount_before_update} টাকা</span>
+                          </div>
+                          <div>
+                            <p className="font-bold">আপডেটের পরের পরিমাণঃ </p>
+                            <span>{update.amount_after_update} টাকা</span>
+                          </div>
+                          <div>
+                            <p className="font-bold">আপডেটের আগের বর্ণনাঃ </p>
+                            <span>{update.description_before_update}</span>
+                          </div>
+                          <div>
+                            <p className="font-bold">আপডেটের পরের বর্ণনাঃ </p>
+                            <span>{update.description_after_update}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })

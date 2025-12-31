@@ -30,6 +30,8 @@ class CostController extends Controller
             $cost->creating_user_id = $cost->creator ? $cost->creator->id : null;
             // I want to not to send the creator relation to the frontend
             unset($cost->creator);
+            $updates = CostUpdateLog::where('is_deleted', false)->where('cost_id', $cost->id)->orderBy('created_at', 'desc')->get();
+            $cost->updates = $updates;
         }
 
         

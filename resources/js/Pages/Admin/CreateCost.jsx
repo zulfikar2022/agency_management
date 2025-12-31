@@ -1,5 +1,6 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import AdminDashboardLayout from './AdminDashboardLayout';
+import { ArrowLeft } from 'lucide-react';
 
 function CreateCost() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -33,7 +34,14 @@ function CreateCost() {
     <AdminDashboardLayout>
       <div>
         <Head title="নতুন খরচ যোগ করুন" />
-
+        <div className="pl-10 mt-4">
+          <Link href={route('home')} className="text-blue-700 underline ">
+            {' '}
+            <span className="flex">
+              <ArrowLeft /> <span>ফিরে যান</span>
+            </span>{' '}
+          </Link>
+        </div>{' '}
         <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
           <h2 className="text-2xl font-bold mb-6">খরচের বিবরণ লিখুন</h2>
 

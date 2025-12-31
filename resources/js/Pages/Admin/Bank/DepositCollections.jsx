@@ -5,7 +5,6 @@ import { ArrowLeft } from 'lucide-react';
 
 // admin.bank.generate_member_deposit_report
 function DepositCollections({ deposit_collections, member }) {
-  console.log(member);
   return (
     <LayoutForMoney>
       <div className="min-h-screen bg-base-200 py-8">
@@ -46,70 +45,73 @@ function DepositCollections({ deposit_collections, member }) {
           <p className="text-center mt-4">কোনো সঞ্চয় পাওয়া যায়নি।</p>
         ) : (
           <div className="max-w-2xl mx-auto mt-6">
-            {deposit_collections.map((collection) => (
-              <div key={collection.id} className="border-b ">
-                <div className="p-4 grid grid-cols-1 md:grid-cols-2 justify-center gap-4">
-                  <p className="font-bold">
-                    তারিখঃ <br />
-                    <span className="font-normal">
-                      {dayjs(collection.created_at).format('D MMMM YYYY')}
-                    </span>
-                    <br />
-                    {collection.updates.length > 0 && (
-                      <span className="text-sm text-slate-400">
-                        (আপডেট করা হয়েছে)
+            {deposit_collections.map((collection) => {
+              console.log(collection);
+              return (
+                <div key={collection.id} className="border-b ">
+                  <div className="p-4 grid grid-cols-1 md:grid-cols-3 justify-center gap-4">
+                    <p className="font-bold">
+                      তারিখঃ <br />
+                      <span className="font-normal">
+                        {dayjs(collection.created_at).format('D MMMM YYYY')}
                       </span>
-                    )}
-                  </p>
-                  <p className="font-bold">
-                    পরিমাণঃ <br />
-                    <span className="font-normal">
-                      {(collection.deposit_amount / 100).toFixed(2)} টাকা
-                    </span>
-                  </p>
-                </div>
-                {collection.updates.length === 0 ? null : (
-                  <div className="mt-2 ml-4">
-                    <p className="text-center italic underline">
-                      আপডেটের বিবরণঃ
+                      <br />
+                      {collection.updates.length > 0 && (
+                        <span className="text-sm text-slate-400">
+                          (আপডেট করা হয়েছে)
+                        </span>
+                      )}
                     </p>
-                    {collection.updates.map((update) => {
-                      return (
-                        <div
-                          key={update.id}
-                          className=" mb-2 pb-1 grid grid-cols-1 md:grid-cols-3 gap-4"
-                        >
-                          <p className="font-bold">
-                            আপডেটের আগের পরিমাণঃ <br />
-                            <span className="font-normal">
-                              {(
-                                update.deposit_amount_before_update / 100
-                              ).toFixed(2)}{' '}
-                              টাকা
-                            </span>
-                          </p>
-                          <p className="font-bold">
-                            আপডেটের পরের পরিমাণঃ <br />
-                            <span className="font-normal">
-                              {(
-                                update.deposit_amount_after_update / 100
-                              ).toFixed(2)}{' '}
-                              টাকা
-                            </span>
-                          </p>
-                          <p className="font-bold">
-                            আপডেট করেছেনঃ <br />
-                            <span className="font-normal">
-                              {update.updating_user_name}
-                            </span>
-                          </p>
-                        </div>
-                      );
-                    })}
+                    <p className="font-bold">
+                      পরিমাণঃ <br />
+                      <span className="font-normal">
+                        {(collection.deposit_amount / 100).toFixed(2)} টাকা
+                      </span>
+                    </p>
+                    <p className="font-bold">
+                      সংগ্রহ করেছেনঃ <br />
+                      <span className="font-normal">
+                        {collection.collector_name}
+                      </span>
+                    </p>
                   </div>
-                )}
-              </div>
-            ))}
+                  {collection.updates.length === 0 ? null : (
+                    <div className="mt-2 ml-4">
+                      <p className="text-center italic underline">
+                        আপডেটের বিবরণঃ
+                      </p>
+                      {collection.updates.map((update) => {
+                        return (
+                          <div
+                            key={update.id}
+                            className=" mb-2 pb-1 grid grid-cols-1 md:grid-cols-2 gap-4"
+                          >
+                            <p className="font-bold">
+                              আপডেটের আগের পরিমাণঃ <br />
+                              <span className="font-normal">
+                                {(
+                                  update.deposit_amount_before_update / 100
+                                ).toFixed(2)}{' '}
+                                টাকা
+                              </span>
+                            </p>
+                            <p className="font-bold">
+                              আপডেটের পরের পরিমাণঃ <br />
+                              <span className="font-normal">
+                                {(
+                                  update.deposit_amount_after_update / 100
+                                ).toFixed(2)}{' '}
+                                টাকা
+                              </span>
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

@@ -21,21 +21,27 @@ class DepositController extends Controller
     public function depositCollections(Deposit $deposit){
         $member = Member::find($deposit->member_id);
 
-        $deposit_collections =  DepositCollection::where('deposit_id', $deposit->id)   
+        $deposit_collections =  DepositCollection::with('collector')->where('deposit_id', $deposit->id)   
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
             ->get();
 
         $deposit_collections->transform(function ($item) {
             $updates = DepositCollectionUpdateLog::where('deposit_collection_id', $item->id)->orderBy('created_at', 'desc')->get();
-            $updates->transform(function ($update) {
-                $updating_user = User::find($update->updating_user_id);
-                $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown';
-                return $update;
-            });
+            // $updates->transform(function ($update) {
+            //     $updating_user = User::find($update->updating_user_id);
+            //     $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown';
+            //     return $update;
+            // });
             $item->updates = $updates;
             return $item;
         });
+
+        foreach ($deposit_collections as $collection) {
+            $collection->collector_name = $collection->collector ? $collection->collector->name : 'Unknown';
+            // I want to not to send the collector relation to the frontend
+            unset($collection->collector);
+        }
 
         return Inertia::render('Admin/Bank/DepositCollections', [
             'member' => $member,
