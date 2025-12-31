@@ -28,11 +28,6 @@ class DepositController extends Controller
 
         $deposit_collections->transform(function ($item) {
             $updates = DepositCollectionUpdateLog::where('deposit_collection_id', $item->id)->orderBy('created_at', 'desc')->get();
-            // $updates->transform(function ($update) {
-            //     $updating_user = User::find($update->updating_user_id);
-            //     $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown';
-            //     return $update;
-            // });
             $item->updates = $updates;
             return $item;
         });

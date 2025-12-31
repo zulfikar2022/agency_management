@@ -37,12 +37,20 @@ function AdminDashboardSidebar() {
         <li>
           <Link href={route('admin.showCosts')}> খরচ দেখুন </Link>
         </li>
+        {/* admin.createReportPage */}
+        <li>
+          <Link href={route('admin.createReportPage')}>
+            {' '}
+            রিপোর্ট তৈরি করুন{' '}
+          </Link>
+        </li>
         <li>
           <Link href={route('password.update.form')}>
             {' '}
             পাসওয়ার্ড আপডেট করুন{' '}
           </Link>
         </li>
+
         <li>
           <button onClick={handleLogout} className="btn btn-xs btn-neutral">
             {' '}

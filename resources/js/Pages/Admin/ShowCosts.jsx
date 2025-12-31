@@ -91,10 +91,9 @@ function ShowCosts({ costs, start_date, end_date, user_id }) {
             </p>
           ) : (
             costs.map((cost) => {
-              console.log(cost);
               return (
-                <div key={cost.id} className="mb-4">
-                  <div className="grid grid-cols-1 md:grid-cols-10 justify-items-start md:justify-items-center gap-4 bg-gray-100 p-2 mb-4 border-b pb-2">
+                <div key={cost.id} className="mb-4 border-b">
+                  <div className="grid grid-cols-1 md:grid-cols-10 justify-items-start md:justify-items-center gap-4 bg-gray-100 p-2 mb-4  pb-2">
                     <div className="col-span-3">
                       <p className="font-bold">বিবরণঃ </p>
                       <span>{cost.description}</span>

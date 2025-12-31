@@ -154,5 +154,10 @@ Route::get('/admin/edit-cost/{cost}', [CostController::class, 'edit'])->name('ad
 
 Route::put('/admin/update-cost', [CostController::class, 'update'])->name('admin.updateCost');
 
+Route::get('/admin/create-report', [AdminController::class, 'createReportPage'])->name('admin.createReportPage');
+
+Route::get('/admin/generate-cost-details-report', [CostController::class, 'generateCostDetailsReport'])->name('admin.generateCostDetailsReport');
+
+
 
 });

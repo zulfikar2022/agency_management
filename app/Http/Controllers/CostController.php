@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Spatie\Browsershot\Browsershot;
 
 class CostController extends Controller
 {
@@ -134,5 +135,53 @@ class CostController extends Controller
     public function destroy(Cost $cost)
     {
         //
+    }
+
+    public function generateCostDetailsReport(Request $request)
+    {
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $start_date = $validated['start_date'];
+        $end_date = $validated['end_date'];
+        $costs = Cost::with('creator')
+            ->where('is_deleted', false)
+            ->whereDate('created_at', '>=', $start_date)
+            ->whereDate('created_at', '<=', $end_date)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // dd($costs);
+        $total_cost = 0;
+        foreach ($costs as $cost) {
+            $total_cost += $cost->amount;
+            $cost->creating_user_name = $cost->creator ? $cost->creator->name : 'Unknown';
+            // I want to not to send the creator relation to the frontend
+            unset($cost->creator);
+        }
+
+        $html = view('pdf.admin-cost-details-report', [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'costs' => $costs,
+            'total_cost' => $total_cost,
+        
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  'cost_details_report_' . $todayDate . '.pdf';
+
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+
+       
     }
 }

@@ -319,5 +319,10 @@ class AdminController extends Controller
             'total_collectable' => $total_collectable,
         ]);
     }
+
+    public function createReportPage(){
+        return Inertia::render('Admin/CreateReport', [
+        ]);
+    }
    
 }
