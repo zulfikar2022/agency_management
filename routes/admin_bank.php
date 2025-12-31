@@ -78,9 +78,15 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::get('/admin/bank/generate-loan-collection-report', [BankReportGenerationController::class, 'generateLoanCollectionReport'])->name('admin.bank.generate_loan_collection_report');
 
+    Route::get('/admin/bank/generate-brief-loan-collection-report', [BankReportGenerationController::class, 'generateBriefLoanCollectionReport'])->name('admin.bank.generate_brief_loan_collection_report');
+
     Route::get('/admin/bank/generate-withdraw-report', [BankReportGenerationController::class, 'generateWithdrawReport'])->name('admin.bank.generate_withdraw_report');
 
+    Route::get('/admin/bank/generate-brief-withdraw-report', [BankReportGenerationController::class, 'generateBriefWithdrawReport'])->name('admin.bank.generate_brief_withdraw_report');
+
     Route::get('/admin/bank/generate-loans-report', [BankReportGenerationController::class, 'generateLoansReport'])->name('admin.bank.generate_loans_report');
+
+    Route::get('/admin/bank/generate-brief-loans-report', [BankReportGenerationController::class, 'generateBriefLoansReport'])->name('admin.bank.generate_brief_loans_report');
 
     Route::get('/admin/bank/generate-deposits-report', [BankReportGenerationController::class, 'generateDepositReport'])->name('admin.bank.generate_deposits_report');
 

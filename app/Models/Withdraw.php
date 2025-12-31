@@ -12,4 +12,12 @@ class Withdraw extends Model
         'withdrawing_user_id',
         'withdraw_amount',
     ];
+
+      public function creator()
+        {
+            // 1st param: related model
+            // 2nd param: foreign key in deposit_collections table
+            // 3rd param: primary key in users table
+            return $this->belongsTo(User::class, 'withdrawing_user_id', 'id');
+        }
 }

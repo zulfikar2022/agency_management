@@ -36,7 +36,7 @@
         <div>
             <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
         </div>
-        <h1 class="title">  সঞ্চয় কালেকশনের সংক্ষিপ্ত রিপোর্ট</h1>
+        <h1 class="title"> ঋণের কিস্তি কালেকশনের সংক্ষিপ্ত রিপোর্ট</h1>
         @if ($start_date == $end_date)
         <!-- use Carbon and make the date as 22 December 2025 -->
         <p style="text-align: center; font-weight: bold;">রিপোর্টের সময়কাল: {{ \Carbon\Carbon::parse($start_date)->format('d F Y') }} </p>
@@ -45,7 +45,7 @@
         @endif
         <p style="font-weight: bold; text-align: center;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
         
-        <p style="text-align: center; font-weight: bold; margin-bottom: 20px;">মোট সঞ্চয় কালেকশন: {{ number_format($total_collection / 100, 2) }} টাকা</p>
+        <p style="text-align: center; font-weight: bold; margin-bottom: 20px;">মোট কিস্তি কালেকশন: {{ number_format($total_collection / 100, 2) }} টাকা</p>
 
         
             @forelse ($grouped_collections as $collection)

@@ -36,7 +36,7 @@
         <div>
             <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
         </div>
-        <h1 class="title">  সঞ্চয় কালেকশনের সংক্ষিপ্ত রিপোর্ট</h1>
+        <h1 class="title"> টাকা উত্তোলনের সংক্ষিপ্ত রিপোর্ট</h1>
         @if ($start_date == $end_date)
         <!-- use Carbon and make the date as 22 December 2025 -->
         <p style="text-align: center; font-weight: bold;">রিপোর্টের সময়কাল: {{ \Carbon\Carbon::parse($start_date)->format('d F Y') }} </p>
@@ -45,30 +45,30 @@
         @endif
         <p style="font-weight: bold; text-align: center;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
         
-        <p style="text-align: center; font-weight: bold; margin-bottom: 20px;">মোট সঞ্চয় কালেকশন: {{ number_format($total_collection / 100, 2) }} টাকা</p>
+        <p style="text-align: center; font-weight: bold; margin-bottom: 20px;">মোট উত্তোলন: {{ number_format($total_withdraw / 100, 2) }} টাকা</p>
 
         
-            @forelse ($grouped_collections as $collection)
+            @forelse ($grouped_withdraws as $withdraw)
                <div>
                  <div class="deposit-collection-entry" style="display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid #ccc;">
                     <div>
-                       <p style="font-weight: bold;">এমপ্লয়ীর আইডিঃ </p>
-                       <span>{{ $collection['collecting_user_id'] }}</span>
+                       <p style="font-weight: bold;">এডমিনের আইডিঃ </p>
+                       <span>{{ $withdraw['withdrawing_user_id'] }}</span>
                     </div>
                     <div>
-                        <p style="font-weight: bold;">এমপ্লয়ীর নামঃ </p>
-                       <span>{{ $collection['collector_name'] }}</span>
+                        <p style="font-weight: bold;">এডমিনের নামঃ </p>
+                       <span>{{ $withdraw['creator_name'] }}</span>
                     </div>
                     <div>
-                        <p style="font-weight: bold;">মোট সঞ্চয় কালেকশনঃ </p>
-                       <span>{{ number_format($collection['employee_wise_collection'] / 100, 2) }} টাকা</span>
+                        <p style="font-weight: bold;">মোট উত্তোলনঃ </p>
+                       <span>{{ number_format($withdraw['admin_wise_withdraw'] / 100, 2) }} টাকা</span>
                     </div>
                     
                 </div>
                 </hr>
                </div>
             @empty
-                <p style="text-align: center; font-weight: bold;">কোনো সঞ্চয় কালেকশন পাওয়া যায়নি।</p>
+                <p style="text-align: center; font-weight: bold;">কোনো টাকা উত্তোলন পাওয়া যায়নি।</p>
             @endforelse
         
 </body>

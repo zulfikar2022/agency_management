@@ -359,4 +359,170 @@ class BankReportGenerationController{
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
+
+    public function generateBriefLoanCollectionReport(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+        
+        $loan_collections = LoanCollection::with('collector')
+            ->where('paying_date', '>=', $validated['start_date'])
+            ->where('paying_date', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->orderBy('paying_date', 'desc')
+            ->get();
+
+            // I want to group loan collections by collecting_user_id
+            $grouped_collections = [];
+            $total_collection = 0;
+            foreach ($loan_collections as $collection) {
+                $total_collection += $collection->paid_amount;
+                $collector_id = $collection->collecting_user_id;
+
+                if (!isset($grouped_collections[$collector_id])) {
+                    $employee_wise_collection = 0;
+                    foreach ($loan_collections as $col) {
+                        if ($col->collecting_user_id == $collector_id) {
+                            $employee_wise_collection += $col->paid_amount;
+                        }
+                    }
+                    $grouped_collections[$collector_id] = [
+                        'collector_name' => $collection->collector ? $collection->collector->name : 'Unknown',
+                        'collecting_user_id' => $collector_id,
+                        'employee_wise_collection' => $employee_wise_collection,
+                    ];
+                }
+            }
+            
+             $html = view('pdf.bank-brief-loan-collection-report', [
+                'grouped_collections' => $grouped_collections,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'total_collection' => $total_collection,
+            
+            ])->render();
+
+            $pdfData = Browsershot::html($html)
+                    ->noSandbox()
+                    ->showBackground()
+                    ->format('A4')
+                    ->pdf();
+            $todayDate = date('d F Y');
+            $filename =  'brief_loan_collection_report_' . $todayDate . '.pdf';
+            return response($pdfData, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function generateBriefWithdrawReport(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+        
+        $withdraws = Withdraw::with('creator')
+            ->whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            // I want to group withdraws by withdrawing_user_id
+            $grouped_withdraws = [];
+            $total_withdraw = 0;
+            foreach ($withdraws as $withdraw) {
+                $total_withdraw += $withdraw->withdraw_amount;
+                $withdrawing_user_id = $withdraw->withdrawing_user_id;
+
+                if (!isset($grouped_withdraws[$withdrawing_user_id])) {
+                    $admin_wise_withdraw = 0;
+                    foreach ($withdraws as $wd) {
+                        if ($wd->withdrawing_user_id == $withdrawing_user_id) {
+                            $admin_wise_withdraw += $wd->withdraw_amount;
+                        }
+                    }
+                    $grouped_withdraws[$withdrawing_user_id] = [
+                        'creator_name' => $withdraw->creator ? $withdraw->creator->name : 'Unknown',
+                        'withdrawing_user_id' => $withdrawing_user_id,
+                        'admin_wise_withdraw' => $admin_wise_withdraw,
+                    ];
+                }
+            }
+            
+             $html = view('pdf.bank-brief-withdraw-report', [
+                'grouped_withdraws' => $grouped_withdraws,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'total_withdraw' => $total_withdraw,
+            
+            ])->render();
+
+            $pdfData = Browsershot::html($html)
+                    ->noSandbox()
+                    ->showBackground()
+                    ->format('A4')
+                    ->pdf();
+            $todayDate = date('d F Y');
+            $filename =  'brief_withdraw_report_' . $todayDate . '.pdf';
+            return response($pdfData, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function generateBriefLoansReport(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+        $loans = Loan::with('creator')
+            ->whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+       // group loans based on the creating_user_id
+        $grouped_loans = [];
+        $total_provided_loan = 0;
+
+        foreach ($loans as $loan) {
+            $total_provided_loan += $loan->total_loan;
+            $user_id = $loan->creating_user_id;
+            if (!isset($grouped_loans[$user_id])) {
+                $total_amount = 0;
+                foreach ($loans as $l) {
+                    if ($l->creating_user_id == $user_id) {
+                        $total_amount += $l->total_loan;
+                    }
+                }
+                $grouped_loans[$user_id] = [
+                    'user_name' => $loan->creator ? $loan->creator->name : 'Unknown',
+                    'user_id' => $user_id,
+                    // inside the total_amount key we will store the total amount of loan created by this user
+                    'total_amount' => $total_amount,
+                ];
+            }
+        }
+
+          $html = view('pdf.bank-brief-loans-report', [
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'loans' => $grouped_loans,
+            'total_provided_loan' => $total_provided_loan,
+        
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  'brief_loans_report_' . $todayDate . '.pdf';
+
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
 }

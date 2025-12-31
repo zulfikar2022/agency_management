@@ -11,8 +11,14 @@ function GenerateReport() {
     end_date: today,
   });
   const loanCollectionForm = useForm({ start_date: today, end_date: today });
+  const briefLoanCollectionForm = useForm({
+    start_date: today,
+    end_date: today,
+  });
   const withdrawForm = useForm({ start_date: today, end_date: today });
+  const briefWithdrawForm = useForm({ start_date: today, end_date: today });
   const loansForm = useForm({ start_date: today, end_date: today });
+  const briefLoansForm = useForm({ start_date: today, end_date: today });
   const depositsForm = useForm({ start_date: today, end_date: today });
 
   /**
@@ -59,14 +65,38 @@ function GenerateReport() {
     );
   };
 
+  const handleBriefLoanCollectionReport = (e) => {
+    e.preventDefault();
+    openPdfReport(
+      'admin.bank.generate_brief_loan_collection_report',
+      briefLoanCollectionForm.data
+    );
+  };
+
   const handleWithdrawReport = (e) => {
     e.preventDefault();
     openPdfReport('admin.bank.generate_withdraw_report', withdrawForm.data);
   };
 
+  const handleBriefWithdrawReport = (e) => {
+    e.preventDefault();
+    openPdfReport(
+      'admin.bank.generate_brief_withdraw_report',
+      briefWithdrawForm.data
+    );
+  };
+
   const handleLoansReport = (e) => {
     e.preventDefault();
     openPdfReport('admin.bank.generate_loans_report', loansForm.data);
+  };
+
+  const handleBriefLoansReport = (e) => {
+    e.preventDefault();
+    openPdfReport(
+      'admin.bank.generate_brief_loans_report',
+      briefLoansForm.data
+    );
   };
 
   const handleDepositsReport = (e) => {
@@ -98,6 +128,11 @@ function GenerateReport() {
             form={loanCollectionForm}
             onSubmit={handleLoanCollectionReport}
           />
+          <ReportBox
+            title="ঋণের কিস্তি সংগ্রহের সংক্ষিপ্ত রিপোর্ট"
+            form={briefLoanCollectionForm}
+            onSubmit={handleBriefLoanCollectionReport}
+          />
 
           <ReportBox
             title="টাকা উত্তোলনের বিস্তারিত রিপোর্ট"
@@ -106,9 +141,20 @@ function GenerateReport() {
           />
 
           <ReportBox
+            title="টাকা উত্তোলনের সংক্ষিপ্ত রিপোর্ট"
+            form={briefWithdrawForm}
+            onSubmit={handleBriefWithdrawReport}
+          />
+
+          <ReportBox
             title="ঋণ প্রদানের বিস্তারিত রিপোর্ট"
             form={loansForm}
             onSubmit={handleLoansReport}
+          />
+          <ReportBox
+            title="ঋণ প্রদানের সংক্ষিপ্ত রিপোর্ট"
+            form={briefLoansForm}
+            onSubmit={handleBriefLoansReport}
           />
 
           <ReportBox
