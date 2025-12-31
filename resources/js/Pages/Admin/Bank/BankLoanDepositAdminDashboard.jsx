@@ -74,7 +74,7 @@ function BankLoanDepositAdminDashboard({
           </div>
           <div className="border-b mt-2">
             <p className="font-bold text-green-700">
-              ঋণের কিস্তি বাবদ মোট সংগ্রহঃ{' '}
+              চলমান ঋণের কিস্তি বাবদ মোট সংগ্রহঃ{' '}
             </p>
             <p className="font-normal">
               <span className="text-2xl font-bold">
