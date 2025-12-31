@@ -158,6 +158,6 @@ Route::get('/admin/create-report', [AdminController::class, 'createReportPage'])
 
 Route::get('/admin/generate-cost-details-report', [CostController::class, 'generateCostDetailsReport'])->name('admin.generateCostDetailsReport');
 
-
+Route::get('/admin/generate-brief-cost-report', [CostController::class, 'generateBriefCostReport'])->name('admin.generateBriefCostReport');
 
 });

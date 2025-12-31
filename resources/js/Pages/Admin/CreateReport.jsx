@@ -4,7 +4,16 @@ import { ArrowLeft } from 'lucide-react';
 
 export default function CreateReport() {
   const today = new Date().toISOString().split('T')[0];
-  const costCollectionForm = useForm({ start_date: today, end_date: today });
+
+  const detailedCostCollectionForm = useForm({
+    start_date: today,
+    end_date: today,
+  });
+
+  const briefCostCollectionForm = useForm({
+    start_date: today,
+    end_date: today,
+  });
 
   const openPdfReport = (routeName, formData) => {
     // Construct query parameters
@@ -20,10 +29,22 @@ export default function CreateReport() {
     window.open(url, '_blank');
   };
 
-  const handleCostCollectionReport = (e) => {
+  const handleDetailedCostCollectionReport = (e) => {
     e.preventDefault();
-    openPdfReport('admin.generateCostDetailsReport', costCollectionForm.data);
+    openPdfReport(
+      'admin.generateCostDetailsReport',
+      detailedCostCollectionForm.data
+    );
   };
+
+  const handleBrifeCostCollectionReport = (e) => {
+    e.preventDefault();
+    openPdfReport(
+      'admin.generateBriefCostReport',
+      briefCostCollectionForm.data
+    );
+  };
+
   return (
     <AdminDashboardLayout>
       <div className="container mx-auto px-2 py-2">
@@ -41,8 +62,13 @@ export default function CreateReport() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <ReportBox
             title="খরচের বিস্তারিত রিপোর্ট"
-            form={costCollectionForm}
-            onSubmit={handleCostCollectionReport}
+            form={detailedCostCollectionForm}
+            onSubmit={handleDetailedCostCollectionReport}
+          />
+          <ReportBox
+            title="খরচের সংক্ষিপ্ত রিপোর্ট"
+            form={briefCostCollectionForm}
+            onSubmit={handleBrifeCostCollectionReport}
           />
         </div>
       </div>

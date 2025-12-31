@@ -181,7 +181,64 @@ class CostController extends Controller
         return response($pdfData, 200)
         ->header('Content-Type', 'application/pdf')
         ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
-
-       
     }
+
+    public function generateBriefCostReport(Request $request){
+           $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $start_date = $validated['start_date'];
+        $end_date = $validated['end_date'];
+        $costs = Cost::with('creator')
+            ->where('is_deleted', false)
+            ->whereDate('created_at', '>=', $start_date)
+            ->whereDate('created_at', '<=', $end_date)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // group costs based on creating_user_id
+        $grouped_costs = [];
+        $total_cost = 0;
+        foreach ($costs as $cost) {
+            $total_cost += $cost->amount;
+            $user_id = $cost->creating_user_id;
+            if (!isset($grouped_costs[$user_id])) {
+                $total_amount = 0;
+                foreach ($costs as $c) {
+                    if ($c->creating_user_id == $user_id) {
+                        $total_amount += $c->amount;
+                    }
+                }
+                $grouped_costs[$user_id] = [
+                    'user_name' => $cost->creator ? $cost->creator->name : 'Unknown',
+                    'user_id' => $user_id,
+                    // inside the total_amount key we will store the total amount of cost created by this user
+                    'total_amount' => $total_amount,
+                ];
+            }
+            // $grouped_costs[$user_id]['total_amount'] += $cost->amount;
+        }
+          $html = view('pdf.admin-cost-brief-report', [
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'costs' => $grouped_costs,
+            'total_cost' => $total_cost,
+        
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  'cost_brief_report_' . $todayDate . '.pdf';
+
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
 }
