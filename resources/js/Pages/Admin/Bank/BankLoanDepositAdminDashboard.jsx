@@ -14,6 +14,7 @@ function BankLoanDepositAdminDashboard({
   totalMainPaidForLoan,
   totalRemainingPayableMain,
   totalRemainingPayableInterest,
+  activeTotalLoanedAmount,
 }) {
   return (
     <div>
@@ -58,6 +59,15 @@ function BankLoanDepositAdminDashboard({
             <p className="font-normal">
               <span className="text-2xl font-bold">
                 {(totalLoanedAmount / 100).toFixed(2)}
+              </span>{' '}
+              &nbsp; টাকা
+            </p>
+          </div>
+          <div className="border-b mt-2">
+            <p className="font-bold text-green-700">মোট চলমান ঋণের পরিমাণঃ </p>
+            <p className="font-normal">
+              <span className="text-2xl font-bold">
+                {(activeTotalLoanedAmount / 100).toFixed(2)}
               </span>{' '}
               &nbsp; টাকা
             </p>

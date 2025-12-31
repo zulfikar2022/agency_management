@@ -23,6 +23,7 @@ function Dashboard({
   totalRemainingPayableMain,
   totalRemainingPayableInterest,
   totalCost,
+  activeTotalLoanedAmount,
 }) {
   console.log(totalInterestPaidForLoan, totalMainPaidForLoan);
   return (
@@ -50,6 +51,7 @@ function Dashboard({
           totalMainPaidForLoan={totalMainPaidForLoan}
           totalRemainingPayableMain={totalRemainingPayableMain}
           totalRemainingPayableInterest={totalRemainingPayableInterest}
+          activeTotalLoanedAmount={activeTotalLoanedAmount}
         />
       </div>
     </AdminDashboardLayout>

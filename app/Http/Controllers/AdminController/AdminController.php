@@ -104,6 +104,7 @@ class AdminController extends Controller
         
         $total_deposit_amount = Member::where('is_deleted', false)->sum('total_deposit');
         $total_loaned_amount = Loan::where('is_deleted', false)->sum('total_loan');
+        $active_total_loaned_amount = Member::where('is_deleted', false)->where('total_loan', '>', 0)->sum('total_loan');
 
 
         $active_loan_ids = Loan::where('is_deleted', false)->where(function ($query) {
@@ -159,6 +160,7 @@ class AdminController extends Controller
             'totalRemainingPayableMain' => $total_remaining_payable_main,
             'totalRemainingPayableInterest' => $total_remaining_payable_interest,
             'totalCost' => $total_cost,
+            'activeTotalLoanedAmount' => $active_total_loaned_amount,
         ]);
     }
 
