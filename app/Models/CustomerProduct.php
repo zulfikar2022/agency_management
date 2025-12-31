@@ -15,4 +15,16 @@ class CustomerProduct extends Model
         'downpayment',
         'weekly_payable_price',
     ];
+
+     public function creator()
+    {
+        // The 2nd argument is your custom foreign key
+        // The 3rd argument is the primary key on the users table
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
 }

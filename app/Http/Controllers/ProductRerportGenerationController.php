@@ -159,4 +159,123 @@ class ProductRerportGenerationController extends Controller {
         ->header('Content-Type', 'application/pdf')
         ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
+
+    public function generateBriefProductSalesReport(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+        
+        $sales = CustomerProduct::with('creator')
+            ->whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+            // each sale has a user_id field and we need to group by user_id and get total sales amount and total downpayment per user
+            
+            $entire_sales_amount = 0;
+            $entire_down_payment = 0;
+            $grouped_sales = [];
+
+            foreach($sales as  $sale){
+                $entire_down_payment += $sale->downpayment;
+                $entire_sales_amount += $sale->total_payable_price;
+                
+                if(!isset($grouped_sales[$sale->user_id])){
+                    $total_sell = 0;
+                    $total_downpayment = 0;
+                    foreach($sales as $s){
+                        if($s->user_id == $sale->user_id){
+                            $total_sell += $s->total_payable_price;
+                            $total_downpayment += $s->downpayment;
+                        }
+                    }
+                    $grouped_sales[$sale->user_id] = [
+                        'user_name' => $sale->creator ? $sale->creator->name : 'Unknown',
+                        'user_id' => $sale->user_id,
+                        'total_sales_amount' => $total_sell,
+                        'total_down_payment' => $total_downpayment,
+                    ];
+                }
+            }
+
+            $html = view('pdf.brief-product-sales-report', [
+                'sales' => $grouped_sales,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'total_sales_amount' => $entire_sales_amount,
+                'total_down_payment' => $entire_down_payment,
+            ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  'brief_product_sales_report_' . $todayDate . '.pdf';
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function generateBriefProductCollectionReport(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+        
+        $collections = ProductCustomerMoneyCollection::with('creator')
+            ->whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        $grouped_collections = [];
+        $entire_collection = 0;
+        // $entire_collectable = 0;
+
+        foreach($collections as $collection){
+            $entire_collection += $collection->collected_amount;
+            // $entire_collectable += $collection->collectable_amount;
+
+            if(!isset($grouped_collections[$collection->collecting_user_id])){
+                $total_collected = 0;
+                // $total_collectable = 0;
+                foreach($collections as $c){
+                    if($c->collecting_user_id == $collection->collecting_user_id){
+                        $total_collected += $c->collected_amount;
+                        // $total_collectable += $c->collectable_amount;
+                    }
+                }
+                $grouped_collections[$collection->collecting_user_id] = [
+                    'user_name' => $collection->creator ? $collection->creator->name : 'Unknown',
+                    'user_id' => $collection->collecting_user_id,
+                    'total_collected_amount' => $total_collected,
+                    // 'total_collectable_amount' => $total_collectable,
+                ];
+            }
+        }
+
+        $html = view('pdf.brief-product-collection-report', [
+            'collections' => $grouped_collections,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'total_collection' => $entire_collection,
+            // 'total_collectable' => $entire_collectable,
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  'brief_product_collection_report_' . $todayDate . '.pdf';  
+        return response($pdfData, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
 }

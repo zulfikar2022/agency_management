@@ -53,15 +53,12 @@ class AdminController extends Controller
             $groupedCollections[$date]['collectable_amount'] += $collection->collectable_amount;
         }
 
-        $purchases = CustomerProduct::where('is_deleted', false)->select('id', 'product_id', 'quantity', 'total_payable_price', 'remaining_payable_price')
+        $purchases = CustomerProduct::with('product')->where('is_deleted', false)->select('id', 'product_id', 'quantity', 'total_payable_price', 'remaining_payable_price')
             ->get();
-
-        $purchases->transform(function ($purchase) {
-            $product = Product::find($purchase->product_id);
-            $purchase->product_name = $product ? $product->name : 'Unknown Product';
-            return $purchase;
-            
-        });
+        foreach ($purchases as $purchase) {
+            $purchase->product_name = $purchase->product ? $purchase->product->name : 'Unknown Product';
+        }
+      
 
         // from the purchases collection, find the total purchased quantity, total payable price and total remaining payable price grouped by product_id
         $groupedPurchases = [];
@@ -85,24 +82,29 @@ class AdminController extends Controller
         }, 0);
 
         // sold products total price
-        $sold_products_total_price = CustomerProduct::where('is_deleted', false)->where('remaining_payable_price', '>', 0)->get()->reduce(function ($carry, $purchase) {
-            return $carry + $purchase->total_payable_price;
-        }, 0);
+        $sales = CustomerProduct::where('is_deleted', false)->where('remaining_payable_price', '>', 0)->get();
+       
+        $sold_products_total_price = 0;
+        foreach ($sales as $sale) {
+            $sold_products_total_price += $sale->total_payable_price;
+        }
 
-        $temaining_purchases_ids = CustomerProduct::where('is_deleted', false)->where('remaining_payable_price', '>', 0)->pluck('id')->toArray();
+        $remaining_purchases_ids = $sales->pluck('id')->toArray();
         
-        $total_collected_amount = ProductCustomerMoneyCollection::whereIn('customer_products_id', $temaining_purchases_ids)->sum('collected_amount');
+        $total_collected_amount = ProductCustomerMoneyCollection::whereIn('customer_products_id', $remaining_purchases_ids)->sum('collected_amount');
 
         $total_downpayment_amount = CustomerProduct::where('remaining_payable_price', '>', 0)->get()->sum('downpayment');
 
         // BANK sections
-        $total_members = Member::where('is_deleted', false)->count();
+        $members = Member::where('is_deleted', false)->get();
+        $total_members = $members->count();
 
         $deposit_account_count = Deposit::where('is_deleted', false)->count();
         $loan_account_count = Loan::where('is_deleted', false)->count();
 
         
-        $total_deposit_amount = Member::where('is_deleted', false)->sum('total_deposit');
+        $total_deposit_amount = $members->sum('total_deposit');
+        
         $total_loaned_amount = Loan::where('is_deleted', false)->sum('total_loan');
         $active_total_loaned_amount = Member::where('is_deleted', false)->where('total_loan', '>', 0)->sum('total_loan');
 
@@ -112,11 +114,15 @@ class AdminController extends Controller
                   ->orWhere('remaining_payable_interest', '>', 0);
         })->pluck('id')->toArray();
 
-        $total_collection_for_loan = LoanCollection::whereIn('loan_id', $active_loan_ids)->sum('paid_amount');
-        $total_interest_paid_for_loan = LoanCollection::whereIn('loan_id', $active_loan_ids)->sum('interest_paid_amount');
-        $total_main_paid_for_loan = LoanCollection::whereIn('loan_id', $active_loan_ids)->sum('main_paid_amount');
-        $total_remaining_payable_main = Loan::whereIn('id', $active_loan_ids)->sum('remaining_payable_main');
-        $total_remaining_payable_interest = Loan::whereIn('id', $active_loan_ids)->sum('remaining_payable_interest');
+        $loan_collections = LoanCollection::whereIn('loan_id', $active_loan_ids)->get();
+        $total_collection_for_loan = $loan_collections->sum('paid_amount');
+        $total_interest_paid_for_loan = $loan_collections->sum('interest_paid_amount');
+        $total_main_paid_for_loan = $loan_collections->sum('main_paid_amount');
+
+
+        $loans = Loan::whereIn('id', $active_loan_ids)->get();
+        $total_remaining_payable_main = $loans->sum('remaining_payable_main');
+        $total_remaining_payable_interest = $loans->sum('remaining_payable_interest');
         
         // generate me a list of last seven days as a datetime object keeping only the date part
         $lastSevenDays = collect();

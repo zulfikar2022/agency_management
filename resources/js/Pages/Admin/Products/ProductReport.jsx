@@ -6,7 +6,12 @@ function ProductReport() {
 
   // 1. Individual Form States for Sales and Collection
   const salesReportForm = useForm({ start_date: today, end_date: today });
+  const briefSalesReportForm = useForm({ start_date: today, end_date: today });
   const collectionReportForm = useForm({ start_date: today, end_date: today });
+  const briefCollectionReportForm = useForm({
+    start_date: today,
+    end_date: today,
+  });
 
   /**
    * Helper function to generate the PDF URL and open it in a new tab
@@ -24,33 +29,51 @@ function ProductReport() {
   // 2. Separate Submission Handlers
   const handleSalesReport = (e) => {
     e.preventDefault();
-    console.log('Sales Report Form Data:', salesReportForm.data);
     openPdfReport('admin.product.generate_sales_report', salesReportForm.data);
+  };
+
+  const handleBriefSalesReport = (e) => {
+    e.preventDefault();
+    openPdfReport(
+      'admin.product.generate_brief_sales_report',
+      briefSalesReportForm.data
+    );
   };
 
   const handleCollectionReport = (e) => {
     e.preventDefault();
-    console.log('Collection Report Form Data:', collectionReportForm.data);
     openPdfReport(
       'admin.product.generate_collection_report',
       collectionReportForm.data
     );
   };
+  const handleBriefCollectionReport = (e) => {
+    e.preventDefault();
+    openPdfReport(
+      'admin.product.generate_brief_collection_report',
+      briefCollectionReportForm.data
+    );
+  };
 
   return (
     <LayoutForProduct>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto p-6">
         <h2 className="font-bold text-3xl text-center mb-10 text-neutral">
           পণ্য ও বিক্রয় রিপোর্ট
         </h2>
 
         {/* Using max-w-4xl and mx-auto to make 2 cards look centered and clean */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2  mx-auto">
           {/* Box 1: বিক্রির রিপোর্ট */}
           <ReportBox
             title="বিক্রির বিস্তারিত রিপোর্ট"
             form={salesReportForm}
             onSubmit={handleSalesReport}
+          />
+          <ReportBox
+            title="বিক্রির সংক্ষিপ্ত রিপোর্ট"
+            form={briefSalesReportForm}
+            onSubmit={handleBriefSalesReport}
           />
 
           {/* Box 2: টাকা সংগ্রহের রিপোর্ট */}
@@ -58,6 +81,11 @@ function ProductReport() {
             title="টাকা সংগ্রহের বিস্তারিত রিপোর্ট"
             form={collectionReportForm}
             onSubmit={handleCollectionReport}
+          />
+          <ReportBox
+            title="টাকা সংগ্রহের সংক্ষিপ্ত রিপোর্ট"
+            form={briefCollectionReportForm}
+            onSubmit={handleBriefCollectionReport}
           />
         </div>
       </div>

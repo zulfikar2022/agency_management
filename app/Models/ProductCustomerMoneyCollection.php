@@ -14,4 +14,9 @@ class ProductCustomerMoneyCollection extends Model
         'collecting_user_id',
         'customer_products_id'
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'collecting_user_id', 'id');
+    }
 }
