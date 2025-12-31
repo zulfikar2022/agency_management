@@ -443,7 +443,7 @@ class EmployeeController extends Controller
             }
         }
         
-        DB::transaction(function () use ($validated){
+        DB::transaction(function () use ($validated, $member){
             if($validated['deposit_id'] != null){
                 $deposit = Deposit::find($validated['deposit_id']);
                 // create a deposit_collections record
@@ -474,6 +474,11 @@ class EmployeeController extends Controller
                     $interest_paid_amount = $loan->remaining_payable_interest;
                     $main_paid_amount = ($validated['paid_amount'] * 100) - $loan->remaining_payable_interest;
                 }
+                if($main_paid_amount >= $loan->remaining_payable_main){
+                    $member->total_loan = 0;
+                    $member->save();
+                }
+                
                  // create a loan_collections record
                 $loan_collection = new LoanCollection();
                 $loan_collection->loan_id = $validated['loan_id'];

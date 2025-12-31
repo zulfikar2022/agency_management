@@ -96,7 +96,7 @@ class LoanController extends Controller
             return redirect()->back()->withErrors(['message' => 'সদস্যের মোট জমার পরিণাম জামানতের চেয়ে কম হতে পারবে না।'])->withInput();
         }
         // dd("before transaction", $validated);
-        DB::transaction(function () use ($validated) {
+        DB::transaction(function () use ($validated, $member) {
             $member_id = $validated['member_id'];
             $total_loan = $validated['total_loan'] * 100; 
             $safety_money = $validated['safety_money'] * 100; 
@@ -109,6 +109,9 @@ class LoanController extends Controller
             $remaining_payable_interest = 0;
             $remaining_payable_main = $total_loan;
             $last_paying_date = Carbon::now()->addDays(115)->format('Y-m-d');
+
+            $member->total_loan = $total_loan;
+            $member->save();
 
             // create a new loan instance
             $loan = new Loan();

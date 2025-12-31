@@ -8,6 +8,7 @@ function CustomerProductAdminDashboard({
   stockProductsTotalPrice,
   soldProductsTotalPrice,
   totalCollectedAmount,
+  totalCost,
 }) {
   let dates = Object.keys(sevenDayCollections);
   const collectedAmounts = dates.map(
@@ -160,6 +161,26 @@ function CustomerProductAdminDashboard({
             <p>
               <span className="text-3xl font-bold">
                 {totalCollectedAmount.toLocaleString()}
+              </span>
+              <span>&nbsp;{'টাকা'}</span>
+            </p>
+          </div>
+          <div className="border-b pb-2 mb-1">
+            <p className="font-bold text-green-700">মোট বাকিঃ </p>
+            <p>
+              <span className="text-3xl font-bold">
+                {(
+                  soldProductsTotalPrice - totalCollectedAmount
+                ).toLocaleString()}
+              </span>
+              <span>&nbsp;{'টাকা'}</span>
+            </p>
+          </div>
+          <div className="border-b pb-2 mb-1">
+            <p className="font-bold text-green-700">মোট খরচঃ </p>
+            <p>
+              <span className="text-3xl font-bold">
+                {totalCost.toLocaleString()}
               </span>
               <span>&nbsp;{'টাকা'}</span>
             </p>

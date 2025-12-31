@@ -10,6 +10,7 @@ use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\LoanCollectionUpdateLog;
 use App\Models\Bank\Member;
+use App\Models\Cost;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
@@ -102,9 +103,8 @@ class AdminController extends Controller
 
         
         $total_deposit_amount = Member::where('is_deleted', false)->sum('total_deposit');
-        $total_loaned_amount = Member::where('is_deleted', false)->sum('total_loan');
+        $total_loaned_amount = Loan::where('is_deleted', false)->sum('total_loan');
 
-        // $total_collectable_with_interest = Loan::where('is_deleted', false)->sum('total_payable_amount');
 
         $active_loan_ids = Loan::where('is_deleted', false)->where(function ($query) {
             $query->where('remaining_payable_main', '>', 0)
@@ -112,6 +112,10 @@ class AdminController extends Controller
         })->pluck('id')->toArray();
 
         $total_collection_for_loan = LoanCollection::whereIn('loan_id', $active_loan_ids)->sum('paid_amount');
+        $total_interest_paid_for_loan = LoanCollection::whereIn('loan_id', $active_loan_ids)->sum('interest_paid_amount');
+        $total_main_paid_for_loan = LoanCollection::whereIn('loan_id', $active_loan_ids)->sum('main_paid_amount');
+        $total_remaining_payable_main = Loan::whereIn('id', $active_loan_ids)->sum('remaining_payable_main');
+        $total_remaining_payable_interest = Loan::whereIn('id', $active_loan_ids)->sum('remaining_payable_interest');
         
         // generate me a list of last seven days as a datetime object keeping only the date part
         $lastSevenDays = collect();
@@ -130,6 +134,8 @@ class AdminController extends Controller
             ];
         }
 
+        $total_cost = Cost::where('is_deleted', false)->sum('amount');
+
         // dd($date_wise_loan_and_deposit_collections);
 
         return Inertia::render('Admin/Dashboard', [
@@ -146,9 +152,13 @@ class AdminController extends Controller
             'loanAccountCount' => $loan_account_count,
             'totalDepositAmount' => $total_deposit_amount,
             'totalLoanedAmount' => $total_loaned_amount,
-            // 'totalCollectableWithInterest' => $total_collectable_with_interest,
             'totalCollectionForLoan' => $total_collection_for_loan,
             'dateWiseLoanAndDepositCollections' => $date_wise_loan_and_deposit_collections,
+            'totalInterestPaidForLoan' => $total_interest_paid_for_loan,
+            'totalMainPaidForLoan' => $total_main_paid_for_loan,
+            'totalRemainingPayableMain' => $total_remaining_payable_main,
+            'totalRemainingPayableInterest' => $total_remaining_payable_interest,
+            'totalCost' => $total_cost,
         ]);
     }
 

@@ -16,10 +16,15 @@ function Dashboard({
   loanAccountCount,
   totalDepositAmount,
   totalLoanedAmount,
-  // totalCollectableWithInterest,
   totalCollectionForLoan,
   dateWiseLoanAndDepositCollections,
+  totalInterestPaidForLoan,
+  totalMainPaidForLoan,
+  totalRemainingPayableMain,
+  totalRemainingPayableInterest,
+  totalCost,
 }) {
+  console.log(totalInterestPaidForLoan, totalMainPaidForLoan);
   return (
     <AdminDashboardLayout>
       <div className="dashboard h-full container mx-auto p-4">
@@ -30,6 +35,7 @@ function Dashboard({
           stockProductsTotalPrice={stockProductsTotalPrice}
           soldProductsTotalPrice={soldProductsTotalPrice}
           totalCollectedAmount={totalCollectedAmount}
+          totalCost={totalCost}
         />
         <BankLoanDepositAdminDashboard
           totalMembers={totalMembers}
@@ -40,6 +46,10 @@ function Dashboard({
           // totalCollectableWithInterest={totalCollectableWithInterest}
           totalCollectionForLoan={totalCollectionForLoan}
           dateWiseLoanAndDepositCollections={dateWiseLoanAndDepositCollections}
+          totalInterestPaidForLoan={totalInterestPaidForLoan}
+          totalMainPaidForLoan={totalMainPaidForLoan}
+          totalRemainingPayableMain={totalRemainingPayableMain}
+          totalRemainingPayableInterest={totalRemainingPayableInterest}
         />
       </div>
     </AdminDashboardLayout>

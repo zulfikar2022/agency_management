@@ -85,7 +85,7 @@ function EmployeeMemberDetails({
           <p className="font-bold">
             মোট পরিশোধিতঃ{' '}
             <span className="font-normal">
-              {(loan?.total_paid / 100).toFixed(2)} টাকা
+              {((loan?.total_paid || 0) / 100).toFixed(2)} টাকা
             </span>
           </p>
           {/* <p className="font-bold">

@@ -101,7 +101,7 @@ function CreateDepositAccount({ member }) {
                     onChange={(e) =>
                       setData('daily_deposit_amount', e.target.value)
                     }
-                    placeholder="৫০০"
+                    placeholder="50"
                   />
                   {errors.daily_deposit_amount && (
                     <label className="label">

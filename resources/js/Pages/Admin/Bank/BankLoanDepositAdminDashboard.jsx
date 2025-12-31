@@ -8,9 +8,12 @@ function BankLoanDepositAdminDashboard({
   loanAccountCount,
   totalDepositAmount,
   totalLoanedAmount,
-  // totalCollectableWithInterest,
   totalCollectionForLoan,
   dateWiseLoanAndDepositCollections,
+  totalInterestPaidForLoan,
+  totalMainPaidForLoan,
+  totalRemainingPayableMain,
+  totalRemainingPayableInterest,
 }) {
   return (
     <div>
@@ -59,17 +62,6 @@ function BankLoanDepositAdminDashboard({
               &nbsp; টাকা
             </p>
           </div>
-          {/* <div className="border-b mt-2">
-            <p className="font-bold text-green-700">
-              সুদসহ মোট সংগ্রহ করা হবেঃ{' '}
-            </p>
-            <p className="font-normal">
-              <span className="text-2xl font-bold">
-                {(totalCollectableWithInterest / 100).toFixed(2)}
-              </span>{' '}
-              &nbsp; টাকা
-            </p>
-          </div> */}
           <div className="border-b mt-2">
             <p className="font-bold text-green-700">
               ঋণের কিস্তি বাবদ মোট সংগ্রহঃ{' '}
@@ -77,6 +69,44 @@ function BankLoanDepositAdminDashboard({
             <p className="font-normal">
               <span className="text-2xl font-bold">
                 {(totalCollectionForLoan / 100).toFixed(2)}
+              </span>{' '}
+              &nbsp; টাকা
+            </p>
+          </div>
+          <div className="pl-5">
+            <div className="border-b mt-2">
+              <p className="font-bold text-green-500">মোট আসল সংগ্রহঃ </p>
+              <p className="font-normal">
+                <span className="text-2xl font-bold">
+                  {(totalMainPaidForLoan / 100).toFixed(2)}
+                </span>{' '}
+                &nbsp; টাকা
+              </p>
+            </div>
+            <div className="border-b mt-2">
+              <p className="font-bold text-green-500">মোট সুদ সংগ্রহঃ </p>
+              <p className="font-normal">
+                <span className="text-2xl font-bold">
+                  {(totalInterestPaidForLoan / 100).toFixed(2)}
+                </span>{' '}
+                &nbsp; টাকা
+              </p>
+            </div>
+          </div>
+          <div className="border-b mt-2">
+            <p className="font-bold text-green-700">মোট আসল বাকিঃ </p>
+            <p className="font-normal">
+              <span className="text-2xl font-bold">
+                {(totalRemainingPayableMain / 100).toFixed(2)}
+              </span>{' '}
+              &nbsp; টাকা
+            </p>
+          </div>
+          <div className="border-b mt-2">
+            <p className="font-bold text-green-700">মোট সুদ বাকিঃ </p>
+            <p className="font-normal">
+              <span className="text-2xl font-bold">
+                {(totalRemainingPayableInterest / 100).toFixed(2)}
               </span>{' '}
               &nbsp; টাকা
             </p>
