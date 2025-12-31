@@ -6,6 +6,10 @@ function GenerateReport() {
 
   // 1. Individual Form States
   const depositCollectionForm = useForm({ start_date: today, end_date: today });
+  const briefDepositCollectionForm = useForm({
+    start_date: today,
+    end_date: today,
+  });
   const loanCollectionForm = useForm({ start_date: today, end_date: today });
   const withdrawForm = useForm({ start_date: today, end_date: today });
   const loansForm = useForm({ start_date: today, end_date: today });
@@ -34,6 +38,16 @@ function GenerateReport() {
     openPdfReport(
       'admin.bank.generate_deposit_collection_report',
       depositCollectionForm.data
+    );
+  };
+
+  // admin.bank.generate_brief_deposit_collection_report
+
+  const handleBriefDepositCollectionReport = (e) => {
+    e.preventDefault();
+    openPdfReport(
+      'admin.bank.generate_brief_deposit_collection_report',
+      briefDepositCollectionForm.data
     );
   };
 
@@ -69,25 +83,30 @@ function GenerateReport() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <ReportBox
-            title="সঞ্চয় সংগ্রহের রিপোর্ট"
+            title="সঞ্চয় সংগ্রহের বিস্তারিত রিপোর্ট"
             form={depositCollectionForm}
             onSubmit={handleDepositCollectionReport}
           />
+          <ReportBox
+            title="সঞ্চয় সংগ্রহের সংক্ষিপ্ত রিপোর্ট"
+            form={briefDepositCollectionForm}
+            onSubmit={handleBriefDepositCollectionReport}
+          />
 
           <ReportBox
-            title="ঋণের কিস্তি সংগ্রহের রিপোর্ট"
+            title="ঋণের কিস্তি সংগ্রহের বিস্তারিত রিপোর্ট"
             form={loanCollectionForm}
             onSubmit={handleLoanCollectionReport}
           />
 
           <ReportBox
-            title="টাকা উত্তোলন রিপোর্ট"
+            title="টাকা উত্তোলনের বিস্তারিত রিপোর্ট"
             form={withdrawForm}
             onSubmit={handleWithdrawReport}
           />
 
           <ReportBox
-            title="ঋণ প্রদান রিপোর্ট"
+            title="ঋণ প্রদানের বিস্তারিত রিপোর্ট"
             form={loansForm}
             onSubmit={handleLoansReport}
           />

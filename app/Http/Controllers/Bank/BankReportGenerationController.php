@@ -304,4 +304,59 @@ class BankReportGenerationController{
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
+
+    public function generateBriefDepositCollectionReport(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $deposit_collections = DepositCollection::with('collector')
+            ->where('deposit_date', '>=', $validated['start_date'])
+            ->where('deposit_date', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->orderBy('deposit_date', 'desc')
+            ->get();
+
+            // I want to group deposit collections by collecting_user_id
+            $grouped_collections = [];
+            $total_collection = 0;
+            foreach ($deposit_collections as $collection) {
+                $total_collection += $collection->deposit_amount;
+                $collector_id = $collection->collecting_user_id;
+                if (!isset($grouped_collections[$collector_id])) {
+                    $employee_wise_collection = 0;
+                    foreach ($deposit_collections as $col) {
+                        if ($col->collecting_user_id == $collector_id) {
+                            $employee_wise_collection += $col->deposit_amount;
+                        }
+                    }
+                    $grouped_collections[$collector_id] = [
+                        'collector_name' => $collection->collector ? $collection->collector->name : 'Unknown',
+                        'collecting_user_id' => $collector_id,
+                        'employee_wise_collection' => $employee_wise_collection,
+                        // 'total_collection' => $total_collection,
+                    ];
+                }
+            }
+            
+             $html = view('pdf.bank-brief-deposit-collection-report', [
+                'grouped_collections' => $grouped_collections,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'total_collection' => $total_collection,
+            
+            ])->render();
+
+            $pdfData = Browsershot::html($html)
+                    ->noSandbox()
+                    ->showBackground()
+                    ->format('A4')
+                    ->pdf();
+            $todayDate = date('d F Y');
+            $filename =  'brief_deposit_collection_report_' . $todayDate . '.pdf';
+            return response($pdfData, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
 }
