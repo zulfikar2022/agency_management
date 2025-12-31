@@ -48,14 +48,14 @@ function ProductReport() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {/* Box 1: বিক্রির রিপোর্ট */}
           <ReportBox
-            title="বিক্রির রিপোর্ট"
+            title="বিক্রির বিস্তারিত রিপোর্ট"
             form={salesReportForm}
             onSubmit={handleSalesReport}
           />
 
           {/* Box 2: টাকা সংগ্রহের রিপোর্ট */}
           <ReportBox
-            title="টাকা সংগ্রহের রিপোর্ট"
+            title="টাকা সংগ্রহের বিস্তারিত রিপোর্ট"
             form={collectionReportForm}
             onSubmit={handleCollectionReport}
           />
