@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>সঞ্চয়ের বিস্তারিত রিপোর্ট</title>
+    <title>টাকা উত্তোলনের সংক্ষিপ্ত রিপোর্ট</title>
 
    
 

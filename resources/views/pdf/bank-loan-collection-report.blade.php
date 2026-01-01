@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>কিস্তির বিস্তারিত রিপোর্ট</title>
+    <title>ঋণের কিস্তি সংগ্রহের বিস্তারিত রিপোর্ট</title>
 
    
 

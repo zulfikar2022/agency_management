@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>এমপ্লয়ী ভিত্তিক বিস্তারিত রিপোর্ট</title>
+    <title>পণ্য বিক্রির টাকা সংগ্রহের সংক্ষিপ্ত রিপোর্ট</title>
 
    
 
@@ -36,7 +36,7 @@
     <div>
         <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
     </div>
-    <h1 class="title">পণ্য বিক্রির সংক্ষিপ্ত রিপোর্ট </h1>
+    <h1 class="title">পণ্য বিক্রির টাকা সংগ্রহের সংক্ষিপ্ত রিপোর্ট </h1>
         @if ($start_date == $end_date)
             <!-- use Carbon and make the date as 22 December 2025 -->
             <p style="text-align: center; font-weight: bold;">রিপোর্টের সময়কাল: {{ \Carbon\Carbon::parse($start_date)->format('d F Y') }} </p>

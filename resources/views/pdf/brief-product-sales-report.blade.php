@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>এমপ্লয়ী ভিত্তিক বিস্তারিত রিপোর্ট</title>
+    <title>পণ্য বিক্রির সংক্ষিপ্ত রিপোর্ট</title>
 
    
 

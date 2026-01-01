@@ -36,7 +36,7 @@
     <div>
         <p class="" style="text-align: center; font-weight:bold ; font-size: large;">ভেলাজান কৃষি সমবায় সমিতি লিমিটেড, ভেলাজান বাজার, ঠাকুরগাঁও সদর, ঠাকুরগাঁও </p>
     </div>
-    <h1 class="title">এমপ্লয়ী ভিত্তিক বিস্তারিত রিপোর্ট</h1>
+    <h1 class="title">এমপ্লয়ী ভিত্তিক বিস্তারিত রিপোর্ট (সঞ্চয় ও কিস্তি) </h1>
         @if ($start_date == $end_date)
             <!-- use Carbon and make the date as 22 December 2025 -->
             <p style="text-align: center; font-weight: bold;">রিপোর্টের সময়কাল: {{ \Carbon\Carbon::parse($start_date)->format('d F Y') }} </p>
