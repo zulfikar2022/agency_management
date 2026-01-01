@@ -14,6 +14,10 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::get('/admin/bank/add-new-member', [MemberController::class, 'create'])->name('admin.bank.add_new_member');
 
+    Route::get('/admin/bank/delete-member-account/{member}', [MemberController::class, 'renderDeleteMemberAccount'])->name('admin.bank.delete_member_account_page');
+
+    Route::delete('/admin/bank/delete-member-account/{member}', [MemberController::class, 'deleteMemberAccount'])->name('admin.bank.delete_member_account');
+
     Route::get('/admin/bank/all-depositing-members', [MemberController::class, 'allDepositingMembers'])->name('admin.bank.all_depositing_members');
 
     Route::get('/admin/bank/all-loan-members', [MemberController::class, 'allLoanMembers'])->name('admin.bank.all_loan_members');

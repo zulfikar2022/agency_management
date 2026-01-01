@@ -84,7 +84,7 @@
                     <p style="font-weight:bold">সঞ্চয় একাউন্ট ক্লোজ বাবদ মোট প্রদানকৃত অর্থঃ  <span style="font-weight: normal;">{{ $total_deposit_dismissals_paid }}টাকা</span></p>
                 </div>
                 <div>
-                    <p style="font-weight:bold">মূল একাউন্ট ক্লোজ বাবদ মোট প্রদানকৃত শেয়ার টাকাঃ  <span style="font-weight: normal;">{{ $total_deposit_dismissals_paid }}টাকা</span></p>
+                    <p style="font-weight:bold">মূল একাউন্ট ক্লোজ বাবদ মোট প্রদানকৃত শেয়ার টাকাঃ  <span style="font-weight: normal;">{{ $total_account_dismissals_provided_share_money }}টাকা</span></p>
                 </div>
             </div>
         </div>

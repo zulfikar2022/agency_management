@@ -9,11 +9,13 @@ use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
 use App\Models\Bank\MemberUpdateLog;
+use App\Models\MemberAccountDismissal;
 use App\Models\Withdraw;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\Browsershot\Browsershot;
 
@@ -634,5 +636,56 @@ class MemberController extends Controller
         return response($pdfData, 200)
         ->header('Content-Type', 'application/pdf')
         ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function renderDeleteMemberAccount(Member $member)
+    {
+        $total_share_money = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->sum('share_money') / 100;
+
+
+        return Inertia::render('Admin/Bank/DeleteMemberAccount', [
+            'member' => $member,
+            'total_share_money' => $total_share_money,
+        ]);
+    }
+
+    
+    public function deleteMemberAccount(Request $request, Member $member)
+    {
+        $validated = $request->validate([
+            'provided_share_money' => 'required|numeric|min:0',
+            'member_id'  => 'required|integer',
+        ]);
+
+        if($validated['member_id'] !== $member->id) {
+            return redirect()->back()->withErrors(['error' => 'সদস্য আইডি মিলছে না। দয়া করে সঠিক সদস্য আইডি প্রদান করুন।']);
+        }
+        
+        $loans = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->get();
+        DB::transaction(function() use($validated,$loans, $member) {
+              // mark all the loans as deleted
+            foreach($loans as $loan){
+                $loan->is_deleted = true;
+                $loan->save();  
+            }
+            // mark the member as deleted
+            $member->is_deleted = true;
+            $member->save();
+            // create an entry of MemberAccountDismissal
+            $member_account_dismissal = new MemberAccountDismissal();
+            $member_account_dismissal->member_id = $member->id;
+            $member_account_dismissal->provided_share_money = $validated['provided_share_money'] * 100; // store in cents
+            $member_account_dismissal->creating_user_id = Auth::id();
+            $member_account_dismissal->save();
+            
+        });
+
+        return redirect()->route('admin.bank.members');
+
+        
     }
 }

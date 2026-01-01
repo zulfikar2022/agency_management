@@ -604,7 +604,6 @@ class BankReportGenerationController{
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->sum('provided_share_money') / 100;
-
         
 
          $html = view('pdf.entire-brief-overall-report', [

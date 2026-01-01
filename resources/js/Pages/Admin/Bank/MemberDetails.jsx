@@ -20,6 +20,7 @@ function MemberDetails({
   loan,
   not_paid_days_count,
 }) {
+  console.log({ has_loan, deposit_account });
   const total_payable =
     ((loan?.daily_payable_main + loan?.daily_payable_interest) / 100) * 115;
   const [open, setOpen] = useState(false);
@@ -63,17 +64,30 @@ function MemberDetails({
                     মেম্বার আইডিঃ{' '}
                     <span className="font-bold text-2xl text-black">{id}</span>
                   </p>
-                  <a
-                    href={route(
-                      'admin.bank.generate_member_details_report',
-                      member.id
+                  <div className="flex flex-col gap-2">
+                    {!has_loan && !has_deposit_account && (
+                      <Link
+                        href={route(
+                          'admin.bank.delete_member_account_page',
+                          member.id
+                        )}
+                        className="btn btn-error"
+                      >
+                        একাউন্ট ডিলিট করুন
+                      </Link>
                     )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-xs btn-neutral md:mb-0"
-                  >
-                    সদস্য রিপোর্ট তৈরি করুন
-                  </a>
+                    <a
+                      href={route(
+                        'admin.bank.generate_member_details_report',
+                        member.id
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-xs btn-neutral md:mb-0"
+                    >
+                      সদস্য রিপোর্ট তৈরি করুন
+                    </a>
+                  </div>
                 </div>
                 {/* <div className="badge badge-neutral p-3">সক্রিয়</div> */}
               </div>
