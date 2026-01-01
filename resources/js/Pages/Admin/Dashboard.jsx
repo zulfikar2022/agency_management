@@ -25,8 +25,11 @@ function Dashboard({
   totalRemainingPayableInterest,
   totalCost,
   activeTotalLoanedAmount,
+  totalAdmissionFee,
+  totalLoanFee,
+  totalShareMoney,
 }) {
-  console.log(totalInterestPaidForLoan, totalMainPaidForLoan);
+  console.log(totalAdmissionFee);
   return (
     <AdminDashboardLayout>
       <Head title="এডমিন ড্যাশবোর্ড" />
@@ -54,6 +57,9 @@ function Dashboard({
           totalRemainingPayableMain={totalRemainingPayableMain}
           totalRemainingPayableInterest={totalRemainingPayableInterest}
           activeTotalLoanedAmount={activeTotalLoanedAmount}
+          totalAdmissionFee={totalAdmissionFee}
+          totalLoanFee={totalLoanFee}
+          totalShareMoney={totalShareMoney}
         />
       </div>
     </AdminDashboardLayout>

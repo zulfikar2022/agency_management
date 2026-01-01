@@ -144,6 +144,11 @@ class AdminController extends Controller
 
         $total_cost = Cost::where('is_deleted', false)->sum('amount');
 
+        $total_adminssion_fee = Member::sum('admission_fee');
+        $total_loan_fee = Loan::sum('loan_fee');
+        $active_member_ids = Member::where('is_deleted', false)->pluck('id')->toArray();
+        $total_share_money = Loan::whereIn('member_id', $active_member_ids)->sum('share_money');
+
         // dd($date_wise_loan_and_deposit_collections);
 
         return Inertia::render('Admin/Dashboard', [
@@ -168,6 +173,9 @@ class AdminController extends Controller
             'totalRemainingPayableInterest' => $total_remaining_payable_interest,
             'totalCost' => $total_cost,
             'activeTotalLoanedAmount' => $active_total_loaned_amount,
+            'totalAdmissionFee' => $total_adminssion_fee,
+            'totalLoanFee' => $total_loan_fee,
+            'totalShareMoney' => $total_share_money,
         ]);
     }
 

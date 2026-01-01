@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController\AdminController;
+use App\Http\Controllers\Bank\BankReportGenerationController;
 use App\Http\Controllers\CostController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerProductController;
@@ -163,5 +164,7 @@ Route::get('/admin/create-report', [AdminController::class, 'createReportPage'])
 Route::get('/admin/generate-cost-details-report', [CostController::class, 'generateCostDetailsReport'])->name('admin.generateCostDetailsReport');
 
 Route::get('/admin/generate-brief-cost-report', [CostController::class, 'generateBriefCostReport'])->name('admin.generateBriefCostReport');
+
+Route::get('/admin/generate-brief-overall-report', [BankReportGenerationController::class, 'generateBriefOverallReport'])->name('admin.generateBriefOverallReport');
 
 });

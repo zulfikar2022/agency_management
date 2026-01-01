@@ -15,7 +15,11 @@ function BankLoanDepositAdminDashboard({
   totalRemainingPayableMain,
   totalRemainingPayableInterest,
   activeTotalLoanedAmount,
+  totalAdmissionFee,
+  totalLoanFee,
+  totalShareMoney,
 }) {
+  console.log(totalAdmissionFee);
   return (
     <div>
       <p className="font-bold text-center text-lg underline mb-6">
@@ -42,6 +46,33 @@ function BankLoanDepositAdminDashboard({
             <p className="font-normal">
               <span className="text-2xl font-bold">{loanAccountCount}</span>{' '}
               &nbsp; জন
+            </p>
+          </div>
+          <div className="border-b mt-2">
+            <p className="font-bold text-green-700">মোট সংগৃহীত ভর্তি ফিঃ </p>
+            <p className="font-normal">
+              <span className="text-2xl font-bold">
+                {(totalAdmissionFee / 100).toFixed(2)}
+              </span>{' '}
+              &nbsp; টাকা
+            </p>
+          </div>
+          <div className="border-b mt-2">
+            <p className="font-bold text-green-700">মোট সংগৃহীত ঋণ ফিঃ </p>
+            <p className="font-normal">
+              <span className="text-2xl font-bold">
+                {(totalLoanFee / 100).toFixed(2)}
+              </span>{' '}
+              &nbsp; টাকা
+            </p>
+          </div>
+          <div className="border-b mt-2">
+            <p className="font-bold text-green-700">মোট সংগৃহীত শেয়ার জমাঃ </p>
+            <p className="font-normal">
+              <span className="text-2xl font-bold">
+                {(totalShareMoney / 100).toFixed(2)}
+              </span>{' '}
+              &nbsp; টাকা
             </p>
           </div>
           <div className="border-b mt-2">

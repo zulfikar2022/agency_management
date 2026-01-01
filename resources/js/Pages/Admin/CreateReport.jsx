@@ -15,6 +15,11 @@ export default function CreateReport() {
     end_date: today,
   });
 
+  const briefOverallReportForm = useForm({
+    start_date: today,
+    end_date: today,
+  });
+
   const openPdfReport = (routeName, formData) => {
     // Construct query parameters
     const params = new URLSearchParams({
@@ -45,6 +50,14 @@ export default function CreateReport() {
     );
   };
 
+  const handleBriefOverallReport = (e) => {
+    e.preventDefault();
+    openPdfReport(
+      'admin.generateBriefOverallReport',
+      briefOverallReportForm.data
+    );
+  };
+
   return (
     <AdminDashboardLayout>
       <Head title="রিপোর্ট তৈরি করুন" />
@@ -70,6 +83,11 @@ export default function CreateReport() {
             title="খরচের সংক্ষিপ্ত রিপোর্ট"
             form={briefCostCollectionForm}
             onSubmit={handleBrifeCostCollectionReport}
+          />
+          <ReportBox
+            title="সামগ্রিক সংক্ষিপ্ত রিপোর্ট"
+            form={briefOverallReportForm}
+            onSubmit={handleBriefOverallReport}
           />
         </div>
       </div>

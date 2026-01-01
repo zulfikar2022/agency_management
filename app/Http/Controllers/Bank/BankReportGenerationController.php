@@ -9,6 +9,11 @@ use App\Models\Bank\DepositCollectionUpdateLog;
 use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
+use App\Models\Cost;
+use App\Models\CustomerProduct;
+use App\Models\DepositDismissal;
+use App\Models\MemberAccountDismissal;
+use App\Models\ProductCustomerMoneyCollection;
 use App\Models\User;
 use App\Models\Withdraw;
 use Illuminate\Http\Request;
@@ -531,5 +536,107 @@ class BankReportGenerationController{
         return response($pdfData, 200)
         ->header('Content-Type', 'application/pdf')
         ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function generateBriefOverallReport(Request $request){
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        // incoming cashes
+        $total_admission_fee = Member::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            // ->where('is_deleted', false)
+            ->sum('admission_fee') / 100;
+        $total_loan_fee = Loan::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('loan_fee') / 100;
+        $active_members_ids = Member::where('is_deleted', false)->pluck('id')->toArray();
+        $total_share_money = Loan::whereIn('member_id', $active_members_ids)
+            ->whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('share_money') / 100;
+
+        $total_deposit_collection = DepositCollection::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('deposit_amount') / 100;
+        $total_loan_collection = LoanCollection::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('paid_amount') / 100;
+        
+        $total_downpayments = CustomerProduct::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('downpayment') ;
+
+        $product_money_collections = ProductCustomerMoneyCollection::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->get();
+        $total_product_money_collections = $product_money_collections->sum('collected_amount');
+        $total_product_money_collectables = $product_money_collections->sum('collectable_amount');
+
+        // outgoing cashes
+        $total_costs = Cost::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('amount');
+        $total_provided_loans = Loan::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('total_loan') / 100;
+
+        $total_withdraws = Withdraw::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('withdraw_amount') / 100;
+        
+        $total_deposit_dismissals_paid = DepositDismissal::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('total_paid') / 100;
+        $total_account_dismissals_provided_share_money = MemberAccountDismissal::whereDate('created_at',
+            '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('provided_share_money') / 100;
+
+        
+
+         $html = view('pdf.entire-brief-overall-report', [
+            // incoming cashes
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'total_admission_fee' => $total_admission_fee,
+            'total_loan_fee' => $total_loan_fee,
+            'total_share_money' => $total_share_money,
+            'total_deposit_collection' => $total_deposit_collection,
+            'total_loan_collection' => $total_loan_collection,
+            'total_product_money_collections' => $total_product_money_collections,
+            'total_downpayments' => $total_downpayments,
+            'total_product_money_collectables' => $total_product_money_collectables,
+            // outgoing cashes
+            'total_costs' => $total_costs,
+            'total_provided_loans' => $total_provided_loans,
+            'total_withdraws' => $total_withdraws,
+            'total_deposit_dismissals_paid' => $total_deposit_dismissals_paid,
+            'total_account_dismissals_provided_share_money' => $total_account_dismissals_provided_share_money,
+        
+        ])->render();
+
+        $pdfData = Browsershot::html($html)
+                ->noSandbox()
+                ->showBackground()
+                ->format('A4')
+                ->pdf();
+        $todayDate = date('d F Y');
+        $filename =  'brief_overall_report_' . $todayDate . '.pdf';
+        return response($pdfData, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
 }
