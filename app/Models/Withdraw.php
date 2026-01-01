@@ -20,7 +20,7 @@ class Withdraw extends Model
         // 1st param: related model
         // 2nd param: foreign key in deposit_collections table
         // 3rd param: primary key in users table
-        return $this->belongsTo(User::class, 'withdrawing_user_id', 'id');
+        return $this->belongsTo(User::class, 'withdrawing_user_id', 'id')->orderBy('created_at', 'desc');
     }
 
     // public function member()
@@ -30,6 +30,6 @@ class Withdraw extends Model
 
     public function deposit()
     {
-        return $this->belongsTo(Deposit::class, 'deposit_id', 'id');
+        return $this->belongsTo(Deposit::class, 'deposit_id', 'id')->orderBy('created_at', 'desc');
     }
 }

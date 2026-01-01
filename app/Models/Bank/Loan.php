@@ -28,11 +28,11 @@ class Loan extends Model
             // 1st param: related model
             // 2nd param: foreign key in deposit_collections table
             // 3rd param: primary key in users table
-            return $this->belongsTo(User::class, 'creating_user_id', 'id');
+            return $this->belongsTo(User::class, 'creating_user_id', 'id')->orderBy('created_at', 'desc');
         }
 
         public function member()
         {
-            return $this->belongsTo(Member::class, 'member_id', 'id');
+            return $this->belongsTo(Member::class, 'member_id', 'id')->orderBy('created_at', 'desc');
         }   
 }

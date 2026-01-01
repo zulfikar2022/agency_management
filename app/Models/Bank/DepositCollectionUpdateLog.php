@@ -11,6 +11,6 @@ class DepositCollectionUpdateLog extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'updating_user_id', 'id');
+        return $this->belongsTo(User::class, 'updating_user_id', 'id')->orderBy('created_at', 'desc');
     }
 }

@@ -20,16 +20,16 @@ class CustomerProduct extends Model
     {
         // The 2nd argument is your custom foreign key
         // The 3rd argument is the primary key on the users table
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id')->orderBy('created_at', 'desc');
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id', 'id')->orderBy('created_at', 'desc');
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id')->orderBy('created_at', 'desc');
     }
 }

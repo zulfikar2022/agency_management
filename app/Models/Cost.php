@@ -12,12 +12,12 @@ class Cost extends Model
     {
         // The 2nd argument is your custom foreign key
         // The 3rd argument is the primary key on the users table
-        return $this->belongsTo(User::class, 'creating_user_id', 'id');
+        return $this->belongsTo(User::class, 'creating_user_id', 'id')->orderBy('created_at', 'desc');
     }
 
     public function updateLogs()
     {
         // 2nd param: the foreign key in the cost_update_logs table
-        return $this->hasMany(CostUpdateLog::class, 'cost_id');
+        return $this->hasMany(CostUpdateLog::class, 'cost_id')->orderBy('created_at', 'desc');
     }
 }

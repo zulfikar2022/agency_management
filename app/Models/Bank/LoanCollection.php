@@ -11,16 +11,16 @@ class LoanCollection extends Model
         {
             // 2nd param: foreign key in deposit_collections table
             // 3rd param: primary key in users table
-            return $this->belongsTo(User::class, 'collecting_user_id', 'id');
+            return $this->belongsTo(User::class, 'collecting_user_id', 'id')->orderBy('created_at', 'desc');
         }
 
         public function loan()
         {
-            return $this->belongsTo(Loan::class, 'loan_id', 'id');
+            return $this->belongsTo(Loan::class, 'loan_id', 'id')->orderBy('created_at', 'desc');
         }
 
         public function update_logs()
         {
-            return $this->hasMany(LoanCollectionUpdateLog::class, 'loan_collection_id', 'id');
+            return $this->hasMany(LoanCollectionUpdateLog::class, 'loan_collection_id', 'id')->orderBy('created_at', 'desc');
         }
 }

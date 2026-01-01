@@ -17,12 +17,12 @@ class ProductCustomerMoneyCollection extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'collecting_user_id', 'id');
+        return $this->belongsTo(User::class, 'collecting_user_id', 'id')->orderBy('created_at', 'desc');
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id')->orderBy('created_at', 'desc');
     }
 
     public function update_logs()
