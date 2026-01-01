@@ -34,7 +34,6 @@ class DepositController extends Controller
 
         foreach ($deposit_collections as $collection) {
             $collection->collector_name = $collection->collector ? $collection->collector->name : 'Unknown';
-            // I want to not to send the collector relation to the frontend
             unset($collection->collector);
         }
 

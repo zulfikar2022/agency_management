@@ -33,17 +33,18 @@ class BankReportGenerationController{
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-        $deposit_collections = DepositCollection::where('deposit_date', '>=', $validated['start_date'])
+            $deposit_collections = DepositCollection::with('deposit.member:id,name')
+            ->where('deposit_date', '>=', $validated['start_date'])
             ->where('deposit_date', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->orderBy('deposit_date', 'desc')
             ->get();
-        
+                
             $total_collection = 0;
         foreach ($deposit_collections as $deposit_collection) {
-            $deposit = Deposit::find($deposit_collection->deposit_id);
+            $deposit = $deposit_collection->deposit;
             $total_collection += $deposit_collection->deposit_amount;
-            $member = Member::find($deposit->member_id);
+            $member = $deposit->member;
 
             $deposit_collection->member_name = $member->name;
             $deposit_collection->member_id = $member->id;
@@ -80,7 +81,7 @@ class BankReportGenerationController{
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-        $loan_collections = LoanCollection::where('paying_date', '>=', $validated['start_date'])
+        $loan_collections = LoanCollection::with('loan.member:id,name')->where('paying_date', '>=', $validated['start_date'])
             ->where('paying_date', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->orderBy('paying_date', 'desc')
@@ -89,10 +90,11 @@ class BankReportGenerationController{
         $total_collection = 0;
         foreach ($loan_collections as $loan_collection) {
             $total_collection += $loan_collection->paid_amount;
-            $loan = Loan::find($loan_collection->loan_id);
-            $member = Member::find($loan->member_id);
+            $loan = $loan_collection->loan;
+            $member = $loan->member;
             $loan_collection->member_name = $member->name;
             $loan_collection->member_id = $member->id;
+            
         }
 
          $html = view('pdf.bank-loan-collection-report', [
@@ -122,7 +124,7 @@ class BankReportGenerationController{
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-        $withdraws = Withdraw::whereDate('created_at', '>=', $validated['start_date'])
+        $withdraws = Withdraw::with('deposit.member:id,name')->whereDate    ('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
@@ -131,10 +133,12 @@ class BankReportGenerationController{
         $total_withdraw = 0;
         foreach ($withdraws as $withdraw) {
             $total_withdraw += $withdraw->withdraw_amount;
-            $deposit = Deposit::find($withdraw->deposit_id);
-            $member = Member::find($deposit->member_id);
+            $deposit = $withdraw->deposit;
+            $member = $deposit->member;
             $withdraw->member_name = $member->name;
             $withdraw->member_id = $member->id;
+            unset($withdraw->deposit);
+
         }
 
          $html = view('pdf.bank-withdraw-report', [
@@ -163,7 +167,7 @@ class BankReportGenerationController{
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-        $loans = Loan::whereDate('created_at', '>=', $validated['start_date'])
+        $loans = Loan::with('member:id,name')->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
@@ -173,9 +177,10 @@ class BankReportGenerationController{
         
         foreach ($loans as $loan) {
             $total_provided_loan += $loan->total_loan;
-            $member = Member::find($loan->member_id);
+            $member = $loan->member;
             $loan->member_name = $member->name;
             $loan->member_id = $member->id;
+            unset($loan->member);
         }
 
 
@@ -205,17 +210,18 @@ class BankReportGenerationController{
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-        $deposits = Deposit::whereDate('created_at', '>=', $validated['start_date'])
+        $deposits = Deposit::with('member:id,name,total_deposit')->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
             ->get();
         // each loan has a member_id field and we need to get the member from that id and put it into the loan object as a member field
         foreach ($deposits as $deposit) {
-            $member = Member::find($deposit->member_id);
+            $member = $deposit->member;
             $deposit->member_name = $member->name;
             $deposit->member_id = $member->id;
             $deposit->total_deposit = $member->total_deposit;
+            unset($deposit->member);
         }
 
 
@@ -249,7 +255,7 @@ class BankReportGenerationController{
         $employee = User::where('id', $validated['employee_id'])->where('is_employee', true)->where('is_deleted', false)->first();
         // dd($employee);
 
-        $deposit_collections = DepositCollection::where('deposit_date', '>=', $validated['start_date'])
+        $deposit_collections = DepositCollection::with('deposit.member:id,name,total_deposit')->where('deposit_date', '>=', $validated['start_date'])
             ->where('deposit_date', '<=', $validated['end_date'])
             ->where('collecting_user_id', $employee->id)
             ->where('is_deleted', false)
@@ -259,14 +265,15 @@ class BankReportGenerationController{
         foreach ($deposit_collections as $deposit_collection) {
             $total_deposit_collection += $deposit_collection->deposit_amount;
             // find the member based on the deposit id
-            $deposit = Deposit::find($deposit_collection->deposit_id);
-            $member = Member::find($deposit->member_id);
+            $deposit = $deposit_collection->deposit;
+            $member = $deposit->member;
             $deposit_collection->member_name = $member->name;
             $deposit_collection->member_id = $member->id;
+            unset($deposit_collection->deposit);
         }
         // dd($deposit_collections);
 
-        $loan_collections = LoanCollection::where('paying_date', '>=', $validated['start_date'])
+        $loan_collections = LoanCollection::with('loan.member:id,name')->where('paying_date', '>=', $validated['start_date'])
             ->where('paying_date', '<=', $validated['end_date'])
             ->where('collecting_user_id', $employee->id)
             ->where('is_deleted', false)
@@ -276,8 +283,8 @@ class BankReportGenerationController{
         foreach ($loan_collections as $loan_collection) {
             $total_loan_collection += $loan_collection->paid_amount;   
             // find the member based on the loan id
-            $loan = Loan::find($loan_collection->loan_id);
-            $member = Member::find($loan->member_id);
+            $loan = $loan_collection->loan;
+            $member = $loan->member;
             $loan_collection->member_name = $member->name;
             $loan_collection->member_id = $member->id; 
         }

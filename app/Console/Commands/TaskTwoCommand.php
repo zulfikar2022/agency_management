@@ -22,7 +22,7 @@ class TaskTwoCommand extends Command
      *
      * @var string
      */
-    protected $description = 'it runs  to calculate daily interest with the previous day interest.';
+    protected $description = 'to remove loan from member instance if loan is fully paid and last paying date is today or later';
 
     /**
      * Execute the console command.
@@ -34,6 +34,7 @@ class TaskTwoCommand extends Command
             ->where('remaining_payable_interest',  0)
             ->where('remaining_payable_main', 0)
             ->get();
+        
 
         foreach ($loans as $loan) {
             $loan->is_deleted = true;

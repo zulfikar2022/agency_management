@@ -13,4 +13,9 @@ class LoanCollection extends Model
             // 3rd param: primary key in users table
             return $this->belongsTo(User::class, 'collecting_user_id', 'id');
         }
+
+        public function loan()
+        {
+            return $this->belongsTo(Loan::class, 'loan_id', 'id');
+        }
 }

@@ -20,19 +20,20 @@ class CostController extends Controller
         $start_date = request()->query('start_date', Carbon::today()->toDateString());
         $end_date = request()->query('end_date', Carbon::today()->toDateString());
         
-        $costs = Cost::with('creator')
+        $costs = Cost::with('creator')->with('updateLogs')
             ->where('is_deleted', false)
             ->whereDate('created_at', '>=', $start_date)
             ->whereDate('created_at', '<=', $end_date)
             ->orderBy('created_at', 'desc')
             ->get();
+        // dd($costs);
         foreach ($costs as $cost) {
             $cost->creating_user_name = $cost->creator ? $cost->creator->name : 'Unknown';
             $cost->creating_user_id = $cost->creator ? $cost->creator->id : null;
-            // I want to not to send the creator relation to the frontend
-            unset($cost->creator);
-            $updates = CostUpdateLog::where('is_deleted', false)->where('cost_id', $cost->id)->orderBy('created_at', 'desc')->get();
+            $updates = $cost->updateLogs()->where('is_deleted', false)->orderBy('created_at', 'desc')->get();
             $cost->updates = $updates;
+            unset($cost->updateLogs);
+            unset($cost->creator);
         }
 
         

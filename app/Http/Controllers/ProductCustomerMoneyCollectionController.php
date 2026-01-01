@@ -94,28 +94,19 @@ class ProductCustomerMoneyCollectionController extends Controller
                
 
                 // from the customer_products table (using the CustomerProduct model) update the remaining_payable_amount
-                $customerProduct = CustomerProduct::find($validated_data['customer_product_id'][$index]);
-                if ($customerProduct  && $customerProduct->remaining_payable_price >= $validated_data['collected_amount'][$index]) {
-                    $customerProduct->remaining_payable_price -= $validated_data['collected_amount'][$index];
-                    $customerProduct->save();
-                    
-                     ProductCustomerMoneyCollection::create([
-                    'customer_id' => $validated_data['customer_id'], 
-                    'collectable_amount' => $validated_data['collectable_amount'][$index],
-                    'collected_amount' => $validated_data['collected_amount'][$index],
-                    'collecting_date' => now(),
-                    'collecting_user_id' => $user->id,
-                    'customer_products_id' => $validated_data['customer_product_id'][$index],
-                ]);
-
-                    // if ($validated_data['collected_amount'][$index] < $validated_data['collectable_amount'][$index]) {
-                    //     $due_amount = $validated_data['collectable_amount'][$index] - $validated_data['collected_amount'][$index];
-                    //     Dues::create([
-                    //         'customer_id' => $validated_data['customer_id'],
-                    //         'customer_product_id' => $validated_data['customer_product_id'][$index],
-                    //         'due_amount' => $due_amount,
-                    //     ]);
-                    // }
+                    $customerProduct = CustomerProduct::find($validated_data['customer_product_id'][$index]);
+                    if ($customerProduct  && $customerProduct->remaining_payable_price >= $validated_data['collected_amount'][$index]) {
+                        $customerProduct->remaining_payable_price -= $validated_data['collected_amount'][$index];
+                        $customerProduct->save();
+                        
+                        ProductCustomerMoneyCollection::create([
+                        'customer_id' => $validated_data['customer_id'], 
+                        'collectable_amount' => $validated_data['collectable_amount'][$index],
+                        'collected_amount' => $validated_data['collected_amount'][$index],
+                        'collecting_date' => now(),
+                        'collecting_user_id' => $user->id,
+                        'customer_products_id' => $validated_data['customer_product_id'][$index],
+                    ]);
 
                 } else{
                     $updatingFailed = true;
@@ -167,28 +158,19 @@ class ProductCustomerMoneyCollectionController extends Controller
                
 
                 // from the customer_products table (using the CustomerProduct model) update the remaining_payable_amount
-                $customerProduct = CustomerProduct::find($validated_data['customer_product_id'][$index]);
-                if ($customerProduct  && $customerProduct->remaining_payable_price >= $validated_data['collected_amount'][$index]) {
-                    $customerProduct->remaining_payable_price -= $validated_data['collected_amount'][$index];
-                    $customerProduct->save();
-                    
-                     ProductCustomerMoneyCollection::create([
-                    'customer_id' => $validated_data['customer_id'], 
-                    'collectable_amount' => $validated_data['collectable_amount'][$index],
-                    'collected_amount' => 0,
-                    'collecting_date' => now(),
-                    'collecting_user_id' => $user->id,
-                    'customer_products_id' => $validated_data['customer_product_id'][$index],
-                ]);
-
-                    // if ($validated_data['collected_amount'][$index] < $validated_data['collectable_amount'][$index]) {
-                    //     $due_amount = $validated_data['collectable_amount'][$index] - $validated_data['collected_amount'][$index];
-                    //     Dues::create([
-                    //         'customer_id' => $validated_data['customer_id'],
-                    //         'customer_product_id' => $validated_data['customer_product_id'][$index],
-                    //         'due_amount' => $due_amount,
-                    //     ]);
-                    // }
+                    $customerProduct = CustomerProduct::find($validated_data['customer_product_id'][$index]);
+                    if ($customerProduct  && $customerProduct->remaining_payable_price >= $validated_data['collected_amount'][$index]) {
+                        $customerProduct->remaining_payable_price -= $validated_data['collected_amount'][$index];
+                        $customerProduct->save();
+                        
+                        ProductCustomerMoneyCollection::create([
+                        'customer_id' => $validated_data['customer_id'], 
+                        'collectable_amount' => $validated_data['collectable_amount'][$index],
+                        'collected_amount' => 0,
+                        'collecting_date' => now(),
+                        'collecting_user_id' => $user->id,
+                        'customer_products_id' => $validated_data['customer_product_id'][$index],
+                    ]);
 
                 } else{
                     $updatingFailed = true;

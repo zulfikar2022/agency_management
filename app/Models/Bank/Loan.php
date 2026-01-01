@@ -30,4 +30,9 @@ class Loan extends Model
             // 3rd param: primary key in users table
             return $this->belongsTo(User::class, 'creating_user_id', 'id');
         }
+
+        public function member()
+        {
+            return $this->belongsTo(Member::class, 'member_id', 'id');
+        }   
 }

@@ -14,4 +14,10 @@ class Cost extends Model
         // The 3rd argument is the primary key on the users table
         return $this->belongsTo(User::class, 'creating_user_id', 'id');
     }
+
+    public function updateLogs()
+    {
+        // 2nd param: the foreign key in the cost_update_logs table
+        return $this->hasMany(CostUpdateLog::class, 'cost_id');
+    }
 }

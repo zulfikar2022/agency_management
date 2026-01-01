@@ -131,6 +131,7 @@ class AdminController extends Controller
         }
         // dd($lastSevenDays);
         $date_wise_loan_and_deposit_collections = [];
+        
         foreach ($lastSevenDays as $key => $date) {
             $deposit_collections_sum = DepositCollection::whereDate('created_at', $date)->where('is_deleted', false)->sum('deposit_amount');
             $loan_collections_sum = LoanCollection::whereDate('created_at', $date)->where('is_deleted', false)->sum('paid_amount');

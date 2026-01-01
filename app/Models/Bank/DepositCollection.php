@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class DepositCollection extends Model
 {
     
-    public function collector()
+        public function collector()
         {
             // 2nd param: foreign key in deposit_collections table
             // 3rd param: primary key in users table
             return $this->belongsTo(User::class, 'collecting_user_id', 'id');
+        }
+
+        public function deposit()
+        {
+            return $this->belongsTo(Deposit::class, 'deposit_id', 'id');
         }
 }
