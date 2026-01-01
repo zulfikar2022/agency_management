@@ -19,4 +19,9 @@ class DepositCollection extends Model
         {
             return $this->belongsTo(Deposit::class, 'deposit_id', 'id');
         }
+
+        public function update_logs()
+        {
+            return $this->hasMany(DepositCollectionUpdateLog::class, 'deposit_collection_id', 'id');
+        }
 }

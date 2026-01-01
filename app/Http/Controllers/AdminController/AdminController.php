@@ -230,7 +230,7 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'কর্মচারী পাওয়া যায়নি।');
         }
 
-        $deposit_collections = DepositCollection::where('collecting_user_id', $employee->id)
+        $deposit_collections = DepositCollection::with(['update_logs.creator','deposit.member'])->where('collecting_user_id', $employee->id)
             ->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->orderBy('created_at', 'desc')
@@ -240,12 +240,12 @@ class AdminController extends Controller
         
         foreach($deposit_collections as $collection){
             $total_deposit_collection += $collection->deposit_amount;
-            $deposit = Deposit::find($collection->deposit_id);
-            $member = Member::find($deposit->member_id);
-            $updates = DepositCollectionUpdateLog::where('deposit_collection_id', $collection->id)->orderBy('created_at', 'desc')->get();
+            $deposit = $collection->deposit;
+            $member = $deposit->member;
+            $updates = $collection->update_logs;
             // dd($collection);
             $updates->map(function($update){
-                $updating_user = User::find($update->updating_user_id);
+                $updating_user = $update->creator;
                 $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown User';
                 return $update;
             });
@@ -255,7 +255,7 @@ class AdminController extends Controller
             $collection->member_id = $member->id;
         }
 
-        $loan_collections = LoanCollection::where('collecting_user_id', $employee->id)
+        $loan_collections = LoanCollection::with(['loan.member', 'update_logs.creator'])->where('collecting_user_id', $employee->id)
             ->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->orderBy('created_at', 'desc')
@@ -264,11 +264,11 @@ class AdminController extends Controller
         $total_loan_collection = 0;
         foreach($loan_collections as $collection){
             $total_loan_collection += $collection->paid_amount;
-            $loan = Loan::find($collection->loan_id);
-            $member = Member::find($loan->member_id);
-            $updates = LoanCollectionUpdateLog::where('loan_collection_id', $collection->id)->orderBy('created_at', 'desc')->get();
+            $loan = $collection->loan;
+            $member = $loan->member;
+            $updates = $collection->update_logs;
             $updates->map(function($update){
-                $updating_user = User::find($update->updating_user_id);
+                $updating_user = $update->creator;
                 $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown User';
                 return $update;
             });
@@ -310,22 +310,27 @@ class AdminController extends Controller
         ]);
         $employee = User::where('id', $validated['employee_id'])->where('is_deleted', false)->first();
 
-        $collections = ProductCustomerMoneyCollection::where('collecting_user_id', $employee->id)
+        $collections = ProductCustomerMoneyCollection::with(['customer','update_logs.creator'])->where('collecting_user_id', $employee->id)
             ->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->orderBy('created_at', 'desc')
             ->get();
+
         $total_collection = 0;
         $total_collectable = 0;
+
         foreach($collections as $collection){
             $total_collection += $collection->collected_amount;
             $total_collectable += $collection->collectable_amount;
-            $customer = Customer::find($collection->customer_id);
+            $customer = $collection->customer;
             $collection->customer_name = $customer ? $customer->name : 'Unknown Customer';
 
-            $updates = ProductCustomerMoneyCollectionUpdateLog::where('product_customer_money_collection_id', $collection->id)
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $updates = $collection->update_logs;
+            $updates->map(function($update){
+                $updating_user = $update->creator;
+                $update->updating_user_name = $updating_user ? $updating_user->name : 'Unknown User';
+                return $update;
+            });
             $collection->updates = $updates;
         }
 

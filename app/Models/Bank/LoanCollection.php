@@ -18,4 +18,9 @@ class LoanCollection extends Model
         {
             return $this->belongsTo(Loan::class, 'loan_id', 'id');
         }
+
+        public function update_logs()
+        {
+            return $this->hasMany(LoanCollectionUpdateLog::class, 'loan_collection_id', 'id');
+        }
 }

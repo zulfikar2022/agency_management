@@ -19,4 +19,14 @@ class ProductCustomerMoneyCollection extends Model
     {
         return $this->belongsTo(User::class, 'collecting_user_id', 'id');
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
+    public function update_logs()
+    {
+        return $this->hasMany(ProductCustomerMoneyCollectionUpdateLog::class, 'product_customer_money_collection_id', 'id')->orderBy('created_at', 'desc');
+    }
 }

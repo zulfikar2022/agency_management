@@ -15,4 +15,9 @@ class ProductCustomerMoneyCollectionUpdateLog extends Model
         'collectable_amount_after',
         'updating_user_id'
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'updating_user_id', 'id');
+    }
 }

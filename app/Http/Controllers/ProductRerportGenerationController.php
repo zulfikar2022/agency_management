@@ -22,7 +22,7 @@ class ProductRerportGenerationController extends Controller {
 
         $employee = User::find($validated['employee_id']);
         
-        $collections = ProductCustomerMoneyCollection::where('collecting_user_id', $validated['employee_id'])
+        $collections = ProductCustomerMoneyCollection::with('customer:name,id')->where('collecting_user_id', $validated['employee_id'])
             ->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->orderBy('created_at', 'desc')
@@ -34,8 +34,9 @@ class ProductRerportGenerationController extends Controller {
         foreach($collections as $collection){
             $total_collection += $collection->collected_amount;
             $total_collectable += $collection->collectable_amount;
-            $customer = Customer::find($collection->customer_id);
+            $customer = $collection->customer;
             $collection->customer_name = $customer ? $customer->name : 'Unknown Customer';
+            unset($collection->customer);
         }
         
         
@@ -70,7 +71,7 @@ class ProductRerportGenerationController extends Controller {
             'end_date' => 'required|date',
         ]);
     // dd($validated);
-        $sales = CustomerProduct::whereDate('created_at', '>=', $validated['start_date'])
+        $sales = CustomerProduct::with(['customer:name,id', 'product:name,id', 'creator:name,id'])->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->orderBy('created_at', 'desc')
@@ -82,13 +83,16 @@ class ProductRerportGenerationController extends Controller {
         foreach($sales as $sale){
             $total_sales_amount += $sale->total_payable_price;
             $total_down_payment += $sale->downpayment;
-            $customer = Customer::find($sale->customer_id);
-            $product = Product::find($sale->product_id);
-            $seller = User::find($sale->user_id);
+            $customer = $sale->customer;
+            $product = $sale->product;
+            $seller = $sale->creator;
 
             $sale->seller_name = $seller ? $seller->name : 'Unknown Seller';
             $sale->product_name = $product ? $product->name : 'Unknown Product';
             $sale->customer_name = $customer ? $customer->name : 'Unknown Customer';
+            unset($sale->customer);
+            unset($sale->product);
+            unset($sale->creator);
         }
 
         // dd($sales);
@@ -121,7 +125,7 @@ class ProductRerportGenerationController extends Controller {
             'end_date' => 'required|date',
         ]);
 
-        $collections = ProductCustomerMoneyCollection::whereDate('created_at', '>=', $validated['start_date'])
+        $collections = ProductCustomerMoneyCollection::with('customer:name,id')->whereDate('created_at', '>=', $validated['start_date'])
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->orderBy('created_at', 'desc')
             ->get();
@@ -132,8 +136,9 @@ class ProductRerportGenerationController extends Controller {
             $total_collection += $collection->collected_amount;
             $total_collectable += $collection->collectable_amount;
 
-            $customer = Customer::find($collection->customer_id);
+            $customer = $collection->customer;
             $collection->customer_name = $customer ? $customer->name : 'Unknown Customer';
+            unset($collection->customer);
         }
 
         // dd($collections);
