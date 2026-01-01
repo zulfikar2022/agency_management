@@ -19,8 +19,9 @@ function MemberDetails({
   update_history,
   loan,
   not_paid_days_count,
+  total_share_money,
 }) {
-  console.log({ has_loan, deposit_account });
+  console.log({ total_share_money });
   const total_payable =
     ((loan?.daily_payable_main + loan?.daily_payable_interest) / 100) * 115;
   const [open, setOpen] = useState(false);
@@ -63,6 +64,12 @@ function MemberDetails({
                   <p className="text-sm text-base-content/60">
                     মেম্বার আইডিঃ{' '}
                     <span className="font-bold text-2xl text-black">{id}</span>
+                  </p>
+                  <p className="text-sm text-base-content/60 my-2">
+                    মোট শেয়ার জমাঃ{' '}
+                    <span className="font-bold text-2xl text-black">
+                      {(total_share_money / 100).toFixed(2)} টাকা
+                    </span>
                   </p>
                   <div className="flex flex-col gap-2">
                     {!has_loan && !has_deposit_account && (

@@ -365,6 +365,10 @@ class MemberController extends Controller
           }
         }
 
+        $total_share_money = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->sum('share_money');
+
         
         return Inertia::render('Admin/Bank/MemberDetails', [
             'member' => $member,
@@ -379,6 +383,7 @@ class MemberController extends Controller
             'loan' => $loan,
             'update_history' => $update_history,
             'not_paid_days_count' => $not_paid_days_count,
+            'total_share_money' => $total_share_money,
         ]);
     }
 
