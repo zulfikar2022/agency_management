@@ -8,6 +8,7 @@ use App\Models\Bank\LoanCollection;
 use App\Models\Bank\LoanCollectionUpdateLog;
 use App\Models\Bank\LoanUpdateLog;
 use App\Models\Bank\Member;
+use App\Models\BankCollectionDailyTarget;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -193,7 +194,7 @@ class LoanController extends Controller
         }
 
         DB::transaction(function() use($total_loan, $validated, $loan, $member, $safety_money){
-            
+
             // create an instance of loan_update_logs
             $loan_update_log = new LoanUpdateLog();
             $loan_update_log->loan_id = $loan->id;
@@ -202,9 +203,6 @@ class LoanController extends Controller
             $loan_update_log->total_loan_after_update = $total_loan;
             $loan_update_log->safety_money_before_update = $loan->safety_money;
             $loan_update_log->safety_money_after_update = $safety_money;
-            // $loan_update_log->total_payable_amount_before_update = $loan->total_payable_amount;
-            // $new_total_payable_amount = $total_loan + ($total_loan * 0.15);
-            // $loan_update_log->total_payable_amount_after_update = $new_total_payable_amount;
             $loan_update_log->save();
 
             // update member 
@@ -218,6 +216,8 @@ class LoanController extends Controller
             $loan->daily_payable_main = round($total_loan / 115);
             $loan->daily_payable_interest = round(($total_loan * 0.15) / 115);
             $loan->remaining_payable_main = $total_loan;
+
+          
 
 
             $loan->save();

@@ -9,6 +9,7 @@ use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
 use App\Models\Bank\MemberUpdateLog;
+use App\Models\BankCollectionDailyTarget;
 use App\Models\MemberAccountDismissal;
 use App\Models\Withdraw;
 use Carbon\Carbon;
@@ -239,6 +240,13 @@ class MemberController extends Controller
         $deposit->daily_deposit_amount = $validated['daily_deposit_amount'] * 100; // store in cents
         $deposit->last_depositing_predictable_date = $today_date->modify('+1 year');
         $deposit->save();
+
+        //
+        $target = BankCollectionDailyTarget::whereDate('created_at', Carbon::today()->toDateString())->first();
+        if($target){
+            $target->deposit_collectable += $validated['daily_deposit_amount'] * 100;
+            $target->save();
+        }
 
         return redirect()->route('admin.bank.member_details', ['member' => $member->id]);
     }

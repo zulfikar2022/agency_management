@@ -8,7 +8,9 @@ use App\Models\Bank\DepositCollection;
 use App\Models\Bank\DepositCollectionUpdateLog;
 use App\Models\Bank\Loan;
 use App\Models\Bank\Member;
+use App\Models\BankCollectionDailyTarget;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -196,8 +198,16 @@ class DepositController extends Controller
             return back()->withErrors(['daily_deposit_amount' => 'শুধুমাত্র আজকের তারিখে তৈরি করা সঞ্চয় একাউন্টের দৈনিক সঞ্চয় পরিমাণ আপডেট করা যাবে।']);
         }
 
+        $target = BankCollectionDailyTarget::whereDate('created_at', Carbon::today()->toDateString())->first();
+        if($target){
+            $target->deposit_collectable = $target->deposit_collectable - $deposit->daily_deposit_amount + ($validated['daily_deposit_amount'] * 100);
+            $target->save();
+        }
+
         $deposit->daily_deposit_amount = $validated['daily_deposit_amount'] * 100;
         $deposit->save();
+
+        
         
         return redirect()->route('admin.bank.member_details', ['member' => $member->id])->with('success', 'সঞ্চয় একাউন্ট সফলভাবে আপডেট করা হয়েছে।');
     }
