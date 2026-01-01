@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { Bounce, toast } from 'react-toastify';
 
 function DismissDepositAccount({
@@ -55,6 +55,7 @@ function DismissDepositAccount({
 
   return (
     <LayoutForMoney>
+      <Head title="সঞ্চয় একাউন্ট বন্ধকরণ" />
       <div className="container mx-auto my-5 p-4 ">
         <h2 className="text-2xl font-bold text-center mb-6 text-error">
           সঞ্চয় একাউন্ট বন্ধকরণ

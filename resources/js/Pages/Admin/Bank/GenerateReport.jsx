@@ -1,5 +1,5 @@
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 
 function GenerateReport() {
   const today = new Date().toISOString().split('T')[0];
@@ -106,6 +106,7 @@ function GenerateReport() {
 
   return (
     <LayoutForMoney>
+      <Head title="রিপোর্ট তৈরি করুন" />
       <div className="container mx-auto px-4 py-8">
         <h2 className="font-bold text-3xl text-center mb-10 text-neutral">
           রিপোর্ট তৈরি করুন

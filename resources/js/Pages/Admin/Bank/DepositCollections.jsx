@@ -1,12 +1,13 @@
 import dayjs from 'dayjs';
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 // admin.bank.generate_member_deposit_report
 function DepositCollections({ deposit_collections, member }) {
   return (
     <LayoutForMoney>
+      <Head title="সঞ্চয়ের তালিকা" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="pl-10 mt-4">
           <Link

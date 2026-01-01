@@ -1,7 +1,7 @@
 // resources/js/Pages/Admin/Customers/EditCustomer.tsx
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import { WEEKDAYS } from '@/constants';
@@ -84,6 +84,7 @@ function UpdateCustomer({ customer }) {
 
   return (
     <LayoutForProduct>
+      <Head title={`কাস্টমার আপডেট করুন: ${customer?.name}`} />
       <GoBack
         targetRouteName="admin.showCustomers"
         text="কাস্টমার তালিকায় ফিরে যান"

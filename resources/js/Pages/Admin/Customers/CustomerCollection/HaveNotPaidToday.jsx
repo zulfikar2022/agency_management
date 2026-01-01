@@ -3,7 +3,7 @@ import LayoutForProduct from '../../layouts/LayoutForProduct';
 import Pagination from '../../components/Pagination';
 import { customerTableDataGenerateForEmployee } from '@/utilityFuntion';
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 function HaveNotPaidToday({ customers, totalCustomers }) {
   const data = customers?.data;
@@ -26,6 +26,7 @@ function HaveNotPaidToday({ customers, totalCustomers }) {
   ];
   return (
     <LayoutForProduct>
+      <Head title="যারা আজ টাকা দেয়নি" />
       <h1 className="font-bold text-center text-2xl">যারা আজ টাকা দেয়নি</h1>
       <div className="my-5 grid grid-cols-1 md:grid-cols-2 gap-4 ml-3 md:ml-5 ">
         <div className="flex flex-col md:flex-row mb-4 mr-3 md:mr-0 ">

@@ -2,14 +2,13 @@ import dayjs from 'dayjs';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import { WEEKDAYS } from '@/constants';
 import { dateFormatter, timeFormatter } from '@/utilityFuntion';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 function SingleCollectionDetails({ collections, collectionsUpdateLogs }) {
-  //   console.log({ collections, collectionsUpdateLogs });
-  console.log(collections);
   return (
     <LayoutForProduct>
+      <Head title={`কিস্তির বিস্তারিত: ${collections[0]?.customer?.name}`} />
       <Link
         className="text-blue-500 hover:underline ml-0 md:ml-10 flex"
         href={route('admin.showCustomerDetails', {

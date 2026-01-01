@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import MemberTable from './components/MemberTable';
 import Pagination from '../components/Pagination';
@@ -11,6 +11,7 @@ function AllDepositingMember({ data }) {
   console.log(members);
   return (
     <LayoutForMoney>
+      <Head title="সকল জমাদানকারী সদস্য" />
       <div className="container mx-auto">
         <h2 className="font-bold text-3xl text-center my-4">
           {' '}

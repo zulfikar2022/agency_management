@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import Pagination from '../components/Pagination';
 import ProductTable from '../components/ProductTable';
 import LayoutForProduct from '../layouts/LayoutForProduct';
@@ -13,6 +13,7 @@ function ShowAllProducts({ user, products, search, numberOfProducts }) {
 
   return (
     <LayoutForProduct>
+      <Head title="সকল পণ্য" />
       <div className="flex flex-col  justify-between">
         <h1 className="text-center mt-3 text-3xl ">সকল পণ্য</h1>
         <p className="text-center ">মোট পণ্য: {numberOfProducts} টি</p>

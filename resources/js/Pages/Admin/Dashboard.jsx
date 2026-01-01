@@ -1,3 +1,4 @@
+import { Head } from '@inertiajs/react';
 import AdminDashboardLayout from './AdminDashboardLayout';
 import BankLoanDepositAdminDashboard from './Bank/BankLoanDepositAdminDashboard';
 import CustomerProductAdminDashboard from './Customers/CustomerProductAdminDashboard';
@@ -28,6 +29,7 @@ function Dashboard({
   console.log(totalInterestPaidForLoan, totalMainPaidForLoan);
   return (
     <AdminDashboardLayout>
+      <Head title="এডমিন ড্যাশবোর্ড" />
       <div className="dashboard h-full container mx-auto p-4">
         <CustomerProductAdminDashboard
           totalCustomers={totalCustomers}

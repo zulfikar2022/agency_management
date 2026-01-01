@@ -47,7 +47,7 @@ export default function EditCost({ cost }) {
 
   return (
     <AdminDashboardLayout>
-      <Head title="খরচ এডিট করুন" />
+      <Head title="খরচ আপডেট করুন" />
       <div className="pl-10 mt-4">
         <Link
           href={route('admin.showCosts')}

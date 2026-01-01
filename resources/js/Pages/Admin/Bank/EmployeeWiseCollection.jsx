@@ -1,10 +1,11 @@
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ClipboardList, Search, User } from 'lucide-react';
 
 function EmployeeWiseCollection({ employees }) {
   return (
     <LayoutForMoney>
+      <Head title="এমপ্লয়ী ভিত্তিক রিপোর্ট" />
       <div className="container mx-auto px-4 py-8">
         <h2 className="font-bold text-3xl text-center mb-10 text-neutral">
           এমপ্লয়ী ভিত্তিক রিপোর্ট (ঋণ ও সঞ্চয়)

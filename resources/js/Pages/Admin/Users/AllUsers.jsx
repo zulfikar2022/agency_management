@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import Swal from 'sweetalert2';
 import AdminDashboardLayout from '../AdminDashboardLayout';
@@ -36,6 +36,7 @@ function AllUsers({ users }) {
   };
   return (
     <AdminDashboardLayout>
+      <Head title="সকল ইউজার" />
       <div>
         <div className="pl-10 mt-4">
           <Link href={route('home')} className="text-blue-700 underline ">

@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import Pagination from '../components/Pagination';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import MemberTable from './components/MemberTable';
@@ -11,6 +11,7 @@ function BankAllMembers({ data }) {
   console.log(paginate);
   return (
     <LayoutForMoney>
+      <Head title="সকল সদস্য" />
       <div className="container mx-auto">
         <h2 className="font-bold text-3xl text-center my-4"> সকল সদস্য</h2>
         <div className="flex flex-col md:flex-row mb-4 mr-3 md:mr-0 px-2">

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import Pagination from '../components/Pagination';
 import CustomersTable from '../components/CustomersTable';
-import { Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import GoBack from '../components/GoBack';
 import { WEEKDAYS } from '@/constants';
 import ResponsiveCustomerTable from '../components/ResponsiveCustomerTable';
@@ -14,6 +14,7 @@ function ShowAllCustomers({ customers, user, totalCustomers }) {
   const [searchTerm, setSearchTerm] = useState('');
   return (
     <LayoutForProduct>
+      <Head title="সকল কাস্টমার" />
       <h1 className="text-center mt-3 text-3xl ">সকল কাস্টমার</h1>
       <div className="my-6">
         <p className="text-center">

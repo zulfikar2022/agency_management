@@ -1,5 +1,5 @@
 import LayoutForProduct from '../layouts/LayoutForProduct';
-import { useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import React from 'react';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
@@ -36,6 +36,7 @@ function CreateProduct() {
   };
   return (
     <LayoutForProduct>
+      <Head title="নতুন পণ্য যুক্ত করুন" />
       <ToastContainer
         position="top-center"
         autoClose={3000}

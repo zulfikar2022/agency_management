@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 
 function ProductReport() {
@@ -57,6 +57,7 @@ function ProductReport() {
 
   return (
     <LayoutForProduct>
+      <Head title="পণ্য ও বিক্রয় রিপোর্ট" />
       <div className="container mx-auto p-6">
         <h2 className="font-bold text-3xl text-center mb-10 text-neutral">
           পণ্য ও বিক্রয় রিপোর্ট

@@ -1,6 +1,6 @@
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import LayoutForProduct from '../../layouts/LayoutForProduct';
-import { useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import GoBack from '../../components/GoBack';
 
@@ -95,6 +95,7 @@ function UpdateSellProduct({ purchase, customer, products }) {
   };
   return (
     <LayoutForProduct>
+      <Head title={`বিক্রয় তথ্য আপডেট করুন: ${customer?.name}`} />
       <ToastContainer
         position="top-center"
         autoClose={5000}

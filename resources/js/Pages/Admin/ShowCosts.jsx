@@ -1,4 +1,4 @@
-import { Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import AdminDashboardLayout from './AdminDashboardLayout';
 import { dateFormatter } from '@/utilityFuntion';
 import { ArrowLeft, PencilIcon } from 'lucide-react';
@@ -33,6 +33,7 @@ function ShowCosts({ costs, start_date, end_date, user_id }) {
 
   return (
     <AdminDashboardLayout>
+      <Head title="খরচ সমূহ" />
       <div className="container mx-auto my-5 ">
         <div className="pl-10 mt-4">
           <Link href={route('home')} className="text-blue-700 underline ">

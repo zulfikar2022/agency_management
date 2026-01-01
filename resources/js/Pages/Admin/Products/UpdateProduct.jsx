@@ -1,4 +1,4 @@
-import { useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import GoBack from '../components/GoBack';
@@ -36,6 +36,7 @@ function UpdateProduct({ product }) {
   };
   return (
     <LayoutForProduct>
+      <Head title={`পণ্য আপডেট করুন: ${product?.name}`} />
       <GoBack
         targetRouteName="admin.showProducts"
         text="পণ্য তালিকায় ফিরে যান"

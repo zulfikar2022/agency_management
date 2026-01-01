@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { NavigationBar } from './components/NavigationBar';
 import Swal from 'sweetalert2';
 import AdminDashboardSidebar from './AdminDashboardSidebar';
@@ -14,6 +14,7 @@ function AdminDashboardLayout({ children }) {
   return (
     <div className="admin-dashboard-layout h-full min-h-screen">
       <ToastContainer />
+
       <header className="admin-dashboard-header">
         <div className="navbar bg-slate-100 shadow-sm">
           <div className="navbar-start">

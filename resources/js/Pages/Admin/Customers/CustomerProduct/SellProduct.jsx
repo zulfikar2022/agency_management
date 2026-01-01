@@ -1,5 +1,5 @@
 import LayoutForProduct from '../../layouts/LayoutForProduct';
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { Link } from '@inertiajs/react';
 import GoBack from '../../components/GoBack';
@@ -43,6 +43,7 @@ function SellProduct({ customer, products, user_id }) {
 
   return (
     <LayoutForProduct>
+      <Head title={`পণ্য বিক্রি করুন: ${customer?.name}`} />
       <GoBack
         targetRouteName="admin.showCustomers"
         text="কাস্টমার তালিকায় ফিরে যান"

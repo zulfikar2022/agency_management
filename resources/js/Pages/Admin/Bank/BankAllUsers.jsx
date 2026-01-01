@@ -1,4 +1,4 @@
-import { router } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import Swal from 'sweetalert2';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 
@@ -35,6 +35,7 @@ function BankAllUsers({ users }) {
   };
   return (
     <LayoutForMoney>
+      <Head title="সকল ইউজারের তালিকা" />
       <div>
         <h1 className="text-2xl font-bold mb-4 text-center md:container mx-2 md:mx-auto pb-2">
           সকল ইউজারের তালিকা

@@ -1,5 +1,5 @@
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
 import { ArrowLeft } from 'lucide-react';
@@ -71,6 +71,7 @@ function ProvideLoan({ member }) {
 
   return (
     <LayoutForMoney>
+      <Head title="সদস্যকে ঋণ দিন" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="pl-10 mt-4">
           <Link

@@ -1,6 +1,6 @@
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import LayoutForProduct from '../layouts/LayoutForProduct';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import GoBack from '../components/GoBack';
 
@@ -95,6 +95,7 @@ function CreateCustomer() {
   };
   return (
     <LayoutForProduct>
+      <Head title="নতুন কাস্টমার তৈরি করুন" />
       <ToastContainer
         position="top-center"
         autoClose={3000}

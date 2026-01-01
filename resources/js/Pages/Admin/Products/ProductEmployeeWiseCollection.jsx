@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import { dateFormatter } from '@/utilityFuntion';
+import { Head } from '@inertiajs/react';
 
 function ProductEmployeeWiseCollection({
   start_date,
@@ -13,6 +14,7 @@ function ProductEmployeeWiseCollection({
   console.log(collections);
   return (
     <LayoutForProduct>
+      <Head title="পণ্যের এমপ্লয়ী ভিত্তিক কালেকশন রিপোর্ট" />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-4 text-center">
           পণ্যের এমপ্লয়ী ভিত্তিক কালেকশন রিপোর্ট

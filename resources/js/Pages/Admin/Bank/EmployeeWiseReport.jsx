@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import { dateFormatter } from '@/utilityFuntion';
 
@@ -13,15 +13,9 @@ function EmployeeWiseReport({
   start_date,
   end_date,
 }) {
-  // console.log(employee);
-  console.log(loan_collections);
-  // console.log(loan_collections);
-  // console.log(total_deposit_collection);
-  // console.log(total_loan_collection);
-  // console.log(start_date);
-  // console.log(end_date);
   return (
     <LayoutForMoney>
+      <Head title="এমপ্লয়ী ভিত্তিক রিপোর্ট" />
       <div className="container mx-auto">
         <Link
           // href={route('admin.bank.member_details', {

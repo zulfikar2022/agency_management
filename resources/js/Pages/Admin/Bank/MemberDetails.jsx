@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import dayjs from 'dayjs';
 import { PencilIcon } from 'lucide-react';
@@ -51,6 +51,7 @@ function MemberDetails({
   } = member;
   return (
     <LayoutForMoney>
+      <Head title="সদস্যের বিস্তারিত" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">

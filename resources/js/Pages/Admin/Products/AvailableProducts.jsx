@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import Pagination from '../components/Pagination';
 import ProductTable from '../components/ProductTable';
 import LayoutForProduct from '../layouts/LayoutForProduct';
@@ -12,6 +12,7 @@ function AvailableProducts({ products, user, search, numberOfProducts }) {
   const [searchTerm, setSearchTerm] = useState(search || '');
   return (
     <LayoutForProduct>
+      <Head title="এভেইলেবল পণ্যসমূহ" />
       <div className="flex flex-col justify-evenly">
         <h1 className="text-center mt-3 text-3xl ">এভেইলেবল পণ্যসমূহ</h1>
         <p className="text-center ">মোট এভেইলেবল পণ্য: {numberOfProducts} টি</p>

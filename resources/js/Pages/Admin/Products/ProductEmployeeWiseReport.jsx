@@ -1,10 +1,11 @@
 import LayoutForProduct from '../layouts/LayoutForProduct';
-import { Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ClipboardList, Search, UserCheck } from 'lucide-react';
 
 function ProductEmployeeWiseReport({ employees }) {
   return (
     <LayoutForProduct>
+      <Head title="পণ্যের এমপ্লয়ী ভিত্তিক কালেকশন রিপোর্ট" />
       <div className="container mx-auto px-4 py-8">
         <h2 className="font-bold text-3xl text-center mb-10 text-neutral">
           এমপ্লয়ী ভিত্তিক কালেকশন রিপোর্ট (পণ্যের কালেকশন)

@@ -1,4 +1,4 @@
-import { Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import AdminDashboardLayout from './AdminDashboardLayout';
 import { ArrowLeft } from 'lucide-react';
 
@@ -47,6 +47,7 @@ export default function CreateReport() {
 
   return (
     <AdminDashboardLayout>
+      <Head title="রিপোর্ট তৈরি করুন" />
       <div className="container mx-auto px-2 py-2">
         <div className="pl-10 mt-4">
           <Link href={route('home')} className="text-blue-700 underline ">

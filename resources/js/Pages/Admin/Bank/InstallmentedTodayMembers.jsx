@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import MemberTable from './components/MemberTable';
 import Pagination from '../components/Pagination';
 
@@ -10,6 +10,7 @@ function InstallmentedTodayMembers({ data }) {
   const [searchTerm, setSearchTerm] = useState('');
   return (
     <LayoutForMoney>
+      <Head title="আজ কিস্তি পরিশোধ করা সদস্যগণ" />
       <div className="container mx-auto">
         <h2 className="font-bold text-3xl text-center my-4">
           {' '}

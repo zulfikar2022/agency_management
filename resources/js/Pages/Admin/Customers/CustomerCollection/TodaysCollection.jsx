@@ -2,7 +2,7 @@ import { useState } from 'react';
 import AdminTodaysCollectionResponsiveTable from '../../components/AdminTodaysCollectionResponsiveTable';
 import LayoutForProduct from '../../layouts/LayoutForProduct';
 import dayjs from 'dayjs';
-import { Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 
 function TodaysCollection({
   collections,
@@ -72,6 +72,7 @@ function TodaysCollection({
 
   return (
     <LayoutForProduct>
+      <Head title="আজকের কালেকশন" />
       <p className="font-bold text-center text-2xl my-5">আজকের কালেকশন</p>
       <p className="font-bold text-center">
         আজকের টার্গেটঃ {totalReceivableAmount} টাকা

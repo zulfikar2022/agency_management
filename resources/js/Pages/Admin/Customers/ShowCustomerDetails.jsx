@@ -1,6 +1,6 @@
 import { WEEKDAYS } from '@/constants';
 import LayoutForProduct from '../layouts/LayoutForProduct';
-import { Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import GoBack from '../components/GoBack';
 import BoughtList from '../components/BoughtList';
 import Swal from 'sweetalert2';
@@ -63,6 +63,7 @@ function ShowCustomerDetails({
 
   return (
     <LayoutForProduct>
+      <Head title={`কাস্টমারের বিস্তারিত: ${customer?.name}`} />
       <GoBack
         targetRouteName="admin.showCustomers"
         text="কাস্টমার তালিকায় ফিরে যান"

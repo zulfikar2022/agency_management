@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import LayoutForMoney from '../layouts/LayoutForMoney';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 function WithdrawLists({ withdraws, member, deposits }) {
@@ -8,6 +8,7 @@ function WithdrawLists({ withdraws, member, deposits }) {
   // admin.bank.generate_member_withdraw_report
   return (
     <LayoutForMoney>
+      <Head title="উত্তোলনের তালিকা" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="pl-10 mt-4">
           <Link

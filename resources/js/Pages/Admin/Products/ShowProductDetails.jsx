@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import GoBack from '../components/GoBack';
 
@@ -7,6 +7,7 @@ function ShowProductDetails({ product, update_logs }) {
   console.log('Product Details:', product);
   return (
     <LayoutForProduct>
+      <Head title={`পণ্যের বিস্তারিত: ${product?.name}`} />
       <GoBack
         targetRouteName="admin.showProducts"
         text="পণ্য তালিকায় ফিরে যান"

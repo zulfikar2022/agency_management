@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import { Bounce, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -61,6 +61,7 @@ function AddNewMember() {
   };
   return (
     <LayoutForMoney>
+      <Head title="নতুন সদস্য যুক্ত করুন" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="card bg-base-100 shadow-xl">

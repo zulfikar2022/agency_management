@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import LayoutForProduct from '../layouts/LayoutForProduct';
 import { WEEKDAYS } from '@/constants';
+import { Head } from '@inertiajs/react';
 
 function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
   console.log({ purchase, customer, paymentList });
@@ -12,6 +13,7 @@ function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
   console.log({ purchase });
   return (
     <LayoutForProduct>
+      <Head title={`ক্রেতার ক্রয়ের বিস্তারিত: ${customer?.name}`} />
       <div className="container mx-auto p-4 flex flex-col gap-4 md:flex-row md:justify-between border-b mb-5">
         <div>
           <h1>

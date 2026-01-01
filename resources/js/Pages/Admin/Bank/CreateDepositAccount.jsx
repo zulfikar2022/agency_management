@@ -1,4 +1,4 @@
-import { Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import LayoutForMoney from '../layouts/LayoutForMoney';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
@@ -55,6 +55,7 @@ function CreateDepositAccount({ member }) {
   };
   return (
     <LayoutForMoney>
+      <Head title="সঞ্চয়ী হিসেব তৈরি করুন" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="pl-10 mt-4">
           <Link
