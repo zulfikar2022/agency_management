@@ -30,8 +30,14 @@ class ProcessBankCollectionDailyTarget extends Command
     public function handle()
     {
         $total_daily_deposit_amount = Deposit::where('is_deleted', false)
-                    ->where('last_depositing_predictable_date', '<=', Carbon::today())
+                    ->whereDate('last_depositing_predictable_date', '>=', Carbon::today())
                     ->sum('daily_deposit_amount');
+
+        
+
+         // For debugging purposes
+        // echo($total_daily_deposit_amount);
+
         $loans = Loan::where('is_deleted', false)
                     ->where(function ($query) {
                     $query->where('remaining_payable_main', '>', 0)
