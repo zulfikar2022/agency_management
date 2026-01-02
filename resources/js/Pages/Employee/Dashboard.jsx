@@ -8,10 +8,11 @@ const Dashboard = ({
   loan_collections,
   deposit_collections,
   product_collections,
+  bank_collection_target,
+  product_collection_target,
 }) => {
-  console.log(loan_collections);
-  console.log(deposit_collections);
-  console.log(product_collections);
+  console.log(bank_collection_target);
+  console.log(product_collection_target);
   const total_loan_collections =
     loan_collections.reduce(
       (total, collection) => total + collection.paid_amount,
@@ -48,22 +49,43 @@ const Dashboard = ({
             </p>
           </div>
           <div>
+            <div>
+              <p className="font-bold text-red-500">
+                ঋণের কিস্তি বাবদ আজকের মোট কালেকশন টার্গেটঃ{' '}
+                <span className="font-normal">
+                  {(
+                    bank_collection_target?.total_loan_collectable / 100
+                  ).toFixed(2)}{' '}
+                  টাকা
+                </span>
+              </p>
+              <p className="font-bold text-red-500">
+                পণ্যের মূল্য বাবদ আজকের মোট কালেকশন টার্গেটঃ{' '}
+                <span className="font-normal">
+                  {(product_collection_target?.total_collectable / 100).toFixed(
+                    2
+                  )}{' '}
+                  টাকা
+                </span>
+              </p>
+              <hr />
+            </div>
             <p className="font-bold">
-              ঋণের কিস্তি বাবদ আজকের কালেকশনঃ{' '}
+              ঋণের কিস্তি বাবদ আমার আজকের কালেকশনঃ{' '}
               <span className="font-normal">
-                {total_loan_collections} টাকা
+                {total_loan_collections.toFixed(2)} টাকা
               </span>{' '}
             </p>
             <p className="font-bold">
-              সঞ্চয় বাবদ আজকের কালেকশনঃ{' '}
+              সঞ্চয় বাবদ আমার আজকের কালেকশনঃ{' '}
               <span className="font-normal">
-                {total_deposit_collections} টাকা
+                {total_deposit_collections.toFixed(2)} টাকা
               </span>{' '}
             </p>
             <p className="font-bold">
-              পণ্য বাবদ আজকের কালেকশনঃ{' '}
+              পণ্য বাবদ আমার আজকের কালেকশনঃ{' '}
               <span className="font-normal">
-                {total_product_collections} টাকা
+                {total_product_collections.toFixed(2)} টাকা
               </span>{' '}
             </p>
           </div>

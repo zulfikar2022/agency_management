@@ -8,12 +8,15 @@ use App\Models\Bank\DepositCollection;
 use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
+use App\Models\BankCollectionDailyTarget;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
+use App\Models\ProductCollectionDailyTarget;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,11 +40,18 @@ class EmployeeController extends Controller
             ->where('collecting_user_id', $user_id)
             ->get();
         $user = request()->get('user');
+        
+        $today = Carbon::now()->format('Y-m-d');
+        $bank_collection_target = BankCollectionDailyTarget::whereDate('created_at', $today)->first();
+        $product_collection_target = ProductCollectionDailyTarget::whereDate('created_at', $today)->first();
+
         return Inertia::render('Employee/Dashboard', [
             'user' => $user,
             'loan_collections' => $loan_collections,
             'deposit_collections' => $deposit_collections,
             'product_collections' => $product_collections,
+            'bank_collection_target' => $bank_collection_target,
+            'product_collection_target' => $product_collection_target
         ]);
     }
 
