@@ -48,7 +48,7 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; justify-items: center;">
             <p style="font-weight:bold">মোট সংগ্রহযোগ্যঃ <span style="font-weight:normal">{{ $total_collectable }} টাকা</span></p>
-            <p style="font-weight:bold">মোট সংগ্রহঃ  <span style="font-weight:normal">{{ $total_collection }} টাকা</span></p>
+            <p style="font-weight:bold">এই এমপ্লয়ীর মোট সংগ্রহঃ  <span style="font-weight:normal">{{ $total_collection }} টাকা</span></p>
         </div>
 
         @forelse ($collections as $collection)

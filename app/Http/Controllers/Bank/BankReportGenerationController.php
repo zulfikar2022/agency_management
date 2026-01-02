@@ -9,10 +9,12 @@ use App\Models\Bank\DepositCollectionUpdateLog;
 use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
+use App\Models\BankCollectionDailyTarget;
 use App\Models\Cost;
 use App\Models\CustomerProduct;
 use App\Models\DepositDismissal;
 use App\Models\MemberAccountDismissal;
+use App\Models\ProductCollectionDailyTarget;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\User;
 use App\Models\Withdraw;
@@ -98,15 +100,19 @@ class BankReportGenerationController{
             $loan = $loan_collection->loan;
             $member = $loan->member;
             $loan_collection->member_name = $member->name;
-            $loan_collection->member_id = $member->id;
-            
+            $loan_collection->member_id = $member->id;   
         }
+
+        $total_collectable = BankCollectionDailyTarget::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->sum('total_loan_collectable');
 
          $html = view('pdf.bank-loan-collection-report', [
             'loan_collections' => $loan_collections,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'total_collection' => $total_collection,
+            'total_collectable' => $total_collectable,
         
         ])->render();
 
@@ -406,12 +412,17 @@ class BankReportGenerationController{
                     ];
                 }
             }
+
+            $total_collectable = BankCollectionDailyTarget::whereDate('created_at', '<=', $validated['start_date'])
+                                ->whereDate('created_at', '>=', $validated['end_date'])->where('is_deleted', false)
+                                ->sum('total_loan_collectable');
             
              $html = view('pdf.bank-brief-loan-collection-report', [
                 'grouped_collections' => $grouped_collections,
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
                 'total_collection' => $total_collection,
+                'total_collectable' => $total_collectable
             
             ])->render();
 
@@ -604,9 +615,15 @@ class BankReportGenerationController{
             ->whereDate('created_at', '<=', $validated['end_date'])
             ->where('is_deleted', false)
             ->sum('provided_share_money') / 100;
+
+        $total_loan_collectable = BankCollectionDailyTarget::whereDate('created_at', '<=', $validated['start_date'])->whereDate('created_at', '>=', $validated['end_date'])->sum('total_loan_collectable');
+        $total_product_money_collectable = ProductCollectionDailyTarget::whereDate('created_at', '<=', $validated['start_date'])->whereDate('created_at', '>=', $validated['end_date'])->sum('total_collectable');
         
 
          $html = view('pdf.entire-brief-overall-report', [
+            // ables
+            'total_loan_collectable' => $total_loan_collectable,
+            'total_product_money_collectable' => $total_product_money_collectable,
             // incoming cashes
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],

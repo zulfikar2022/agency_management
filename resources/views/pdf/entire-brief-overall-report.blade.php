@@ -44,7 +44,16 @@
         <p style="text-align: center; font-weight: bold;">রিপোর্টের সময়কাল: {{ \Carbon\Carbon::parse($start_date)->format('d F Y') }} থেকে {{ \Carbon\Carbon::parse($end_date)->format('d F Y') }} </p>
         @endif
         <p style="font-weight: bold; text-align: center;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
-        
+        <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+            <div>
+                <p style="font-weight:bold">ঋণের কিস্তি বাবদ মোট সংগ্রহযোগ্যঃ  <span style="font-weight: normal;">{{ number_format($total_loan_collectable/100, 2)}} টাকা</span> </p>
+               
+            </div>
+            <div>
+                <p style="font-weight:bold">পণ্যের মূল্য বাবদ মোট সংগ্রহযোগ্যঃ <span style="font-weight: normal;">{{ number_format($total_product_money_collectable, 2)}} টাকা</span> </p>
+                
+            </div>
+        </div>
        <div style="display: grid; grid-template-columns: 1fr 1fr">
             <div>
                 <div>

@@ -45,7 +45,13 @@
         @endif
         <p style="font-weight: bold; text-align: center;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
         
-        <p style="text-align: center; font-weight: bold; margin-bottom: 20px;">মোট কিস্তি কালেকশন: {{ number_format($total_collection / 100, 2) }} টাকা</p>
+        <div style="display:flex; justify-content:space-around;">
+            <p style=" font-weight: bold; margin-bottom: 10px;">মোট কালেকশনযোগ্য কিস্তির পরিমাণঃ <span style="font-weight: normal;"> {{ number_format($total_collectable / 100, 2) }} টাকা</span> </p>
+            <p style="font-weight:bold; margin-bottom: 10px; ">
+                মোট কিস্তির কালেকশনঃ 
+                <span style="font-weight: normal;">{{ number_format($total_collection / 100, 2) }} টাকা</span>
+            </p>
+        </div>
 
         
             @forelse ($grouped_collections as $collection)
@@ -60,7 +66,7 @@
                        <span>{{ $collection['collector_name'] }}</span>
                     </div>
                     <div>
-                        <p style="font-weight: bold;">মোট সঞ্চয় কালেকশনঃ </p>
+                        <p style="font-weight: bold;"> কিস্তির কালেকশনঃ </p>
                        <span>{{ number_format($collection['employee_wise_collection'] / 100, 2) }} টাকা</span>
                     </div>
                     

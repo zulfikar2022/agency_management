@@ -45,7 +45,10 @@
         @endif
         <p style="font-weight: bold; text-align: center;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>
         
-        <p style="text-align: center; font-weight: bold; margin-bottom: 20px;">মোট কিস্তি কালেকশন: {{ number_format($total_collection / 100, 2) }} টাকা</p>
+       <div style="display: flex; justify-content: space-around;">
+            <p style="text-align: center; font-weight: bold; margin-bottom: 10px;">মোট কালেকশনযোগ্য কিস্তির পরিমাণ: <span style="font-weight:normal;">{{ number_format($total_collectable / 100, 2) }} টাকা</span></p>
+            <p style="text-align: center; font-weight: bold; margin-bottom: 10px;">মোট কিস্তি কালেকশন: <span style="font-weight:normal;">{{ number_format($total_collection / 100, 2) }} টাকা</span></p>
+       </div>
 
         @forelse ($loan_collections as $loan_collection)
             <div class="deposit-collection-entry">

@@ -19,7 +19,7 @@ function ProductEmployeeWiseCollection({
         <h1 className="text-2xl font-bold mb-4 text-center">
           পণ্যের এমপ্লয়ী ভিত্তিক কালেকশন রিপোর্ট
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-6 justify-items-start md:justify-items-center">
           <div>
             <p className="font-bold">
               এমপ্লয়ীর আইডিঃ <span className="font-normal">{employee.id}</span>
@@ -42,7 +42,7 @@ function ProductEmployeeWiseCollection({
               <span className="font-normal">{total_collectable} টাকা</span>
             </p>
             <p className="font-bold">
-              মোট সংগ্রহকৃত পরিমাণঃ{' '}
+              এই এমপ্লয়ীর মোট সংগ্রহকৃত পরিমাণঃ{' '}
               <span className="font-normal">{total_collection} টাকা</span>
             </p>
             <p className="font-bold">

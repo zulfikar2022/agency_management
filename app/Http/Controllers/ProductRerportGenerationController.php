@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
+use App\Models\ProductCollectionDailyTarget;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use App\Models\User;
@@ -30,14 +31,18 @@ class ProductRerportGenerationController extends Controller {
 
         // each collection has a customer_id field and we need to get the customer name from the Customer model
         $total_collection = 0;
-        $total_collectable = 0;
+        
         foreach($collections as $collection){
             $total_collection += $collection->collected_amount;
-            $total_collectable += $collection->collectable_amount;
             $customer = $collection->customer;
             $collection->customer_name = $customer ? $customer->name : 'Unknown Customer';
             unset($collection->customer);
         }
+
+        $total_collectable = ProductCollectionDailyTarget::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('total_collectable');
         
         
          $html = view('pdf.product-employee-wise-collection-report', [
@@ -131,17 +136,19 @@ class ProductRerportGenerationController extends Controller {
             ->get();
 
         $total_collection = 0;
-        $total_collectable = 0;
         foreach($collections as $collection){
             $total_collection += $collection->collected_amount;
-            $total_collectable += $collection->collectable_amount;
+            // $total_collectable += $collection->collectable_amount;
 
             $customer = $collection->customer;
             $collection->customer_name = $customer ? $customer->name : 'Unknown Customer';
             unset($collection->customer);
         }
-
-        // dd($collections);
+        
+        $total_collectable = ProductCollectionDailyTarget::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('total_collectable');
         
         
          $html = view('pdf.product-collection-report', [
@@ -240,36 +247,36 @@ class ProductRerportGenerationController extends Controller {
         
         $grouped_collections = [];
         $entire_collection = 0;
-        // $entire_collectable = 0;
 
         foreach($collections as $collection){
             $entire_collection += $collection->collected_amount;
-            // $entire_collectable += $collection->collectable_amount;
 
             if(!isset($grouped_collections[$collection->collecting_user_id])){
                 $total_collected = 0;
-                // $total_collectable = 0;
                 foreach($collections as $c){
                     if($c->collecting_user_id == $collection->collecting_user_id){
                         $total_collected += $c->collected_amount;
-                        // $total_collectable += $c->collectable_amount;
                     }
                 }
                 $grouped_collections[$collection->collecting_user_id] = [
                     'user_name' => $collection->creator ? $collection->creator->name : 'Unknown',
                     'user_id' => $collection->collecting_user_id,
                     'total_collected_amount' => $total_collected,
-                    // 'total_collectable_amount' => $total_collectable,
                 ];
             }
         }
+
+        $total_collectable = ProductCollectionDailyTarget::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->where('is_deleted', false)
+            ->sum('total_collectable');
 
         $html = view('pdf.brief-product-collection-report', [
             'collections' => $grouped_collections,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'total_collection' => $entire_collection,
-            // 'total_collectable' => $entire_collectable,
+            'total_collectable' => $total_collectable,
         ])->render();
 
         $pdfData = Browsershot::html($html)

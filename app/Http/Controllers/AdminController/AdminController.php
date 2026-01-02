@@ -14,6 +14,7 @@ use App\Models\Cost;
 use App\Models\Customer;
 use App\Models\CustomerProduct;
 use App\Models\Product;
+use App\Models\ProductCollectionDailyTarget;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use App\Models\ProductUpdateLog;
@@ -325,11 +326,12 @@ class AdminController extends Controller
             ->get();
 
         $total_collection = 0;
-        $total_collectable = 0;
+        $total_collectable = ProductCollectionDailyTarget::whereDate('created_at', '>=', $validated['start_date'])
+            ->whereDate('created_at', '<=', $validated['end_date'])
+            ->sum('total_collectable');
 
         foreach($collections as $collection){
             $total_collection += $collection->collected_amount;
-            $total_collectable += $collection->collectable_amount;
             $customer = $collection->customer;
             $collection->customer_name = $customer ? $customer->name : 'Unknown Customer';
 

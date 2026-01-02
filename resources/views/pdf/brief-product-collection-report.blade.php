@@ -46,7 +46,11 @@
         <p style="text-align: center; font-weight: bold;">রিপোর্ট তৈরির তারিখঃ <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span> </p>
         <div style="display: grid; grid-template-columns: 1fr 1fr; justify-items: center;">
             <div>
-                <p style="font-weight: bold;">মোট সংগ্রহঃ
+                <p style="font-weight: bold;">মোট সংগ্রহযোগ্যঃ 
+                <span style="font-weight: normal;">{{ $total_collectable }} টাকা</span></p>
+            </div>
+             <div>
+                <p style="font-weight: bold;">মোট সংগ্রহঃ 
                 <span style="font-weight: normal;">{{ $total_collection }} টাকা</span></p>
             </div>
         </div>
