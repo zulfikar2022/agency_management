@@ -144,7 +144,7 @@ function BankLoanDepositAdminDashboard({
             </p>
           </div>
           <div className="border-b mt-2">
-            <p className="font-bold text-green-700">মোট সুদ বাকিঃ </p>
+            <p className="font-bold text-green-700">আজকের মোট সুদ বাকিঃ </p>
             <p className="font-normal">
               <span className="text-2xl font-bold">
                 {(totalRemainingPayableInterest / 100).toFixed(2)}
