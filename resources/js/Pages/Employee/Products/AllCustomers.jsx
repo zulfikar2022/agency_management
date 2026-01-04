@@ -3,7 +3,7 @@ import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
 import ResponsiveTable from '../components/ResponsiveTable';
 import { customerTableDataGenerateForEmployee } from '@/utilityFuntion';
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { WEEKDAYS } from '@/constants';
 
 function AllCustomers({ customers, totalCustomers }) {
@@ -29,6 +29,7 @@ function AllCustomers({ customers, totalCustomers }) {
 
   return (
     <EmployeeProductLayout>
+      <Head title="সকল কাস্টমার" />
       <div className="container mx-auto">
         <p className="text-lg font-semibold text-center my-5">সকল কাস্টমার</p>
         <p className="text-center">

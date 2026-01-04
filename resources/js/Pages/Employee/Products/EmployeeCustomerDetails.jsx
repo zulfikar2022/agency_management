@@ -3,6 +3,7 @@ import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
 import ResponsiveCustomerDetailsTable from '@/Pages/Admin/components/ResponsiveCustomerDetailsTable';
 import ResponsiveCustomerDetailsTableForEmployee from '../components/ResponsiveCustomerDetailsTableForEmployee';
 import CollectionListTable from '../components/CollectionListTable';
+import { Head } from '@inertiajs/react';
 
 function EmployeeCustomerDetails({ customer, purchases, collections }) {
   const totalPrice = purchases.reduce(
@@ -21,6 +22,7 @@ function EmployeeCustomerDetails({ customer, purchases, collections }) {
 
   return (
     <EmployeeProductLayout>
+      <Head title="কাস্টমারের বিস্তারিত তথ্য" />
       <div>
         <h1 className="text-2xl font-bold mb-4 border-b text-center md:container mx-2 md:mx-auto pb-2">
           কাস্টমারের বিস্তারিত তথ্য

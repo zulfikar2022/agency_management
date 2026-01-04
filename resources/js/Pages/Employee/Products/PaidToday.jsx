@@ -2,7 +2,7 @@ import Pagination from '@/Pages/Admin/components/Pagination';
 import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
 import { customerTableDataGenerateForEmployee } from '@/utilityFuntion';
 import ResponsiveTable from '../components/ResponsiveTable';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
@@ -30,6 +30,7 @@ function PaidToday({ customers, totalCustomers }) {
 
   return (
     <EmployeeProductLayout>
+      <Head title="আজ যারা টাকা দিয়েছে" />
       <div className="container mx-auto">
         <div className="text-lg font-semibold text-center my-5">
           আজ যারা টাকা দিয়েছে

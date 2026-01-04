@@ -1,4 +1,4 @@
-import { useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import CollectMoneyForm from '../components/CollectMoneyForm';
 import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
 import Swal from 'sweetalert2';
@@ -123,6 +123,7 @@ function CollectionPage({ user, customer, purchases, collections }) {
   };
   return (
     <EmployeeProductLayout>
+      <Head title="কাস্টমার কালেকশন পেজ" />
       <ToastContainer
         position="top-center"
         autoClose={3000}

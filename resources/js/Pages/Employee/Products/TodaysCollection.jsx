@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
-import { Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import dayjs from 'dayjs';
 import EmployeeTodaysCollectionResponsiveTable from '../components/EmployeeTodaysCollectionResponsiveTable';
 
@@ -66,6 +66,7 @@ function TodaysCollection({
 
   return (
     <EmployeeProductLayout>
+      <Head title="আজকের কালেকশন" />
       <p className="font-bold text-center text-2xl my-5">আজকের কালেকশন</p>
       <p className="font-bold text-center">
         আজকের টার্গেটঃ {totalReceivableAmount} টাকা

@@ -1,4 +1,4 @@
-import { useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import EmployeeProductLayout from '../layouts/EmployeeProductLayout';
 import Swal from 'sweetalert2';
 
@@ -66,6 +66,7 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
 
   return (
     <EmployeeProductLayout>
+      <Head title="কিস্তি আপডেট করুন" />
       <div className=" px-2 container md:mx-auto mt-5">
         <h3 className="font-bold text-center">
           কাস্টমারের নামঃ <span className="font-normal">{customer?.name}</span>

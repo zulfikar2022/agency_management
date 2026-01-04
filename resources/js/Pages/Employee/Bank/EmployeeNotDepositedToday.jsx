@@ -2,13 +2,14 @@ import Pagination from '@/Pages/Admin/components/Pagination';
 import EmployeeMemberResponsiveTable from '../components/EmployeeMemberResponsiveTable';
 import EmployeeBankLayout from '../layouts/EmployeeBankLayout';
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 function EmployeeNotDepositedToday({ members }) {
   const pagination = { ...members, data: [] };
   const [searchTerm, setSearchTerm] = useState('');
   return (
     <EmployeeBankLayout>
+      <Head title="যে সকল সদস্য আজ সঞ্চয় দেয়নি" />
       <div className="container mx-auto">
         <h1 className="text-2xl font-bold mb-4 text-center">
           যে সকল সদস্য আজ সঞ্চয় দেয়নি

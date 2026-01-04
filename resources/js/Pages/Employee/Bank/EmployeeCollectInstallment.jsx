@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import EmployeeBankLayout from '../layouts/EmployeeBankLayout';
 import { Bounce, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -59,6 +59,7 @@ function EmployeeCollectInstallment({ member, loan }) {
   };
   return (
     <EmployeeBankLayout>
+      <Head title="কিস্তি উত্তোলন" />
       <h1 className="font-bold text-center text-2xl">কিস্তি উত্তোলন</h1>
       <div className="min-h-screen bg-base-200 py-8">
         <div className="max-w-xl mx-auto px-4">

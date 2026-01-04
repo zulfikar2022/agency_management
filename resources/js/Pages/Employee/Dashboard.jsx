@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import EmployeeDashboardLayout from './EmployeeDashboardLayout';
 import { dateFormatter } from '@/utilityFuntion';
 import dayjs from 'dayjs';
@@ -29,6 +29,7 @@ const Dashboard = ({
   );
   return (
     <EmployeeDashboardLayout>
+      <Head title="এমপ্লয়ীর ড্যাশবোর্ড" />
       <div className="container mx-auto p-5 md:p-0">
         <p className="font-bold text-center text-2xl my-5">
           আজকের তারিখঃ{' '}

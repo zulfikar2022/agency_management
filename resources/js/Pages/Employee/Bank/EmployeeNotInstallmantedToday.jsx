@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import EmployeeBankLayout from '../layouts/EmployeeBankLayout';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import EmployeeMemberResponsiveTable from '../components/EmployeeMemberResponsiveTable';
 import Pagination from '@/Pages/Admin/components/Pagination';
 
@@ -10,6 +10,7 @@ function EmployeeNotInstallmantedToday({ members }) {
   const [searchTerm, setSearchTerm] = useState('');
   return (
     <EmployeeBankLayout>
+      <Head title="আজ যারা ঋণের কিস্তি দেয়নি" />
       <div className="container mx-2  md:mx-auto ">
         <h2 className="font-bold text-2xl text-center">
           আজ যারা ঋণের কিস্তি দেয়নি

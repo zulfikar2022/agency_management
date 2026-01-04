@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import EmployeeMemberResponsiveTable from '../components/EmployeeMemberResponsiveTable';
 import EmployeeBankLayout from '../layouts/EmployeeBankLayout';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import Pagination from '@/Pages/Admin/components/Pagination';
 
 function EmployeeAllMembers({ members, totalMembers }) {
@@ -9,6 +9,7 @@ function EmployeeAllMembers({ members, totalMembers }) {
   const [searchTerm, setSearchTerm] = useState('');
   return (
     <EmployeeBankLayout>
+      <Head title="সকল সদস্য" />
       <div className="container mx-auto">
         <h1 className="text-2xl font-bold mb-4 text-center">সকল সদস্য</h1>
         {members?.data?.length >= 0 && (

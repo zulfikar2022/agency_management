@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import EmployeeBankLayout from '../layouts/EmployeeBankLayout';
 import Swal from 'sweetalert2';
 import { Bounce, toast } from 'react-toastify';
@@ -66,6 +66,7 @@ function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
   };
   return (
     <EmployeeBankLayout>
+      <Head title="দৈনিক সঞ্চয় ও ঋণ কিস্তি সংগ্রহ" />
       <div>
         <p className="text-center font-bold text-xl">
           দৈনিক {deposit && <span>সঞ্চয় </span>}{' '}

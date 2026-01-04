@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import EmployeeBankLayout from '../layouts/EmployeeBankLayout';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Pencil } from 'lucide-react';
 import { useState } from 'react';
 import { Modal } from 'react-responsive-modal';
@@ -38,6 +38,7 @@ function EmployeeMemberDetails({
 
   return (
     <EmployeeBankLayout>
+      <Head title="সদস্যের বিস্তারিত" />
       <div className=" border p-4 mt-4 container mx-auto rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="">
           <p className="font-bold">
