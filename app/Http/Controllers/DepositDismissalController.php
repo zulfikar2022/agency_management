@@ -31,7 +31,14 @@ class DepositDismissalController extends Controller
             ->where('is_deleted', false)
             ->count();
 
-        $total_day_missed = $total_days - $total_number_of_deposits;
+        $total_day_missed = $total_days - $total_number_of_deposits ;
+
+        $today = Carbon::now()->startOfDay();
+        if($today <= $last_date){
+            // calculate the number of days between creation_date and today
+            $total_days_until_today = $creation_date->diffInDays($today) + 1;
+            $total_day_missed = $total_days_until_today - $total_number_of_deposits;
+        }
 
         $total_withdraw_amount = Withdraw::where('deposit_id', $deposit->id)
             ->where('is_deleted', false)
@@ -60,6 +67,8 @@ class DepositDismissalController extends Controller
             }
         }
 
+        // dd($total_day_missed);
+
         return Inertia::render('Admin/Bank/DismissDepositAccount', [
             'member' => $member,
             'deposit' => $deposit,
@@ -85,21 +94,21 @@ class DepositDismissalController extends Controller
         $last_depositing_prdictable_date = Carbon::parse($deposit->last_depositing_predictable_date)->startOfDay();
         $today_date = Carbon::now()->startOfDay();
 
-        if($today_date->lt($last_depositing_prdictable_date)){
-            return back()->withErrors(['message' => 'সদস্যের সঞ্চয় একাউন্ট বন্ধ করার জন্য সর্বনিম্ন পূর্বনির্ধারিত জমাদানের তারিখ অতিক্রম করতে হবে।']);
-        }
+        // if($today_date->lt($last_depositing_prdictable_date)){
+        //     return back()->withErrors(['message' => 'সদস্যের সঞ্চয় একাউন্ট বন্ধ করার জন্য সর্বনিম্ন পূর্বনির্ধারিত জমাদানের তারিখ অতিক্রম করতে হবে।']);
+        // }
         
         if($member->total_loan > 0){
             return back()->withErrors(['message' => 'সদস্যের উপর বকেয়া ঋণ থাকায় সঞ্চয় একাউন্ট বন্ধ করা যাবে না।']);
         }
 
-        $loan = Loan::where('member_id', $member->id)
-            ->where('is_deleted', false)
-            ->first();
+        // $loan = Loan::where('member_id', $member->id)
+        //     ->where('is_deleted', false)
+        //     ->first();
         
-            if($loan){
-            return back()->withErrors(['message' => 'সদস্যের উপর বকেয়া ঋণ থাকায় সঞ্চয় একাউন্ট বন্ধ করা যাবে না।']);
-        }
+        // if($loan){
+        //     return back()->withErrors(['message' => 'সদস্যের উপর বকেয়া ঋণ থাকায় সঞ্চয় একাউন্ট বন্ধ করা যাবে না।']);
+        // }
 
         $total_deposit_collection = DepositCollection::where('deposit_id', $deposit->id)
             ->where('is_deleted', false)

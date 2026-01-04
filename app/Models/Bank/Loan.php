@@ -35,4 +35,13 @@ class Loan extends Model
         {
             return $this->belongsTo(Member::class, 'member_id', 'id')->orderBy('created_at', 'desc');
         }   
+
+        public function loanCollections()
+        {
+            return $this->hasMany(LoanCollection::class, 'loan_id', 'id')->orderBy('created_at', 'desc');
+        }
+        public function lastLoanCollection()
+        {
+            return $this->hasMany(LoanCollection::class, 'loan_id', 'id')->orderBy('created_at', 'desc')->limit(1);
+        }
 }

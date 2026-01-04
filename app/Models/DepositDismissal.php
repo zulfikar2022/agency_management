@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Bank\Deposit;
 use Illuminate\Database\Eloquent\Model;
 
 class DepositDismissal extends Model
@@ -13,4 +14,8 @@ class DepositDismissal extends Model
         'creating_user_id',
         'total_collected_deposit',
     ];
+
+    public function deposit(){
+        return $this->belongsTo(Deposit::class, 'deposit_id');
+    }
 }

@@ -506,6 +506,9 @@ class EmployeeController extends Controller
                 // $loan->remaining_payable_amount -= $validated['paid_amount'] * 100;
                 $loan->remaining_payable_main -= $main_paid_amount;
                 $loan->remaining_payable_interest -= $interest_paid_amount;
+                if($loan->remaining_payable_main === 0 && $loan->remaining_payable_interest === 0){
+                    $loan->is_deleted = true;
+                }
                 $loan->total_paid += ($main_paid_amount + $interest_paid_amount);
                 $loan->save();
             }

@@ -20,8 +20,10 @@ function MemberDetails({
   loan,
   not_paid_days_count,
   total_share_money,
+  old_loans,
+  deposit_dismissals,
 }) {
-  console.log({ total_share_money });
+  console.log(loan);
   const total_payable =
     ((loan?.daily_payable_main + loan?.daily_payable_interest) / 100) * 115;
   const [open, setOpen] = useState(false);
@@ -235,17 +237,16 @@ function MemberDetails({
                         &nbsp;টাকা
                       </span>{' '}
                     </p>
-                    {deposit_account.last_depositing_predictable_date <
-                      today && (
+                    {
                       <Link
                         href={route('admin.bank.deposit_dismissal_form', {
                           deposit: deposit_account.id,
                         })}
-                        className="my-5 btn btn-xs btn-neutral"
+                        className="my-5 btn btn-xs btn-error"
                       >
-                        সঞ্চয় একাউন্ট ডিসমিস করুন
+                        সঞ্চয় একাউন্ট ক্লোজ করুন
                       </Link>
-                    )}
+                    }
                   </div>
                 )}
                 {has_loan && (
@@ -282,7 +283,10 @@ function MemberDetails({
                     <p className="font-bold">
                       মোট পরিশোধযোগ্যঃ{' '}
                       <span className="text-slate-500">
-                        {total_payable.toFixed(2)} টাকা
+                        {total_payable.toFixed(2)} টাকা{' '}
+                        <span className="text-xs">
+                          (115 দিনে পরিশোধের ক্ষেত্রে)
+                        </span>
                       </span>
                     </p>
                     <p className="font-bold">
@@ -311,7 +315,7 @@ function MemberDetails({
                     <p className="font-bold  mb-2">
                       পরিশোধ হয়েছেঃ{' '}
                       <span className="text-slate-500">
-                        {loan.total_paid}
+                        {(loan.total_paid / 100).toFixed(2)}
                         টাকা
                       </span>
                     </p>
@@ -356,6 +360,7 @@ function MemberDetails({
                 </div>
 
                 {/* Information List */}
+
                 <div className="space-y-4">
                   <h3 className="font-bold text-lg border-b pb-2">
                     ব্যক্তিগত তথ্য
@@ -412,6 +417,111 @@ function MemberDetails({
         </div>
       </div>
 
+      <div className="container mx-auto">
+        <p className="text-center font-normal text-2xl ">
+          পুরনো সঞ্চয় ও ঋণের তথ্য
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+          <div>
+            <h2 className="text-center text-xl underline mb-2">সঞ্চয়</h2>
+            {deposit_dismissals.length === 0 ? (
+              <p className="text-center mt-4">কোনো পুরনো সঞ্চয় নেই।</p>
+            ) : (
+              <div>
+                {deposit_dismissals.map((dismissal) => {
+                  // console.log({ dismissal });
+                  return (
+                    <div
+                      key={dismissal.id}
+                      className="mb-4 p-4 border border-green-400 rounded-lg"
+                    >
+                      <p className="font-bold ">
+                        একাউন্ট তৈরির তারিখঃ{' '}
+                        <span className="font-normal">
+                          {dateFormatter(dismissal?.deposit?.created_at)}
+                        </span>
+                      </p>
+                      <p className="font-bold ">
+                        একাউন্ট বন্ধের তারিখঃ{' '}
+                        <span className="font-normal">
+                          {dateFormatter(dismissal?.created_at)}
+                        </span>
+                      </p>
+                      <p className="font-bold ">
+                        মোট সঞ্চিত পরিমাণঃ{' '}
+                        <span className="font-normal">
+                          {(dismissal?.total_collected_deposit / 100).toFixed(
+                            2
+                          )}{' '}
+                          টাকা
+                        </span>
+                      </p>
+                      <p className="font-bold ">
+                        উত্তোলনের সময় একাউন্টে সঞ্চিত পরিমাণঃ{' '}
+                        <span className="font-normal">
+                          {(dismissal?.total_remaining_deposit / 100).toFixed(
+                            2
+                          )}{' '}
+                          টাকা
+                        </span>
+                      </p>
+                      <p className="font-bold ">
+                        মোট প্রদত্ত পরিমাণঃ{' '}
+                        <span className="font-normal">
+                          {(dismissal?.total_paid / 100).toFixed(2)} টাকা
+                        </span>
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+          <div>
+            <h2 className="text-center text-xl underline mb-2">ঋণ</h2>
+            {old_loans.length === 0 ? (
+              <p className="text-center mt-4">কোনো পুরনো ঋণ নেই।</p>
+            ) : (
+              <div className=" border p-4 rounded-lg border-red-400">
+                {old_loans.map((old_loan) => {
+                  console.log({ old_loan });
+                  return (
+                    <div key={old_loan.id}>
+                      <p>
+                        ঋণ প্রদানের তারিখঃ{' '}
+                        <span>{dateFormatter(old_loan?.created_at)}</span>
+                      </p>
+                      <p>
+                        শেষ পরিশোধের তারিখঃ
+                        <span>
+                          {old_loan?.last_loan_collection[0]?.created_at
+                            ? dateFormatter(
+                                old_loan?.last_loan_collection[0]?.created_at
+                              )
+                            : 'N/A'}
+                        </span>
+                      </p>{' '}
+                      <p>
+                        ঋণের পরিমাণঃ
+                        <span>
+                          {(old_loan?.total_loan / 100).toFixed(2)} টাকা
+                        </span>
+                      </p>
+                      <p>
+                        মোট পরিশোধিত পরিমাণঃ
+                        <span>
+                          {(old_loan?.total_paid / 100).toFixed(2)} টাকা
+                        </span>
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto py-4 px-4">
         <h1 className="font-bold text-center text-2xl">আপডেট ইতিহাস</h1>
         {update_history.length === 0 && (
@@ -423,7 +533,7 @@ function MemberDetails({
               <span className="font-bold">আপডেটের তারিখঃ </span>
               {dayjs(update.created_at).format('D MMMM YYYY, h:mm A')}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-4 my-2">
               <p>
                 <span className="font-bold">আপডেটের আগে পিতার নামঃ </span>
                 {update.fathers_name_before_update}
@@ -433,7 +543,7 @@ function MemberDetails({
                 {update.fathers_name_after_update}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-4 my-2">
               <p>
                 <span className="font-bold">আপডেটের আগে মাতার নামঃ </span>
                 {update.mothers_name_before_update}
@@ -443,7 +553,7 @@ function MemberDetails({
                 {update.mothers_name_after_update}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-4 my-2">
               <p>
                 <span className="font-bold">
                   আপডেটের আগে জাতীয় পরিচয়পত্র নম্বরঃ{' '}
@@ -457,7 +567,7 @@ function MemberDetails({
                 {update.nid_number_after_update}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-4 my-2">
               <p>
                 <span className="font-bold">আপডেটের আগে ফোন নাম্বারঃ </span>
                 {update.phone_number_before_update}

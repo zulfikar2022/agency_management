@@ -38,7 +38,7 @@ function DismissDepositAccount({
           onError: (error) => {
             toast.error(error?.message || 'একটি ত্রুটি ঘটেছে', {
               position: 'top-center',
-              autoClose: 3,
+              autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: false,
               pauseOnHover: true,
@@ -132,9 +132,7 @@ function DismissDepositAccount({
             {/* Read Only Field */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-bold">
-                  মোট অবশিষ্ট সঞ্চয় (Read Only)
-                </span>
+                <span className="label-text font-bold">মোট অবশিষ্ট সঞ্চয়</span>
               </label>
               <div className="relative">
                 <input

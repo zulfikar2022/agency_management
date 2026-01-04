@@ -10,6 +10,7 @@ use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
 use App\Models\Bank\MemberUpdateLog;
 use App\Models\BankCollectionDailyTarget;
+use App\Models\DepositDismissal;
 use App\Models\MemberAccountDismissal;
 use App\Models\Withdraw;
 use Carbon\Carbon;
@@ -365,9 +366,23 @@ class MemberController extends Controller
           }
         }
 
-        $total_share_money = Loan::where('member_id', $member->id)
+        $loans = Loan::with('loanCollections')->where('member_id', $member->id)
             ->where('is_deleted', false)
-            ->sum('share_money');
+            ->get();
+        $total_share_money = $loans->sum('share_money');
+
+        // old deposit and loan information end
+        $old_loans = Loan::with('lastLoanCollection')->where('member_id', $member->id)
+            ->where('remaining_payable_main', '=', 0)
+            ->where('remaining_payable_interest', '=', 0)
+            ->where('is_deleted', false)
+            ->get();
+        $old_deposit_ids = Deposit::where('member_id', $member->id)
+            ->where('is_deleted', true)
+            ->get()->pluck('id');
+
+        $deposit_dismissals = DepositDismissal::with('deposit')->whereIn('deposit_id', $old_deposit_ids)
+            ->get();
 
         
         return Inertia::render('Admin/Bank/MemberDetails', [
@@ -384,6 +399,10 @@ class MemberController extends Controller
             'update_history' => $update_history,
             'not_paid_days_count' => $not_paid_days_count,
             'total_share_money' => $total_share_money,
+
+            //old deposit and loan information 
+            'old_loans' => $old_loans,
+            'deposit_dismissals' => $deposit_dismissals,
         ]);
     }
 
