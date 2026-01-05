@@ -35,6 +35,7 @@ function DECollectLoanCollection({ member, dataEntryMode = false }) {
             toast.success('কিস্তি সফলভাবে সংগ্রহ করা হয়েছে!', {
               theme: 'dark',
               transition: Bounce,
+              position: 'top-center',
             });
           },
           onError: (err) => {
@@ -54,7 +55,7 @@ function DECollectLoanCollection({ member, dataEntryMode = false }) {
   };
 
   return (
-    <AdminDashboardLayout>
+    <AdminDashboardLayout dataEntryMode={dataEntryMode}>
       <div className="min-h-screen bg-base-200 py-8">
         <div className="max-w-md mx-auto px-4">
           <div className="mb-4">

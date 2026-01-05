@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
 function DEAllMembers({ members, dataEntryMode = false }) {
+  // admin.bank.de.member_details
   const handleDeleteMember = (member) => {
     Swal.fire({
       text: `আপনি কি নিশ্চিত যে আপনি মেম্বার আইডি ${member.id}, যার নাম ${member.name} ডিলিট করতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।`,
@@ -15,8 +16,6 @@ function DEAllMembers({ members, dataEntryMode = false }) {
       confirmButtonText: 'হ্যাঁ, ডিলিট করুন!',
     }).then((result) => {
       if (result.isConfirmed) {
-        // console.log(`Deleting member with ID: ${member.id}`);
-        // admin.bank.de.delete_member
         router.delete(route('admin.bank.de.delete_member', member.id), {
           preserveScroll: true,
           onError: (err) => {
@@ -75,7 +74,7 @@ function DEAllMembers({ members, dataEntryMode = false }) {
                   </p>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-2 grid-cols-3">
+                <div className="flex flex-col md:flex-row gap-2 col-span-3">
                   {/* admin.bank.de.collect_deposit */}
                   <Link
                     href={route('admin.bank.de.collect_deposit', member.id)}
@@ -94,6 +93,12 @@ function DEAllMembers({ members, dataEntryMode = false }) {
                     className="btn btn-xs btn-primary"
                   >
                     কিস্তি গ্রহণ করুন
+                  </Link>
+                  <Link
+                    className="underline"
+                    href={route('admin.bank.de.member_details', member.id)}
+                  >
+                    বিস্তারিত
                   </Link>
                 </div>
               </div>

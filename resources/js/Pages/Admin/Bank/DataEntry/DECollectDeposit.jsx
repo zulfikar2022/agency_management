@@ -46,7 +46,7 @@ function DECollectDeposit({ member, dataEntryMode = false }) {
   };
 
   return (
-    <AdminDashboardLayout>
+    <AdminDashboardLayout dataEntryMode={dataEntryMode}>
       <Head title="সঞ্চয় জমা করুন" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="max-w-md mx-auto px-4">

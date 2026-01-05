@@ -27,6 +27,48 @@ class DataEntryController extends Controller
         ]);
     }
 
+    public function memberDetails(Member $member){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
+        $deposit = Deposit::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->first();
+        $loan = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
+            ->first();
+        
+        $deposit_collections = [];
+        $loan_collections = [];
+
+        if($deposit){
+            $deposit_collections = DepositCollection::where('deposit_id', $deposit->id) 
+                ->where('is_deleted', false)
+                ->orderBy('deposit_date', 'desc')
+                ->get();
+        }
+        if($loan){
+            $loan_collections = LoanCollection::where('loan_id', $loan->id)
+                ->where('is_deleted', false)
+                ->orderBy('paying_date', 'desc')
+                ->get();
+        }
+        return Inertia::render('Admin/Bank/DataEntry/DEMemberDetails', [
+            'member' => $member,
+            'dataEntryMode' => $data_entry_mode,
+            'deposit' => $deposit,
+            'loan' => $loan,
+            'deposit_collections' => $deposit_collections,
+            'loan_collections' => $loan_collections,
+        ]);
+    }
+
     public function  collectDeposit(Member $member){
         $data_entry_mode = config('services.data_entry.mode', false);
         if(!$data_entry_mode){
@@ -232,7 +274,6 @@ class DataEntryController extends Controller
         
     }
 
-    // UNDER DEVELOPMENT
     public function collectLoanSave(Request $request){
         $validated = $request->validate([
             'member_id' => 'required|exists:members,id',
@@ -240,7 +281,10 @@ class DataEntryController extends Controller
             'last_collecting_date' => 'required|date',
         ]);
 
-        $paid_amount = $validated['paid_amount'] * 100; // convert to cents
+        $total_collected = $validated['paid_amount'] * 100; 
+        $main_collected = 0;
+        $interest_collected = 0;
+
         $member = Member::findOrFail($validated['member_id']);
 
         $loan = Loan::where('member_id', $member->id)
@@ -250,5 +294,46 @@ class DataEntryController extends Controller
                       ->orWhere('remaining_payable_interest', '>', 0);
             })
             ->first();
+
+        if(!$loan){
+            return redirect()->back()->withErrors(['message' => 'এই সদস্যের জন্য কোন চলমান ঋণ পাওয়া যায়নি।'])->withInput();
+        }
+
+        $total_days_between_after_loan_creation_and_last_collecting = Carbon::parse($loan->created_at)->diffInDays(Carbon::parse($validated['last_collecting_date']));
+
+        $interest_collected = $loan->daily_payable_interest * $total_days_between_after_loan_creation_and_last_collecting;
+        $main_collected = $total_collected - $interest_collected;
+        if($main_collected <= 0){
+            $interest_collected = $total_collected;
+            $main_collected = 0;
+        }
+
+        if($main_collected > $loan->remaining_payable_main){
+            // send an error back
+            return redirect()->back()->withErrors(['message' => 'সংগ্রহকৃত মূল টাকার পরিমাণ বাকি মূল টাকার চেয়ে বেশি হতে পারে না।'])->withInput();
+        }
+
+        DB::transaction(function () use($loan, $total_collected, $main_collected, $interest_collected, $validated) {
+            $loan_collection = new LoanCollection();
+            $loan_collection->loan_id = $loan->id;
+            $loan_collection->collecting_user_id = Auth::id();
+            $loan_collection->paid_amount = $total_collected;
+            $loan_collection->main_paid_amount = $main_collected;
+            $loan_collection->interest_paid_amount = $interest_collected;
+            $loan_collection->paying_date = today();
+            $loan_collection->is_deleted = false;
+            $loan_collection->save();
+
+            $loan->remaining_payable_main -= $main_collected;
+            $loan->remaining_payable_interest  = Carbon::parse($validated['last_collecting_date'])->diffInDays(Carbon::now()) * $loan->daily_payable_interest;
+            $loan->save();
+        });
+
+       
+        return redirect()->route('admin.bank.de.all_members', [
+            'dataEntryMode' => config('services.data_entry.mode', false),
+        ])->with('message', 'কিস্তি সফলভাবে সংগ্রহ করা হয়েছে।');
+
+
     }
 }

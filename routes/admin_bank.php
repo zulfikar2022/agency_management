@@ -111,6 +111,8 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
     // DATA ENTRY routes
     Route::get('/admin/bank/de/all-members',[DataEntryController::class, 'seeAllMembers'])->name('admin.bank.de.all_members');
 
+    Route::get('/admin/bank/de/member-details/{member}',[DataEntryController::class, 'memberDetails'])->name('admin.bank.de.member_details');
+
     Route::get('/admin/bank/de/collect-deposit/{member}',[DataEntryController::class, 'collectDeposit'])->name('admin.bank.de.collect_deposit');
 
     Route::post('/admin/bank/de/save-deposit',[DataEntryController::class, 'saveDeposit'])->name('admin.bank.de.save_deposit');
