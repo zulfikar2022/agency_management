@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'data_entry' => [
+        'mode' => env('DATA_ENTRY_MODE', false),
+    ],
+
 ];

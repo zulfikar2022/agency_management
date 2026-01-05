@@ -21,6 +21,8 @@ class Loan extends Model
         'share_money',
         'loan_fee',
         'is_deleted',
+        'created_at',
+        'updated_at'
     ];
 
         public function creator()

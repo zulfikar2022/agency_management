@@ -1,7 +1,7 @@
 import { Link, router } from '@inertiajs/react';
 import Swal from 'sweetalert2';
 
-function AdminDashboardSidebar() {
+function AdminDashboardSidebar({ dataEntryMode = false }) {
   const handleLogout = () => {
     Swal.fire({
       title: 'আপনি কি আসলেই লগআউট করতে চান?',
@@ -50,6 +50,18 @@ function AdminDashboardSidebar() {
             পাসওয়ার্ড আপডেট করুন{' '}
           </Link>
         </li>
+        {dataEntryMode && (
+          <ul>
+            <li>
+              <span className="font-bold">Data Entry System</span>
+            </li>
+            <li>
+              <Link href={route('admin.bank.de.all_members')} className="mx-2">
+                All Members
+              </Link>
+            </li>
+          </ul>
+        )}
 
         <li>
           <button onClick={handleLogout} className="btn btn-xs btn-neutral">

@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify';
 </button>
 */
 
-function AdminDashboardLayout({ children }) {
+function AdminDashboardLayout({ children, dataEntryMode = false }) {
   return (
     <div className="admin-dashboard-layout h-full min-h-screen">
       <ToastContainer />
@@ -81,7 +81,7 @@ function AdminDashboardLayout({ children }) {
               </label>
             </div>
             {/* <MoneyOpenDrawer /> */}
-            <AdminDashboardSidebar />
+            <AdminDashboardSidebar dataEntryMode={dataEntryMode} />
           </div>
           {/* </div> */}
         </div>

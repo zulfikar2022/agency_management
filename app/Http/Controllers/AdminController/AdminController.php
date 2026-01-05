@@ -151,6 +151,8 @@ class AdminController extends Controller
         $total_share_money = Loan::whereIn('member_id', $active_member_ids)->sum('share_money');
 
         // dd($date_wise_loan_and_deposit_collections);
+        $data_entry_mode = config('services.data_entry.mode', false);
+        // dd($data_entry_mode);
 
         return Inertia::render('Admin/Dashboard', [
             'user' => $leanUser,
@@ -177,6 +179,7 @@ class AdminController extends Controller
             'totalAdmissionFee' => $total_adminssion_fee,
             'totalLoanFee' => $total_loan_fee,
             'totalShareMoney' => $total_share_money,
+            'dataEntryMode' => $data_entry_mode,
         ]);
     }
 

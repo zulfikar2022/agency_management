@@ -28,10 +28,11 @@ function Dashboard({
   totalAdmissionFee,
   totalLoanFee,
   totalShareMoney,
+  // other props,
+  dataEntryMode = false,
 }) {
-  console.log(totalAdmissionFee);
   return (
-    <AdminDashboardLayout>
+    <AdminDashboardLayout dataEntryMode={dataEntryMode}>
       <Head title="এডমিন ড্যাশবোর্ড" />
       <div className="dashboard h-full container mx-auto p-4 ">
         <div className="flex flex-col justify-center items-center mb-4  font-bold text-2xl gap-4 bg-warning/10 p-4 rounded-md border border-warning">

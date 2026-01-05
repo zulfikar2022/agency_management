@@ -5,6 +5,7 @@ use App\Http\Controllers\Bank\BankReportGenerationController;
 use App\Http\Controllers\Bank\DepositController;
 use App\Http\Controllers\Bank\LoanController;
 use App\Http\Controllers\Bank\MemberController;
+use App\Http\Controllers\DataEntryController;
 use App\Http\Controllers\DepositDismissalController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
@@ -106,6 +107,12 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
     Route::get('/admin/bank/deposit-dismissal/{deposit}', [DepositDismissalController::class, 'depositDismissalForm'])->name('admin.bank.deposit_dismissal_form');
 
     Route::post('/admin/bank/deposit-dismissal-store', [DepositDismissalController::class, 'store'])->name('admin.bank.deposit_dismissal.store');
+
+    // DATA ENTRY routes
+    Route::get('/admin/bank/de/all-members',[DataEntryController::class, 'seeAllMembers'])->name('admin.bank.de.all_members');
+    Route::get('/admin/bank/de/provide-loan/{member}',[DataEntryController::class, 'provideLoan'])->name('admin.bank.de.provide_loan');
+
+    Route::post('/admin/bank/de/save-loan',[DataEntryController::class, 'saveLoan'])->name('admin.bank.de.save_loan');
 
 
     
