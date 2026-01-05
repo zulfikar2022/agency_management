@@ -5,7 +5,7 @@ import { Bounce, toast } from 'react-toastify';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-function DEProvideLoan({ member }) {
+function DEProvideLoan({ member, dataEntryMode = false }) {
   const [isSafetyMoneyManual, setIsSafetyMoneyManual] = useState(false);
 
   // Get current date in YYYY-MM-DD format for the input default
@@ -70,12 +70,12 @@ function DEProvideLoan({ member }) {
     });
   };
   return (
-    <AdminDashboardLayout>
+    <AdminDashboardLayout dataEntryMode={dataEntryMode}>
       <Head title="সদস্যকে ঋণ দিন" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="pl-10 mt-4">
           <Link
-            href={route('admin.bank.member_details', { member: member?.id })}
+            href={route('admin.bank.de.all_members')}
             className="text-blue-700 underline flex items-center gap-1"
           >
             <ArrowLeft size={18} /> <span>ফিরে যান</span>

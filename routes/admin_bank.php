@@ -110,9 +110,20 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     // DATA ENTRY routes
     Route::get('/admin/bank/de/all-members',[DataEntryController::class, 'seeAllMembers'])->name('admin.bank.de.all_members');
+
+    Route::get('/admin/bank/de/collect-deposit/{member}',[DataEntryController::class, 'collectDeposit'])->name('admin.bank.de.collect_deposit');
+
+    Route::post('/admin/bank/de/save-deposit',[DataEntryController::class, 'saveDeposit'])->name('admin.bank.de.save_deposit');
+
+    Route::delete('/admin/bank/de/delete-member/{member}',[DataEntryController::class, 'deleteMember'])->name('admin.bank.de.delete_member');
+
     Route::get('/admin/bank/de/provide-loan/{member}',[DataEntryController::class, 'provideLoan'])->name('admin.bank.de.provide_loan');
 
     Route::post('/admin/bank/de/save-loan',[DataEntryController::class, 'saveLoan'])->name('admin.bank.de.save_loan');
+
+    Route::get('/admin/bank/de/collect-loan/{member}',[DataEntryController::class, 'collectLoan'])->name('admin.bank.de.collect_loan');
+
+    Route::post('/admin/bank/de/collect-loan-save',[DataEntryController::class, 'collectLoanSave'])->name('admin.bank.de.collect_loan_save');
 
 
     

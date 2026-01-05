@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Bank\Deposit;
+use App\Models\Bank\DepositCollection;
 use App\Models\Bank\Loan;
+use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,9 +23,116 @@ class DataEntryController extends Controller
         $members = Member::where('is_deleted', false)->get();
         return Inertia::render('Admin/Bank/DataEntry/DEAllMembers', [
             'members' => $members,
+            'dataEntryMode' => $data_entry_mode,
         ]);
     }
 
+    public function  collectDeposit(Member $member){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
+        return Inertia::render('Admin/Bank/DataEntry/DECollectDeposit', [
+            'member' => $member,
+            'dataEntryMode' => $data_entry_mode,
+        ]);
+    }
+
+    public function saveDeposit(Request $request){
+        $validated = $request->validate([
+            'member_id' => 'required|exists:members,id',
+            'deposit_amount' => 'required|numeric|min:1',
+        ]);
+
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
+    
+    
+        $deposit_amount = $validated['deposit_amount'] * 100; // convert to cents
+        
+        $member = Member::findOrFail($validated['member_id']);
+        $deposit = Deposit::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->first();
+            // dd($deposit, $deposit_amount, $member);
+        if(!$deposit){
+            return redirect()->back()->withErrors(['message' => 'এই সদস্যের জন্য কোন জমা অ্যাকাউন্ট পাওয়া যায়নি।'])->withInput();
+        }
+
+        // dd( $deposit->daily_deposit_amount);
+            
+        $yesterday = Carbon::yesterday()->endOfDay();
+        DB::transaction(function () use ($deposit, $deposit_amount, $member, $yesterday) {
+            // Create a new deposit collection
+            $deposit_collection = new DepositCollection();
+            $deposit_collection->deposit_id = $deposit->id;
+            $deposit_collection->collecting_user_id = Auth::id();
+            $deposit_collection->deposit_amount = $deposit_amount;
+            $deposit_collection->depositable_amount = $deposit->daily_deposit_amount;
+            $deposit_collection->deposit_date = today();
+            $deposit_collection->created_at = $yesterday; // Set to yesterday
+            $deposit_collection->updated_at = today();
+            $deposit_collection->is_deleted = false;
+            $deposit_collection->timestamps = false;
+            $deposit_collection->save();
+
+
+            // Update the member's total deposit
+            $member->total_deposit += $deposit_amount;
+            $member->save();
+        });
+
+        return redirect()->route('admin.bank.de.all_members', [
+            'dataEntryMode' => $data_entry_mode,
+        ])->with('message', 'জমা সফলভাবে সংগ্রহ করা হয়েছে।');
+       
+
+    }
+
+    public function deleteMember(Member $member){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
+
+        // find all the deposits of that member
+        $deposits = Deposit::where('member_id', $member->id)->where('is_deleted', false)->get();
+        $deposit_collections = DepositCollection::whereIn('deposit_id', $deposits->pluck('id'))->where('is_deleted', false)->get();
+
+        foreach($deposits as $deposit){
+            $deposit->is_deleted = true;
+            $deposit->save();
+        }
+        foreach($deposit_collections as $collection){
+            $collection->is_deleted = true;
+            $collection->save();
+        }
+
+        // find  all the loans of that member
+        $loans = Loan::where('member_id', $member->id)->where('is_deleted', false)->get();
+        $loan_collections = LoanCollection::whereIn('loan_id', $loans->pluck('id'))->where('is_deleted', false)->get();
+        foreach($loans as $loan){
+            $loan->is_deleted = true;
+            $loan->save();
+        }
+        foreach($loan_collections as $collection){
+            $collection->is_deleted = true;
+            $collection->save();
+        }
+
+        $member->is_deleted = true;
+        $member->save();
+
+        return redirect()->route('admin.bank.de.all_members', [
+            'dataEntryMode' => $data_entry_mode,
+        ])->with('message', 'সদস্য এবং তার সকল তথ্য সফলভাবে মুছে ফেলা হয়েছে।');
+
+       
+
+       
+    }
     public function provideLoan(Member $member){
         $data_entry_mode = config('services.data_entry.mode', false);
         if(!$data_entry_mode){
@@ -30,10 +140,15 @@ class DataEntryController extends Controller
         }
         return Inertia::render('Admin/Bank/DataEntry/DEProvideLoan', [
             'member' => $member,
+            'dataEntryMode' => $data_entry_mode,
         ]);
     }
 
     public function saveLoan(Request $request){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
         $validated = $request->validate([
             'member_id' => 'required|exists:members,id',
             'total_loan' => 'required|numeric|min:1',
@@ -99,8 +214,41 @@ class DataEntryController extends Controller
             $loan->save();
         });
 
+        
         return redirect()->route('admin.bank.de.all_members', [
-            'member' => $validated['member_id'],
+            'dataEntryMode' => $data_entry_mode,
         ])->with('message', 'ঋণ সফলভাবে প্রদান করা হয়েছে।');
+    }
+
+    public function collectLoan(Member $member){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
+        return Inertia::render('Admin/Bank/DataEntry/DECollectLoanCollection', [
+            'member' => $member,
+            'dataEntryMode' => $data_entry_mode,
+        ]);
+        
+    }
+
+    // UNDER DEVELOPMENT
+    public function collectLoanSave(Request $request){
+        $validated = $request->validate([
+            'member_id' => 'required|exists:members,id',
+            'paid_amount' => 'required|numeric|min:1',
+            'last_collecting_date' => 'required|date',
+        ]);
+
+        $paid_amount = $validated['paid_amount'] * 100; // convert to cents
+        $member = Member::findOrFail($validated['member_id']);
+
+        $loan = Loan::where('member_id', $member->id)
+            ->where('is_deleted', false)
+            ->where(function ($query) {
+                $query->where('remaining_payable_main', '>', 0)
+                      ->orWhere('remaining_payable_interest', '>', 0);
+            })
+            ->first();
     }
 }
