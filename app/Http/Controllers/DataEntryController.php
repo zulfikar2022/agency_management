@@ -6,6 +6,7 @@ use App\Models\Bank\DepositCollection;
 use App\Models\Bank\Loan;
 use App\Models\Bank\LoanCollection;
 use App\Models\Bank\Member;
+use App\Services\SmsService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -230,7 +231,8 @@ class DataEntryController extends Controller
             $daily_payable_interest = round(($total_loan * 0.15) / 115); // মোট ১৫% সুদ দিতে হবে, যা 115 দিনের মধ্যে পরিশোধ করতে হবে
             $remaining_payable_interest = 0;
             $remaining_payable_main = $total_loan;
-            $last_paying_date = Carbon::now()->addDays(115)->format('Y-m-d');
+            // $last_paying_date = Carbon::now()->addDays(115)->format('Y-m-d');
+            $last_paying_date = Carbon::parse($validated['created_at'])->addDays(115)->format('Y-m-d');
 
             $member->total_loan = $total_loan;
             $member->save();
@@ -493,5 +495,7 @@ class DataEntryController extends Controller
             'member' => $member->id,
         ])->with('message', 'কিস্তি সফলভাবে আপডেট করা হয়েছে।');
     }
+
+  
 
 }

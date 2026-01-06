@@ -38,5 +38,11 @@ return [
     'data_entry' => [
         'mode' => env('DATA_ENTRY_MODE', false),
     ],
+   
+    'mrem' => [
+        'api_key' => env('MREM_API_KEY'),
+        'message_type' => env('MREM_MESSAGE_TYPE', 'unicode'),
+        'sender_id' => env('MREM_SENDER_ID', 'VKSSL'),
+    ],
 
 ];
