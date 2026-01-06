@@ -20,7 +20,7 @@ class DataEntryController extends Controller
         if(!$data_entry_mode){
             return redirect()->route('home');
         }
-        $members = Member::where('is_deleted', false)->get();
+        $members = Member::where('is_deleted', false)->orderBy('created_at', 'desc')->get();
         return Inertia::render('Admin/Bank/DataEntry/DEAllMembers', [
             'members' => $members,
             'dataEntryMode' => $data_entry_mode,
@@ -313,19 +313,23 @@ class DataEntryController extends Controller
             return redirect()->back()->withErrors(['message' => 'সংগ্রহকৃত মূল টাকার পরিমাণ বাকি মূল টাকার চেয়ে বেশি হতে পারে না।'])->withInput();
         }
 
-        DB::transaction(function () use($loan, $total_collected, $main_collected, $interest_collected, $validated) {
+        DB::transaction(function () use($loan, $total_collected, $main_collected, $interest_collected, $validated, $total_days_between_after_loan_creation_and_last_collecting) {
             $loan_collection = new LoanCollection();
             $loan_collection->loan_id = $loan->id;
             $loan_collection->collecting_user_id = Auth::id();
             $loan_collection->paid_amount = $total_collected;
             $loan_collection->main_paid_amount = $main_collected;
             $loan_collection->interest_paid_amount = $interest_collected;
-            $loan_collection->paying_date = today();
+            $loan_collection->paying_date = $validated['last_collecting_date'];
+            $loan_collection->created_at = Carbon::parse($validated['last_collecting_date'])->startOfDay();
+            $loan_collection->updated_at = today();
             $loan_collection->is_deleted = false;
             $loan_collection->save();
 
             $loan->remaining_payable_main -= $main_collected;
-            $loan->remaining_payable_interest  = Carbon::parse($validated['last_collecting_date'])->diffInDays(Carbon::now()) * $loan->daily_payable_interest;
+
+            $loan->remaining_payable_interest  = Carbon::parse($validated['last_collecting_date'])->diffInDays(Carbon::now()) * $loan->daily_payable_interest + ($loan->daily_payable_interest * $total_days_between_after_loan_creation_and_last_collecting - $interest_collected);
+           
             $loan->save();
         });
 
@@ -336,4 +340,158 @@ class DataEntryController extends Controller
 
 
     }
+
+    public function updateDepositCollection(DepositCollection $deposit_collection){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
+        $deposit = Deposit::find($deposit_collection->deposit_id);
+        if(!$deposit){
+            return redirect()->route('home');
+        }
+        $member = Member::find($deposit->member_id);
+        if(!$member){
+            return redirect()->route('home');
+        }
+        return Inertia::render('Admin/Bank/DataEntry/DEUpdateDepositCollection', [
+            'member' => $member,
+            'depositCollection' => $deposit_collection,
+            'dataEntryMode' => $data_entry_mode,
+        ]);
+    }
+
+    public function saveUpdatedDepositCollection(Request $request){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
+
+        $validated = $request->validate([
+            'deposit_collection_id' => 'required|exists:deposit_collections,id',
+            'deposit_amount' => 'required|numeric|min:1',
+        ]);
+
+        $deposit_collection = DepositCollection::findOrFail($validated['deposit_collection_id']);
+        $deposit = Deposit::find($deposit_collection->deposit_id);
+        
+
+        if(!$deposit){
+            return redirect()->route('home');
+        }
+        $member = Member::find($deposit->member_id);
+        if(!$member){
+            return redirect()->route('home');
+        }
+        
+        $deposit_amount = $validated['deposit_amount'] * 100; // convert to cents
+        $previously_collected_amount = $deposit_collection->deposit_amount;
+
+        DB::transaction(function() use($deposit_collection, $deposit_amount, $member, $previously_collected_amount) {
+            // Update the deposit collection record
+            $deposit_collection->deposit_amount = $deposit_amount;
+            $deposit_collection->save();
+
+
+            // Adjust the member's total deposit
+            $member->total_deposit = $member->total_deposit - $previously_collected_amount + $deposit_amount;
+            $member->save();
+        });
+        // return back to admin.bank.de.member_details
+
+        return redirect()->route('admin.bank.de.member_details', [
+            'member' => $member->id,
+        ])->with('message', 'সঞ্চয় জমা সফলভাবে আপডেট করা হয়েছে।');
+
+        
+    }
+
+    public function updateLoanCollection(LoanCollection $loan_collection){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home');
+        }
+        $loan = Loan::find($loan_collection->loan_id);
+        if(!$loan){
+            return redirect()->route('home');
+        }
+        $member = Member::find($loan->member_id);
+        if(!$member){
+            return redirect()->route('home');
+        }
+        return Inertia::render('Admin/Bank/DataEntry/DEUpdateLoanCollection', [
+            'member' => $member,
+            'loanCollection' => $loan_collection,
+            'dataEntryMode' => $data_entry_mode,
+        ]);
+    }
+
+    public function saveUpdatedLoanCollection(Request $request){
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+            return redirect()->route('home'); 
+        }
+
+        $validated = $request->validate([
+            'loan_collection_id' => 'required|exists:loan_collections,id',
+            'paid_amount' => 'required|numeric|min:1',
+            'last_collecting_date' => 'required|date',
+        ]);
+        $total_paid_amount = $validated['paid_amount'] * 100; // convert to cents
+        $interest_paid = 0;
+        $main_paid = 0;
+
+        $loan_collection = LoanCollection::findOrFail($validated['loan_collection_id']);
+        $loan = Loan::find($loan_collection->loan_id);
+        if(!$loan){
+            return redirect()->route('home');
+        }
+        $member = Member::find($loan->member_id);
+        if(!$member){
+            return redirect()->route('home');
+        }
+        $previously_paid_interest = $loan_collection->interest_paid_amount;
+        $previously_paid_main = $loan_collection->main_paid_amount;
+        $previously_paid_total = $loan_collection->paid_amount;
+
+        $total_days_between_after_loan_creation_and_last_collecting = Carbon::parse($loan->created_at)->diffInDays(Carbon::parse($validated['last_collecting_date']));
+
+        if($total_paid_amount >= $previously_paid_interest){
+            $interest_paid = $previously_paid_interest;
+            $main_paid = $total_paid_amount - $interest_paid;
+        } else{
+            $interest_paid = $total_paid_amount;
+            $main_paid = 0;
+        }
+
+        DB::transaction(function () use(
+            $loan_collection, 
+            $total_paid_amount, 
+            $main_paid, 
+            $interest_paid, 
+            $loan, 
+            $previously_paid_main, 
+            $previously_paid_interest,
+            $validated,
+        ){
+             //update the LoanCollection instance
+            $loan_collection->paid_amount = $total_paid_amount;
+            $loan_collection->main_paid_amount = $main_paid;
+            $loan_collection->interest_paid_amount = $interest_paid;
+            $loan_collection->paying_date = $validated['last_collecting_date'];
+            $loan_collection->created_at = Carbon::parse($validated['last_collecting_date'])->startOfDay();
+            $loan_collection->updated_at = today();
+            $loan_collection->save();
+
+            // update the Loan instance
+            $loan->remaining_payable_main = $loan->remaining_payable_main + $previously_paid_main - $main_paid;
+            $loan->remaining_payable_interest = $loan->remaining_payable_interest + $previously_paid_interest - $interest_paid;
+            $loan->save();
+        });
+       
+        return redirect()->route('admin.bank.de.member_details', [
+            'member' => $member->id,
+        ])->with('message', 'কিস্তি সফলভাবে আপডেট করা হয়েছে।');
+    }
+
 }

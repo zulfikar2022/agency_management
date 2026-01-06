@@ -52,7 +52,7 @@
             <div>
             @if ($loan)
                 <p style="font-weight: bold;">মোট লোনঃ <span style="font-weight: normal;">{{ $loan->total_loan  / 100}} টাকা</span></p>
-                <p style="font-weight: bold;">মোট পরিশোধযোগ্যঃ    <span style="font-weight: normal;">{{ $loan->total_payable_amount  / 100}} টাকা</span></p>
+                <p style="font-weight: bold;">মোট পরিশোধযোগ্যঃ    <span style="font-weight: normal;">{{ $loan->remaining_payable_interest  / 100 + $loan->remaining_payable_main / 100}} টাকা</span></p>
                 <p style="font-weight: bold;">ঋণ গ্রহণের তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($loan->created_at)->format('d F Y') }}</span></p>
                 <p style="font-weight: bold;">পরিশোধের শেষ তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::parse($loan->last_paying_date)->format('d F Y') }}</span></p>
                 <p style="font-weight: bold; border-top: 1px dashed black;">রিপোর্ট তৈরির তারিখঃ    <span style="font-weight: normal;">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></p>

@@ -11,7 +11,6 @@ function DEMemberDetails({
   deposit_collections,
   loan_collections,
 }) {
-  console.log(loan, loan_collections);
   return (
     <AdminDashboardLayout dataEntryMode={dataEntryMode}>
       <div className="container mx-auto px-4">
@@ -39,7 +38,14 @@ function DEMemberDetails({
                         {(collection?.deposit_amount / 100).toFixed(2)} টাকা
                       </span>
                     </div>
-                    <Pencil className="text-blue-600 hover:cursor-pointer" />
+                    {/* admin.bank.de.update_deposit_collection */}
+                    <Link
+                      href={route('admin.bank.de.update_deposit_collection', {
+                        deposit_collection: collection.id,
+                      })}
+                    >
+                      <Pencil className="text-blue-600 hover:cursor-pointer" />
+                    </Link>
                   </div>
                 );
               })}
@@ -76,7 +82,13 @@ function DEMemberDetails({
                         {(collection?.paid_amount / 100).toFixed(2)} টাকা
                       </span>
                     </div>
-                    <Pencil className="text-blue-600 hover:cursor-pointer" />
+                    <Link
+                      href={route('admin.bank.de.update_loan_collection', {
+                        loan_collection: collection.id,
+                      })}
+                    >
+                      <Pencil className="text-blue-600 hover:cursor-pointer" />
+                    </Link>
                   </div>
                 );
               })}

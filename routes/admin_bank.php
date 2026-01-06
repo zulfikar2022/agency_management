@@ -127,6 +127,14 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::post('/admin/bank/de/collect-loan-save',[DataEntryController::class, 'collectLoanSave'])->name('admin.bank.de.collect_loan_save');
 
+    Route::get('/admin/bank/de/update-deposit-collection/{deposit_collection}',[DataEntryController::class, 'updateDepositCollection'])->name('admin.bank.de.update_deposit_collection');
+
+    Route::patch('/admin/bank/de/save-updated-deposit-collection',[DataEntryController::class, 'saveUpdatedDepositCollection'])->name('admin.bank.de.save_updated_deposit_collection');
+
+    Route::get('/admin/bank/de/update-loan-collection/{loan_collection}',[DataEntryController::class, 'updateLoanCollection'])->name('admin.bank.de.update_loan_collection');
+
+    Route::patch('/admin/bank/de/save-updated-loan-collection',[DataEntryController::class, 'saveUpdatedLoanCollection'])->name('admin.bank.de.save_updated_loan_collection');
+
 
     
 });
