@@ -9,14 +9,15 @@ function DEUpdateLoanCollection({
   loanCollection,
   dataEntryMode = false,
 }) {
-  // আগের রেকর্ডের ডাটা দিয়ে ফর্ম ইনিশিয়ালাইজ করা
   const { data, setData, patch, processing, errors } = useForm({
     loan_collection_id: loanCollection?.id, // Invisible field
     paid_amount: loanCollection?.paid_amount / 100 || '',
+    interest_paid_amount: loanCollection?.interest_paid_amount / 100 || '',
     last_collecting_date: loanCollection?.paying_date
       ? new Date(loanCollection.created_at).toISOString().split('T')[0]
       : '',
   });
+  console.log(loanCollection);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -77,9 +78,6 @@ function DEUpdateLoanCollection({
                 <p className="text-xs text-gray-500 uppercase font-bold">
                   সদস্য: {member?.name}
                 </p>
-                <p className="text-sm text-gray-600">
-                  কালেকশন আইডি: #{loanCollection?.id}
-                </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -111,7 +109,7 @@ function DEUpdateLoanCollection({
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-bold text-black">
-                      কিস্তির পরিমাণ (Paid Amount){' '}
+                      মোট কিস্তির পরিমাণ (Paid Amount){' '}
                       <span className="text-error">*</span>
                     </span>
                   </label>
@@ -127,6 +125,31 @@ function DEUpdateLoanCollection({
                   {errors.paid_amount && (
                     <p className="text-error text-xs mt-1">
                       {errors.paid_amount}
+                    </p>
+                  )}
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-bold text-black">
+                      সুদের পরিমাণ (Interest Paid Amount){' '}
+                      <span className="text-error">*</span>
+                    </span>
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="টাকার পরিমাণ"
+                    className={`input input-bordered input-lg ${errors.interest_paid_amount ? 'input-error' : ''}`}
+                    value={data.interest_paid_amount}
+                    onChange={(e) =>
+                      setData('interest_paid_amount', e.target.value)
+                    }
+                    required
+                    autoFocus
+                  />
+                  {errors.interest_paid_amount && (
+                    <p className="text-error text-xs mt-1">
+                      {errors.interest_paid_amount}
                     </p>
                   )}
                 </div>

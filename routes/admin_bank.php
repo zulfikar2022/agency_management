@@ -135,6 +135,14 @@ Route::group(['middleware' => ['auth','adminonly']], function(){
 
     Route::patch('/admin/bank/de/save-updated-loan-collection',[DataEntryController::class, 'saveUpdatedLoanCollection'])->name('admin.bank.de.save_updated_loan_collection');
 
+    Route::get('/admin/bank/de/loan-update/{loan}',[DataEntryController::class, 'editLoan'])->name('admin.bank.de.edit_loan');
+
+    // admin.bank.de.update_loan_save
+    Route::patch('/admin/bank/de/update-loan-save',[DataEntryController::class, 'updateLoanSave'])->name('admin.bank.de.update_loan_save');
+
+    // route for a calculator page for calculating various utilities
+    Route::get('/admin/bank/de/calculator', [DataEntryController::class, 'calculator'])->name('admin.bank.de.calculator');
+
 
     
 });

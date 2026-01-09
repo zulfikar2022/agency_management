@@ -15,7 +15,7 @@ function DEProvideLoan({ member, dataEntryMode = false }) {
     member_id: member?.id,
     total_loan: '',
     safety_money: '',
-    created_at: today, // Added date field with today as default
+    created_at: today,
   });
 
   useEffect(() => {

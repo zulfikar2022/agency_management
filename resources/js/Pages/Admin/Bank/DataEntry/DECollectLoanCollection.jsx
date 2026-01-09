@@ -11,6 +11,7 @@ function DECollectLoanCollection({ member, dataEntryMode = false }) {
   const { data, setData, post, processing, errors, reset } = useForm({
     member_id: member?.id,
     paid_amount: '',
+    interest_paid_amount: '', // Added interest paid amount field
     last_collecting_date: today, // Added the new date field
   });
 
@@ -56,6 +57,7 @@ function DECollectLoanCollection({ member, dataEntryMode = false }) {
 
   return (
     <AdminDashboardLayout dataEntryMode={dataEntryMode}>
+      <Head title="ঋণের কিস্তি সংগ্রহ করুন" />
       <div className="min-h-screen bg-base-200 py-8">
         <div className="max-w-md mx-auto px-4">
           <div className="mb-4">
@@ -111,7 +113,7 @@ function DECollectLoanCollection({ member, dataEntryMode = false }) {
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text font-bold text-black">
-                      কিস্তির পরিমাণ (Amount){' '}
+                      মোট কিস্তির পরিমাণ (Amount){' '}
                       <span className="text-error">*</span>
                     </span>
                   </label>
@@ -127,6 +129,31 @@ function DECollectLoanCollection({ member, dataEntryMode = false }) {
                   {errors.paid_amount && (
                     <p className="text-error text-xs mt-1">
                       {errors.paid_amount}
+                    </p>
+                  )}
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-bold text-black">
+                      কিস্তিতে সুদের পরিমাণ{' '}
+                      <span className="text-error">*</span>
+                    </span>
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="টাকার পরিমাণ লিখুন"
+                    className={`input input-bordered input-lg ${errors.interest_paid_amount ? 'input-error' : ''}`}
+                    value={data.interest_paid_amount}
+                    onChange={(e) =>
+                      setData('interest_paid_amount', e.target.value)
+                    }
+                    required
+                    autoFocus
+                  />
+                  {errors.interest_paid_amount && (
+                    <p className="text-error text-xs mt-1">
+                      {errors.interest_paid_amount}
                     </p>
                   )}
                 </div>

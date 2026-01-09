@@ -18,6 +18,7 @@ function AdminDashboardSidebar({ dataEntryMode = false }) {
       }
     });
   };
+
   return (
     <div className="drawer-side">
       <label
@@ -58,6 +59,11 @@ function AdminDashboardSidebar({ dataEntryMode = false }) {
             <li>
               <Link href={route('admin.bank.de.all_members')} className="mx-2">
                 All Members
+              </Link>
+            </li>
+            <li>
+              <Link href={route('admin.bank.de.calculator')} className="mx-2">
+                Calculator
               </Link>
             </li>
           </ul>

@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import AdminDashboardLayout from '../../AdminDashboardLayout';
 import { ArrowLeft, Pencil, ReceiptRussianRuble } from 'lucide-react';
 import { dateFormatter } from '@/utilityFuntion';
@@ -13,6 +13,7 @@ function DEMemberDetails({
 }) {
   return (
     <AdminDashboardLayout dataEntryMode={dataEntryMode}>
+      <Head title="সদস্যের বিস্তারিত দেখুন" />
       <div className="container mx-auto px-4">
         <div className="mb-4 mt-3">
           <Link
@@ -64,7 +65,14 @@ function DEMemberDetails({
                   {dateFormatter(loan?.created_at)}{' '}
                 </p>
               </div>
-              <Pencil className="text-blue-600 hover:cursor-pointer" />
+              {/* admin.bank.de.edit_loan */}
+              <Link
+                href={route('admin.bank.de.edit_loan', {
+                  loan: loan.id,
+                })}
+              >
+                <Pencil className="text-blue-600 hover:cursor-pointer" />
+              </Link>
             </div>
           </div>
           <div>
