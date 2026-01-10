@@ -20,6 +20,11 @@ function DECalculator({ dataEntryMode = false }) {
   const [dailyPayableMain, setDailyPayableMain] = useState(0);
   const [dailyPayableTotal, setDailyPayableTotal] = useState(0);
 
+  //
+  const [baseDate, setBaseDate] = useState('');
+  const [resultDate, setResultDate] = useState(null);
+  const [daysToAdd, setDaysToAdd] = useState(0);
+
   return (
     <AdminDashboardLayout dataEntryMode={dataEntryMode}>
       <Head title="Calculator" />
@@ -75,7 +80,7 @@ function DECalculator({ dataEntryMode = false }) {
         </div>
 
         {/* will take 2 dates and calculate the difference */}
-        <div>
+        <div className="border-b pb-4 mb-4">
           <p className="mb-2 font-bold">
             দুই তারিখের মধ্যে দিন সংখ্যা নির্ণয় করতে নিচের ফর্মটি ব্যবহার করুন।
           </p>
@@ -143,9 +148,81 @@ function DECalculator({ dataEntryMode = false }) {
             </p>
           </div>
         </div>
-        {/* There will be a number input field and which will used to provide the main amount of loan. it will calculate three things: daily payable interest, daily payable main and daily payable total. daily payable interest will be calculated by  finding the 15% of the input value and dividing it by 115 and making it rounded(for fractional numbers), daily payable main will be calculated by dividing the provided input value dividing by 115 and total will be the sum of these two. */}
-
+        {/* this input field will take a date as input and a number as another input. The result will be the day after the selected date and adding the day provided number */}
         <div>
+          <p className="mb-2 font-bold">
+            একটি তারিখ এবং দিন সংখ্যা প্রদান করে নির্দিষ্ট দিনের তারিখ নির্ণয়
+            করতে নিচের ফর্মটি ব্যবহার করুন।
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center justify-items-center border-b pb-4 mb-4">
+            <div className="mb-4">
+              <label
+                htmlFor="baseDate"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Base Date:
+              </label>
+              <input
+                type="date"
+                id="baseDate"
+                value={baseDate}
+                onChange={(e) => setBaseDate(e.target.value)}
+                className="border border-gray-300 rounded-md p-2 w-full"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="daysToAdd"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Days to Add:
+              </label>
+              <input
+                type="number"
+                id="daysToAdd"
+                value={daysToAdd}
+                onChange={(e) => setDaysToAdd(Number(e.target.value))}
+                className="border border-gray-300 rounded-md p-2 w-full"
+              />
+            </div>
+            <button
+              type="button"
+              className="btn btn-xs btn-neutral text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              onClick={() => {
+                const baseDateInput = document.getElementById('baseDate').value;
+                if (baseDateInput && daysToAdd >= 0) {
+                  const baseDate = new Date(baseDateInput);
+                  const outputDate = new Date(baseDate);
+                  outputDate.setDate(baseDate.getDate() + daysToAdd);
+                  setResultDate(outputDate);
+                  // toast.success(
+                  //   `Resulting Date: ${dateFormatter(resultDate)}`,
+                  //   {
+                  //     position: 'top-center',
+                  //     theme: 'dark',
+                  //     autoClose: 5000,
+                  //     hideProgressBar: false,
+                  //   }
+                  // );
+                } else {
+                  toast.error('সঠিক তারিখ এবং দিন সংখ্যা প্রদান করুন', {
+                    position: 'top-center',
+                    theme: 'dark',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                  });
+                }
+              }}
+            >
+              Calculate Resulting Date
+            </button>
+            <div>
+              <p>{resultDate ? dateFormatter(resultDate) : ''}</p>
+            </div>
+          </div>
+        </div>
+        {/* There will be a number input field and which will used to provide the main amount of loan. it will calculate three things: daily payable interest, daily payable main and daily payable total. daily payable interest will be calculated by  finding the 15% of the input value and dividing it by 115 and making it rounded(for fractional numbers), daily payable main will be calculated by dividing the provided input value dividing by 115 and total will be the sum of these two. */}
+        <div className="border-b pb-4 mb-4">
           <p className="mb-2 font-bold">
             দৈনিক পরিশোধযোগ্য সুদ, মূলধন এবং মোট পরিশোধযোগ্য অর্থ নির্ণয় করতে
             নিচের ফর্মটি ব্যবহার করুন।

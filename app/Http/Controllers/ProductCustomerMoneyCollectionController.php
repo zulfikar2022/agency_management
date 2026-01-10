@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductCustomerMoneyCollection;
 use App\Models\ProductCustomerMoneyCollectionUpdateLog;
 use App\Models\User;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -86,13 +87,8 @@ class ProductCustomerMoneyCollectionController extends Controller
         // loop through each purchase id and create a record in the product_customer_money_collections table
         $updatingFailed = false;
         DB::transaction(function () use ($validated_data, $user, &$updatingFailed) {
- 
             $purchases_ids = $validated_data['customer_product_id'];
-            
-            
             foreach ($purchases_ids as $index => $purchase_id) {
-               
-
                 // from the customer_products table (using the CustomerProduct model) update the remaining_payable_amount
                     $customerProduct = CustomerProduct::find($validated_data['customer_product_id'][$index]);
                     if ($customerProduct  && $customerProduct->remaining_payable_price >= $validated_data['collected_amount'][$index]) {
@@ -117,9 +113,24 @@ class ProductCustomerMoneyCollectionController extends Controller
                
             }
         });
-
+        
         if($updatingFailed){
             return redirect()->back()->withErrors(['error' => 'অনুগ্রহ করে সঠিক তথ্য দিয়ে আবার চেষ্টা করুন।']);
+        }
+
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+
+            $customer = Customer::find($validated_data['customer_id']);
+            $purchases = CustomerProduct::where('customer_id', $customer->id)
+                ->whereIn('id', $validated_data['customer_product_id'])
+                ->where('is_deleted', false)
+                ->where('remaining_payable_price', '>', 0)
+                ->get();
+            $total_collected_amount = array_sum($validated_data['collected_amount']);
+            $total_remaining_payable_price = $purchases->sum('remaining_payable_price');
+            $message = "প্রিয় গ্রাহক " . $customer->name . ",আপনার আজকের মোট পরিশোধ: " . $total_collected_amount . " টাকা। মোট বকেয়া পরিমাণ: " . $total_remaining_payable_price . " টাকা।";
+            SmsService::send($customer->phone_number, $message);
         }
 
         return redirect()->back()->with('success', 'Payment collected successfully.');
@@ -371,6 +382,24 @@ class ProductCustomerMoneyCollectionController extends Controller
                 $updatable_collection_instances[$index]->save();    
             }
         });
+
+        $data_entry_mode = config('services.data_entry.mode', false);
+        if(!$data_entry_mode){
+
+            $customer = Customer::find($validated_data['customer_id']);
+
+            $purchases = CustomerProduct::where('customer_id', $customer->id)
+                ->whereIn('id', $validated_data['purchase_ids'])
+                ->where('is_deleted', false)
+                ->where('remaining_payable_price', '>', 0)
+                ->get();
+            $total_collected_amount = array_sum($validated_data['collected_amounts']);
+            $total_remaining_payable_price = $purchases->sum('remaining_payable_price');
+            $message = "প্রিয় গ্রাহক " . $customer->name . ",আপনার আজকের মোট পরিশোধ: " . $total_collected_amount . " টাকা। মোট বকেয়া পরিমাণ: " . $total_remaining_payable_price . " টাকা।";
+            SmsService::send($customer->phone_number, $message);
+        }
+
+
 
         // return redirect()->back()->with('success', 'কালেকশন আপডেট সফল হয়েছে।');
         return redirect()->route('employee.renderCollectionPage', $validated_data['customer_id']);

@@ -67,10 +67,13 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
   return (
     <EmployeeProductLayout>
       <Head title="কিস্তি আপডেট করুন" />
-      <div className=" px-2 container md:mx-auto mt-5">
-        <h3 className="font-bold text-center">
-          কাস্টমারের নামঃ <span className="font-normal">{customer?.name}</span>
-        </h3>
+      <div className="flex flex-col container mx-auto items-center">
+        <div>
+          <h3 className="font-bold text-center">
+            কাস্টমারের নামঃ{' '}
+            <span className="font-normal">{customer?.name}</span>
+          </h3>
+        </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4 ">
           {collectionPurchaseCombo.map((combo, index) => (
             <div key={combo?.id} className="">
@@ -89,7 +92,7 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
                 <input
                   type="number"
                   step={'1'}
-                  className="input w-full md:w-1/2"
+                  className="input "
                   onChange={(e) => {
                     const newAmounts = [...data.collected_amounts];
                     newAmounts[index] = e.target.value;
@@ -102,7 +105,7 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
               </div>
             </div>
           ))}
-          <button type="submit" className="btn btn-neutral w-full md:w-1/2">
+          <button type="submit" className="btn btn-neutral">
             আপডেট করুন
           </button>
         </form>
