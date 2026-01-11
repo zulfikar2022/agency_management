@@ -22,7 +22,7 @@ function EmployeeCollectDeposit({ member, deposit }) {
       cancelButtonText: 'না',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(data);
+        // console.log(data);
         // Replace 'admin.bank.storeSpecificDeposit' with your actual route
         post(route('employee.bank.store_deposit'), {
           preserveScroll: true,

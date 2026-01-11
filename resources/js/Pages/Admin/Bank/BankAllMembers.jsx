@@ -8,7 +8,7 @@ function BankAllMembers({ data }) {
   const members = data?.data;
   const paginate = { ...data, data: [] };
   const [searchTerm, setSearchTerm] = useState('');
-  console.log(paginate);
+  // console.log(paginate);
   return (
     <LayoutForMoney>
       <Head title="সকল সদস্য" />

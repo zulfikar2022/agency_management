@@ -4,7 +4,7 @@ import GoBack from '../components/GoBack';
 
 function ShowProductDetails({ product, update_logs }) {
   const { previousUrl } = usePage().props;
-  console.log('Product Details:', product);
+  // console.log('Product Details:', product);
   return (
     <LayoutForProduct>
       <Head title={`পণ্যের বিস্তারিত: ${product?.name}`} />

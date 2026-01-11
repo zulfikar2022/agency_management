@@ -46,7 +46,7 @@ function DEProvideLoan({ member, dataEntryMode = false }) {
       cancelButtonText: 'না',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log('Submitting loan data:', data);
+        // console.log('Submitting loan data:', data);
         post(route('admin.bank.de.save_loan'), {
           preserveScroll: true,
           onSuccess: () => {

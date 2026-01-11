@@ -5,7 +5,7 @@ import EmployeeMemberResponsiveTable from '../components/EmployeeMemberResponsiv
 import Pagination from '@/Pages/Admin/components/Pagination';
 
 function EmployeeNotInstallmantedToday({ members }) {
-  console.log(members);
+  // console.log(members);
   const pagination = { ...members, data: [] };
   const [searchTerm, setSearchTerm] = useState('');
   return (

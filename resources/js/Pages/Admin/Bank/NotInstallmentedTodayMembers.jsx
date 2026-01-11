@@ -9,7 +9,7 @@ function NotInstallmentedTodayMembers({ data }) {
   const paginate = { ...data, data: [] };
   const [searchTerm, setSearchTerm] = useState('');
 
-  console.log(members);
+  // console.log(members);
   return (
     <LayoutForMoney>
       <Head title="আজ ঋণের কিস্তি দেয়নি এমন সদস্যগণ" />

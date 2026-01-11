@@ -11,7 +11,7 @@ function CreateCost() {
   // 2. Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data:', data);
+    // console.log('Form Data:', data);
     // admin.storeCost
     post(route('admin.storeCost'), {
       onSuccess: () => reset(), // Clears form on success

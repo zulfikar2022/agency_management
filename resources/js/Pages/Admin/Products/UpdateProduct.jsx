@@ -16,7 +16,7 @@ function UpdateProduct({ product }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitting updated product data:', data);
+    // console.log('Submitting updated product data:', data);
     put(route('admin.updateProduct', product.id), {
       preserveScroll: true,
       onSuccess: () => {

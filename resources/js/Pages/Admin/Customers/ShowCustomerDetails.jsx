@@ -59,7 +59,7 @@ function ShowCustomerDetails({
     });
   };
 
-  console.log(paymentLists);
+  // console.log(paymentLists);
 
   return (
     <LayoutForProduct>

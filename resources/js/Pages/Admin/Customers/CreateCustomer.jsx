@@ -72,8 +72,8 @@ function CreateCustomer() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('inside handle submit');
-    console.log(data);
+    // console.log('inside handle submit');
+    // console.log(data);
 
     post(route('admin.storeCustomer'), {
       preserveScroll: true,

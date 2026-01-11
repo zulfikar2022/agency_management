@@ -19,7 +19,7 @@ function BankLoanDepositAdminDashboard({
   totalLoanFee,
   totalShareMoney,
 }) {
-  console.log(totalAdmissionFee);
+  // console.log(totalAdmissionFee);
   return (
     <div>
       <p className="font-bold text-center text-lg underline mb-6">

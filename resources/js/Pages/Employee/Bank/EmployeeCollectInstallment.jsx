@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 
 function EmployeeCollectInstallment({ member, loan }) {
   const remaining_payable_amount = loan.remaining_payable_amount / 100;
-  console.log(remaining_payable_amount);
+  // console.log(remaining_payable_amount);
 
   const { data, setData, post, processing, errors, reset } = useForm({
     paid_amount:

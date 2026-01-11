@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { ArrowLeft } from 'lucide-react';
 
 function UpdateMember({ member }) {
-  console.log(member);
+  // console.log(member);
   const { data, setData, patch, processing, errors } = useForm({
     name: member.name || '',
     address: member.address || '',
@@ -28,7 +28,7 @@ function UpdateMember({ member }) {
       cancelButtonText: 'না',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(data);
+        // console.log(data);
         // Assuming the route name is admin.bank.update_member
         patch(route('admin.bank.update_member', member.id), {
           preserveScroll: true,

@@ -25,7 +25,7 @@ function DepositUpdateModal({ open, onCloseModal, deposit }) {
       cancelButtonText: 'না',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log('Submitting update with data:', data);
+        // console.log('Submitting update with data:', data);
         // Replace with your specific route for updating deposit collections
         patch(route('admin.bank.update_deposit'), {
           preserveScroll: true,

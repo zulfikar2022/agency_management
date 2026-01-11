@@ -17,7 +17,7 @@ function DEUpdateLoanCollection({
       ? new Date(loanCollection.created_at).toISOString().split('T')[0]
       : '',
   });
-  console.log(loanCollection);
+  // console.log(loanCollection);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ function DEUpdateLoanCollection({
       cancelButtonText: 'না',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(data);
+        // console.log(data);
         // লারাভেল কনভেনশন অনুযায়ী আপডেট রিকোয়েস্টের জন্য patch ব্যবহার করা হয়েছে
         patch(route('admin.bank.de.save_updated_loan_collection'), {
           preserveScroll: true,

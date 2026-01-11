@@ -8,7 +8,7 @@ import { WEEKDAYS } from '@/constants';
 import ResponsiveCustomerTable from '../components/ResponsiveCustomerTable';
 
 function ShowAllCustomers({ customers, user, totalCustomers }) {
-  console.log('totalCustomers:', totalCustomers);
+  // console.log('totalCustomers:', totalCustomers);
   const { previousUrl } = usePage().props;
   let paginationData = { ...customers, data: [] };
   const [searchTerm, setSearchTerm] = useState('');

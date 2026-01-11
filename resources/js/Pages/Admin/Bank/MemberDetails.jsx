@@ -23,7 +23,7 @@ function MemberDetails({
   old_loans,
   deposit_dismissals,
 }) {
-  console.log(loan);
+  // console.log(loan);
   const total_payable =
     ((loan?.daily_payable_main + loan?.daily_payable_interest) / 100) * 115;
   const [open, setOpen] = useState(false);
@@ -484,7 +484,7 @@ function MemberDetails({
             ) : (
               <div className=" border p-4 rounded-lg border-red-400">
                 {old_loans.map((old_loan) => {
-                  console.log({ old_loan });
+                  // console.log({ old_loan });
                   return (
                     <div key={old_loan.id}>
                       <p>

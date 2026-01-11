@@ -4,7 +4,7 @@ import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 function LoanCollections({ member, loan_collections }) {
-  console.log(loan_collections, member);
+  // console.log(loan_collections, member);
   return (
     <LayoutForMoney>
       <Head title="ঋণের কিস্তির তালিকা" />

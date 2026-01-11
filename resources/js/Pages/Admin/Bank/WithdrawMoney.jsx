@@ -25,7 +25,7 @@ function WithdrawMoney({ member, deposit_id }) {
       cancelButtonText: 'বাতিল',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log('Form submitted:', data);
+        // console.log('Form submitted:', data);
         // Replace with your actual route name
         post(route('admin.bank.store_withdraw_money'), {
           preserveScroll: true,

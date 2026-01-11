@@ -8,7 +8,7 @@ function AllDepositingMember({ data }) {
   const members = data?.data;
   const paginate = { ...data, data: [] };
   const [searchTerm, setSearchTerm] = useState('');
-  console.log(members);
+  // console.log(members);
   return (
     <LayoutForMoney>
       <Head title="সকল জমাদানকারী সদস্য" />

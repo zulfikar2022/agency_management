@@ -5,7 +5,7 @@ import { Bounce, toast } from 'react-toastify';
 import { ArrowLeft } from 'lucide-react';
 
 function CreateDepositAccount({ member }) {
-  console.log(member);
+  // console.log(member);
   const { data, setData, post, processing, errors, reset } = useForm({
     daily_deposit_amount: '',
     member_id: member?.id || '', // Hidden or contextual field

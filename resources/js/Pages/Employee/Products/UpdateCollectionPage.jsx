@@ -12,9 +12,9 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
     };
   });
 
-  console.log({ collectionPurchaseCombo });
+  // console.log({ collectionPurchaseCombo });
   const { error } = usePage().props;
-  console.log({ error });
+  // console.log({ error });
 
   const { data, setData, put } = useForm({
     customer_id: customer?.id || '',
@@ -24,7 +24,7 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
     purchase_ids:
       collectionPurchaseCombo.map((combo) => combo?.purchase?.id) || [],
   });
-  console.log({ data });
+  // console.log({ data });
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -44,7 +44,7 @@ function UpdateCollectionPage({ collections, customer, customer_products }) {
           data,
           {
             onError: (err) => {
-              console.log({ err });
+              // console.log({ err });
               Swal.fire({
                 title: 'ত্রুটি!',
                 text: 'কিস্তি আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।',

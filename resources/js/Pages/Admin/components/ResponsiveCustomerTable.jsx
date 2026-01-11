@@ -2,7 +2,7 @@ import { WEEKDAYS } from '@/constants';
 import { Link } from '@inertiajs/react';
 
 function ResponsiveCustomerTable({ data }) {
-  console.log({ data });
+  // console.log({ data });
   if (data.length === 0) {
     return <div className="text-center my-10 text-gray-500">কোন তথ্য নেই</div>;
   }

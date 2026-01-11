@@ -18,7 +18,7 @@ export default function SARegister() {
 
   const submit = (e) => {
     e.preventDefault();
-    console.log('Submitting form data:', data);
+    // console.log('Submitting form data:', data);
 
     post(route('superadmin.register'), {
       //   onFinish: () => reset('password', 'password_confirmation'),

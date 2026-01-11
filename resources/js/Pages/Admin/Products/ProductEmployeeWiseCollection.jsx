@@ -11,7 +11,7 @@ function ProductEmployeeWiseCollection({
   total_collectable,
   total_collection,
 }) {
-  console.log(collections);
+  // console.log(collections);
   return (
     <LayoutForProduct>
       <Head title="পণ্যের এমপ্লয়ী ভিত্তিক কালেকশন রিপোর্ট" />

@@ -11,8 +11,8 @@ const Dashboard = ({
   bank_collection_target,
   product_collection_target,
 }) => {
-  console.log(bank_collection_target);
-  console.log(product_collection_target);
+  // console.log(bank_collection_target);
+  // console.log(product_collection_target);
   const total_loan_collections =
     loan_collections.reduce(
       (total, collection) => total + collection.paid_amount,

@@ -4,13 +4,13 @@ import { WEEKDAYS } from '@/constants';
 import { Head } from '@inertiajs/react';
 
 function ShowCustomerPurchaseDetails({ customer, purchase, paymentList }) {
-  console.log({ purchase, customer, paymentList });
+  // console.log({ purchase, customer, paymentList });
   const totalCollectedAmount = paymentList?.reduce(
     (total, payment) => total + payment?.collected_amount,
     0
   );
 
-  console.log({ purchase });
+  // console.log({ purchase });
   return (
     <LayoutForProduct>
       <Head title={`ক্রেতার ক্রয়ের বিস্তারিত: ${customer?.name}`} />

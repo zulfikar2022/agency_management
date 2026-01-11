@@ -55,7 +55,7 @@ function LoanCollectionUpdateModal({ open, onCloseModal, collection }) {
           }
         );
 
-        console.log('form data: ', data);
+        // console.log('form data: ', data);
       }
     });
   };

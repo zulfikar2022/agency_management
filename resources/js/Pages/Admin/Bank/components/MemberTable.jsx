@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 
 function MemberTable({ members }) {
-  console.log(members);
+  // console.log(members);
   return (
     <div>
       {members.map((member) => (

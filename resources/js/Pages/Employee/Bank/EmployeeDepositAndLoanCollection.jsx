@@ -6,7 +6,7 @@ import { Bounce, toast } from 'react-toastify';
 function EmployeeDepositAndLoanCollection({ deposit, loan, member }) {
   //   console.log(deposit, loan);
 
-  console.log(loan);
+  // console.log(loan);
   const { data, setData, errors, post, processing, reset } = useForm({
     has_deposit: deposit ? true : false,
     has_loan: loan ? true : false,

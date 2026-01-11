@@ -98,7 +98,7 @@ function IndividualCustomerReport({
   );
   const uniqueDays = [];
   const sameDayCollections = [];
-  console.log({ collections });
+  // console.log({ collections });
 
   collections?.forEach((collection) => {
     if (uniqueDays.indexOf(collection.collecting_date) === -1) {

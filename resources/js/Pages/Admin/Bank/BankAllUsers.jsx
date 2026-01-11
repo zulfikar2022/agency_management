@@ -4,7 +4,7 @@ import LayoutForMoney from '../layouts/LayoutForMoney';
 
 // admin.bank.all_users
 function BankAllUsers({ users }) {
-  console.log(users);
+  // console.log(users);
   const admins = users.filter(
     (user) => user?.is_admin === 1 && user?.is_employee === 0
   );
@@ -15,7 +15,7 @@ function BankAllUsers({ users }) {
     (user) => user?.is_employee === 0 && user?.is_admin === 0
   );
   const handlePowerToggleEmployee = (employee) => {
-    console.log(employee);
+    // console.log(employee);
     Swal.fire({
       text: employee.is_activated
         ? `আপনি কি আসলেই এমপ্লয়ীর (${employee?.name}) ক্ষমতা বন্ধ করতে চান?`

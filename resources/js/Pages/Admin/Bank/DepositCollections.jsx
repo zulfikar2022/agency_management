@@ -47,7 +47,7 @@ function DepositCollections({ deposit_collections, member }) {
         ) : (
           <div className="max-w-2xl mx-auto mt-6">
             {deposit_collections.map((collection) => {
-              console.log(collection);
+              // console.log(collection);
               return (
                 <div key={collection.id} className="border-b ">
                   <div className="p-4 grid grid-cols-1 md:grid-cols-3 justify-center gap-4">

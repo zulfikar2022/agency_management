@@ -43,7 +43,7 @@ function DEUpdateLoan({
     last_paying_date: today,
   });
 
-  console.log(data);
+  // console.log(data);
 
   const handleSubmit = (e) => {
     e.preventDefault();

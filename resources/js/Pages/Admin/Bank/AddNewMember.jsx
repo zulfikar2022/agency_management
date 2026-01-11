@@ -15,8 +15,8 @@ function AddNewMember() {
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Data Submitted:', data);
-    console.log('second line');
+    // console.log('Form Data Submitted:', data);
+    // console.log('second line');
     Swal.fire({
       text: 'আপনি কি আসলেই নতুন সদস্য যুক্ত করতে চান?',
       icon: 'warning',
